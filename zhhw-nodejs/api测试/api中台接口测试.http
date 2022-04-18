@@ -1,0 +1,8 @@
+@hostname = 121.201.18.209:9523
+@contentType = x-www-form-urlencoded
+
+get http://{{hostname}}/Vehicle/getVehicleClaimList?current=1&limit=5&pid=dg1168
+
+###
+get http://{{hostname}}/Dictionary/sysDictLinkDetail?companyId=dg1168&code=1
+

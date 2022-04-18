@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>-tt-</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script><style type="text/css">
+        .videolist { position:relative; float:left; width:540px; height:300px;margin-left: 230px;}
+        .videolist:hover{ cursor: pointer; }
+        .videoed { width:50px; height:50px; position: absolute; left:45%; top:40%; z-index:99; border-radius:100%; }
+        .videos{ display:none; border: 1px solid #080808; position:fixed; left:50%; top:50%; margin-left:-320px; margin-top:-210px; z-index:100; width:640px; height:360px; }
+        .vclose { position:absolute;right:1%; top:1%; border-radius:100%; cursor: pointer; }
+        .con{height: 430px; width: 1000px;margin: 0 auto;}
+        .masklayer{position: fixed;display: none;width: 100%;height: 1000px;top: 0px;left: 0px;background-color: rgba(0, 0, 0, 0.8);z-index: 1000;-webkit-user-select: none;-ms-user-select: none;}
+    </style>
+    <script>
+        $( function() {
+        $("#tabs").tabs();
+    } );
+    </script>
+</head>
+<body>
+
+<div id="tabs">
+    <ul>
+        -li-
+    </ul>
+    -liDiv-
+</div>
+<div class="masklayer">
+    <div class="videos"></div>
+</div>
+<script>
+        $('.vlist').each(function(){ //遍历视频列表
+            $(this).click(function(){ //视频被点击后执行
+                console.log('aa');
+                var video = $(this).attr('vpath');//获取视频路径
+                var vcdoe  = '<video id="video" style="width: 640px" src="-v-" preload="auto" controls="controls" autoplay="autoplay"></video><img onClick="close1()" class="vclose" src="关闭.jpg" width="25" height="25"/>'
+                vcdoe = vcdoe.replace('-v-',video);
+                $('.videos').html(vcdoe);
+                $('.videos').show();//视频窗口弹出
+                $('.masklayer').show(); //遮罩层弹出
+            });
+        });
+        function close1(){
+            var v = document.getElementById('video');//获取视频节点
+            $('.videos').hide();//点击关闭
+			$('.masklayer').hide();//遮罩层隐藏
+            v.pause();//停止
+            $('.videos').html('');
+        }
+</script>
+</body>
+</html>

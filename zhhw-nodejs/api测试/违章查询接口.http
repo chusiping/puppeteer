@@ -1,0 +1,58 @@
+@hostname = gd.122.gov.cn
+@contentType = application/json
+@url1 = https://gd.122.gov.cn/views/memfyy/violation.html
+
+### 验证码
+get https://{{hostname}}/m/tmri/captcha/math?nocache=1633915811548
+Pre
+
+###
+# @name loginAdmin
+POST https://{{hostname}}/user/m/loginkey HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "44012012107753", 
+    "password":"CT29DjKq6"
+}
+
+
+### form方式
+GET HTTP/1.1 https://gd.122.gov.cn/views/memfyy/violation.html 
+cookie:_uab_collina=163374818524468265628371
+cookie:sto-id-20480-sg_http=BJAKKNKNCICD
+cookie:JSESSIONID-L=3680c74f-6e26-4592-90db-307654602193
+cookie:accessToken=H9SbD1vAIUMlRb0Qb01twKQcqsjCnDstnGnachZr4fT5WpH/zcAZoIz+B4ti+6r5TvLDMNt+foMXKcHe4eScMJg6Pn4mmSkMGLpJ1ZNOK9XhDD6WsBc0veJFSIiIaV/QrYJYA7Uj6Q+3YwiR1izs+jrzGpK7dWs1vGSMgchdIrDaLz1VeLnrm3UD+k75C3Ki
+cookie:JSESSIONID=30D5B9D81C7A23D7250C7C5E67A7AB64
+cookie:c_yhlx_=2
+cookie:tmri_csfr_token=3ECAC77A44FC2139E880518D69B398F9
+Content-Type: application/json, text/javascript, */*; q=0.01
+
+startDate=20210101
+&endDate=20211001
+&hpzl=02
+&hphm=粤A29BN9
+&page=1
+&type=0
+
+### json方式
+get https://gd.122.gov.cn/user/m/uservio/suriquery HTTP/1.1
+cookie:tmri_csfr_token=BC85213994E0C001D15C2FF40F2492B7	
+cookie:JSESSIONID-L=32f3818d-79cc-420a-9bf8-9da1b89fe2bc	
+cookie:sto-id-20480-sg_http=BJAKKNKNCICD	
+cookie:JSESSIONID=D20E4AF728AD5A0ECB3885D167532EF9	
+cookie:accessToken=I31H/6lUPLUQA6KJE5wopLWAjQdwXEW2WKCd5T7e/I+xRTzlfMNLigMLZRk6sq+zfyKk3jac09Um+XJOO8xSJLX7xPzb+yXMJyITlFHe3+bR73KVv9+jXHp+7Z7TBZuDqAAfRkYNgSEER9xgANSzT4OTf0RpYnk3UVwIniv+OA5O0RIU2N127TZT3JyNmK/I	
+cookie:_uab_collina=163374818524468265628371	
+Content-Type: application/json
+
+{
+    "startDate":"20210101",
+    "endDate":"20211001",
+    "hpzl":"02",
+    "hphm":"粤A29BN9",
+    "page":"1",
+    "type":"0"
+}
+
+### 
+get https://gd.122.gov.cn/views/memfyy/violation.html

@@ -1,0 +1,116 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Tabs - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+  <script>
+  $( function() {
+    $( "#tabs" ).tabs();
+  } );
+  </script>
+</head>
+<body>
+ 
+<div id="tabs">
+  <ul id="uu">
+    <!-- <li><a href="#tabs-1">Nunc tincidunt</a></li>
+    <li><a href="#tabs-2">Proin dolor</a></li>
+    <li><a href="#tabs-3">Aenean lacinia</a></li> -->
+  </ul>
+  <div id="tabs-1">
+
+    afadf
+  </div>
+  <div id="tabs-2">dd
+  </div>
+  <div id="tabs-3">dccc
+  </div>
+</div>
+ 
+<script language="JavaScript"> 
+/******************************* 文档载入 ************************************/
+String.prototype.format = function() {
+    var formatted = this;
+    for( var arg in arguments ) {
+        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+    }
+    return formatted;
+};
+$(document).ready(function(){                           
+    get_allSite();    
+});
+/******************************* tab菜单悬停延迟 ************************************/ 
+
+var html_ = '';
+
+//站点分类：aa.com/ bbb.com/ ccc.com
+function get_allSite()
+{
+    var site = "/get_site";
+    h = ''
+    var rt=$.getJSON(site, function(rt){   
+        var i=1;  
+        $.each(rt, function(i, item) {    
+            var html = `<li><a href="#tabs-${i}">${rt[i].site}</a></li>`;
+            h+=html;
+            console.log(rt[i].site)
+            // get_list(rt[i].site,'OneSite');
+            i++
+        });  
+    });     
+    rt.complete(function(){ 
+        console.log(h)
+            $("#uu").append(h);
+    });   
+} 
+
+
+function get_list(_site,rang='all')
+{        	
+    // var range = "all"; 
+    
+    var api = "get_list?site="+_site;
+    var rt=$.getJSON(api, function(arr){     
+        $.each(arr, function(i, item) {  
+            rt = itemToHtml(arr[i]);
+            console.log(rt)
+            var html2 = `<li><a href="#tabs-${rt.title}">Nunc tincidunt</a></li>`;
+            html = html2 + rt; 
+        });  
+        html = html +  "</ul></div>"
+    });      
+    rt.complete(function(){ 
+       $("#tbs").append(html);
+    });      
+}
+function getLocalTime(nS) {     
+    return new Date(parseInt(nS) * 1000).toLocaleString();//.replace(/:\d{1,2}$/,' ');     
+}
+function itemToHtml(obj)
+{
+    console.log(obj)
+    // var __id = obj["_id"]["$id"];
+    // var mkd = mark_del(obj["_id"]["$id"]);
+    // var dt = getLocalTime(obj["dt"]["sec"])
+    // dt = dt.format("yyyy-MM-dd hh:mm")
+    // var title = obj["name"].substring(0,28)
+    // var s = `<li class='title><img scr='del.png' width='15' height='15' onclick="submit_del(this,'${__id}')" /><a _id='${__id}' href='${obj["href"]}' title='${obj["name"]}' target='_blank'>${title}</a><span class='right512'>${dt}</span></li>`
+
+    var s = `<li class='title><img scr='del.png' width='15' height='15' onclick="submit_del(this,'${obj.site}')" /><a href='${obj.href}' title='${obj.title}' target='_blank'>${obj.title}</a><span class='right512'>${obj.date}</span></li>`
+
+    // console.log(s)
+
+
+    return s;
+}
+
+</script>
+</body>
+</html>

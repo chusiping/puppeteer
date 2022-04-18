@@ -1,0 +1,44 @@
+
+### OA测试登录
+post http://oa.gzqiaoyin.com/login/Login.jsp
+Content-Type: application/x-www-form-urlencoded
+
+loginid=00119960
+&userpassword=1qaz@WSX
+
+### OA测试登录
+post https://oa.gzqiaoyin.com/wui/theme/ecology8/page/login.jsp?templateId=3&logintype=1&gopage=
+Content-Type: multipart/form-data boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW  
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+
+
+
+###
+post http://192.168.1.144/vhost/custom/api_stock.php
+?fcname=get_allkind_increased
+&code=day5
+
+###
+post https://gd.122.gov.cn/user/m/uservio/suriquery
+Content-Type: multipart/form-data  
+
+ startDate: "20210101",
+        endDate: "20211001",
+        hpzl: "02",
+        hphm: "粤A29BN9",
+        page: "1",
+        type:"0"
+
+
+### 企业微信发送消息
+post https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=QQwO6MB6A8Ze0J83xLzYGMyd8XrIowmcDHIMQvLzkVAJIiXwPsvOXhNz-EUbSZmfBW1_zWkzPn2eraUYJH4v-563TfFSjcHAsjSMvulhf0ImmMUfijfh7R9dgI0L4HEffrGbQmIDxXVHFSCmrQtX4qpA2eVCCa9GClsGAzjshkECSvnvr89LUWToNBRrKnLCcJbxuucIkB0vnOHCkZpObQ
+Content-Type: multipart/json
+
+{"touser" : "FanBingQi","msgtype" : "text",   "agentid" : 1000003,   "text" : {       "content" : "ag3"   },   "safe":0,   "enable_id_trans": 0,   "enable_duplicate_check": 0,   "duplicate_check_interval": 1800}
+
+
+### 企业微信token
+POST https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwd8658d118708a9ae&corpsecret=_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc

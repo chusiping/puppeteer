@@ -1,0 +1,113 @@
+<!-- http://127.0.0.1:3000/content_newslist_bak.html -->
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb232" />
+    <title></title>
+    <link rel="stylesheet" href="style_v1.css" />
+    <script type="text/javascript" src="https://raw.githack.com/chusiping/static/main/jquery1.10.js"></script>
+    <!-- <link rel="stylesheet" href="https://raw.githack.com/chusiping/static/main/style_v1.css" />
+    <script type="text/javascript" src="https://raw.githack.com/chusiping/static/main/jquery1.10.js"></script> -->
+    <base target="_blank" />
+</head>
+
+<body>
+    <style type="text/css">
+        .masonry {
+            column-count: 4;
+            column-gap: 0;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 5px;
+        }
+
+        .item {
+            break-inside: avoid;
+            box-sizing: border-box;
+            padding: 5px;
+            border: solid 1px rgb(180, 177, 179);
+            margin: 3px;
+        }
+
+        .item a {
+            /* color: rgb(58, 23, 166); */
+            font-size: 13px;
+        }
+        .myTitle {
+            color: #fff;
+            font-size: 18px;
+            /* width: 100%;
+            margin: 5px;
+            padding: 5 5 5 5; */
+        }
+    </style>
+
+    <div class="masonry" id="tab_sw">
+    </div>
+    <script language="JavaScript">
+        /******************************* 文档载入 ************************************/
+        String.prototype.format = function () {
+            var formatted = this;
+            for (var arg in arguments) {
+                formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+            }
+            return formatted;
+        };
+        $(document).ready(function () {
+            get_allSite();
+        });
+        /******************************* tab菜单悬停延迟 ************************************/
+
+        var html_ = '';
+
+        //站点分类：aa.com/ bbb.com/ ccc.com
+        function get_allSite() {
+            var site = "/get_site";
+            var rt = $.getJSON(site, function (rt) {
+                $.each(rt, function (i, item) {
+                    get_list(rt[i].site, 'OneSite');
+                });
+            });
+        }
+        function submit_del(obj, ids) {
+            $(obj).hide();
+            var url = "Nodenews_api.php?act=del&v2=" + ids; //站点集合
+            var rt = $.get(url, function (result) {
+                // $(obj).children('a').removeClass("visit"); // 追加样式 
+
+            })
+        }
+        function mark_del(id) {
+            rt = "onclick='submit_del(" + id + ")'   ";
+            return rt;
+        }
+        function get_list(_site, rang = 'all') {
+            // var range = "all"; 
+            var html = '';
+            var api = "get_list?site=" + _site;
+            var rt = $.getJSON(api, function (arr) {
+                var ic = 0;
+                $.each(arr, function (i, item) {
+                    rt = itemToHtml(arr[i]);
+                    html = html + rt;
+                    ic++;
+                    if(ic > 20 ) return false;;
+                });
+                html = `<div class='item'><div class='bg myTitle'>` + _site + '</div><hr>' + html + '<div>';
+            });
+            rt.complete(function () {
+                $("#tab_sw").append(html);
+            });
+        }
+        function getLocalTime(nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString();//.replace(/:\d{1,2}$/,' ');     
+        }
+        function itemToHtml(obj) {
+            var s = `<div class='textEllipsis'><a href='${obj.url}' title='${obj.title}-${obj.AddTime}' target='_blank'>${obj.title} - ${obj.AddTime}</a></div>`
+            return s;
+        }
+    </script>
+</body>
+</html>
