@@ -6,9 +6,9 @@ const connection   = await amqp.connect('amqp://test:test@127.0.0.1:5672')
 const channel = await connection.createChannel()
 channel.assertQueue('team2');
 for (let i = 0; i < 1000; i++) {
-   mg = `【2021.05.31 09：14】第${i}条消息 1s`
-   await channel.sendToQueue('team2', Buffer.from(mg));
-   console.log(mg)
+    mg = `【2021.05.31 09：14】第${i}条消息 1s`
+    await channel.sendToQueue('team2', Buffer.from(mg));
+    console.log(mg)
 }
 await channel.close()
 }
