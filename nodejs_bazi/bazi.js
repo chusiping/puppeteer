@@ -153,8 +153,3 @@ console.log("日柱魁罡:" + Mingx.四柱[2]) ;
 Ming.init(1978, "戊午,壬戌,庚戌,戊寅", "男", 8);
 // Ming.init(1993,"丙子,丙申,甲辰,戊辰","女",9); //七銀
 
-data.sort(
-    firstBy(function (v1, v2) { return v1.name.length - v2.name.length; })
-    .thenBy(function (v1, v2) { return v1.population - v2.population; })
-    .thenBy(function (v1, v2) { return v1.id - v2.id; })
-);

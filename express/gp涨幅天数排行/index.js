@@ -125,6 +125,7 @@ function sortData(arryrt,type,cut=4000)
     var codes = "";             //"000653,600454 ...."
     var string = arryrt[0].stet + "<br>";   // var string = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
     var obj_rt = {};
+    var HuanHang = 1;
     for (let i = 0; i < arryrt.length; i++) {
         if((arryrt[i].name).includes('ST')) continue;
         if(arryrt[i].name.length == 3) arryrt[i].name += "　" 
@@ -136,6 +137,8 @@ function sortData(arryrt,type,cut=4000)
         string += `<br>${istr} <a href='https://q.stock.sohu.com/cn/${arryrt[i].code}/index.shtml' target='_blank'>${arryrt[i].name}</a> ${Wencai} ${codeAdd} 上涨天数：${arryrt[i].zhang}% , 振幅：${arryrt[i].zhangfu}% , 涨幅：${arryrt[i].zhangfu_now}% , ${arryrt[i].stet}` ;
         //string += `<br>${istr} <a href='http://quote.eastmoney.com/${arryrt[i].code}.html' target='_blank'>${arryrt[i].name}</a> ${Wencai} ${codeAdd} 上涨天数：${arryrt[i].zhang}% , 振幅：${arryrt[i].zhangfu}% , 涨幅：${arryrt[i].zhangfu_now}% , ${arryrt[i].stet}` ;
         codes += arryrt[i].code+",";
+        if( (HuanHang > 9) && (HuanHang % 10) == 0) codes += "<br>"; //一行显示太长，换三行
+        HuanHang++;
         if((i+1) == cut) break;
     }
     obj_rt.data = string;
