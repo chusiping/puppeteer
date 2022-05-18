@@ -102,7 +102,7 @@ var InsertByNul = (dbname,table_name,query_obj) => {
 //     });
 // }
 
-//8.删除多条数据
+//8.删除多条数据，禁止无条件删除
 var deleteMany_where = (dbname,table_name,where) => { 
     //delete var url = "mongodb://192.168.1.16:27017"
     MongoClient.connect(url, function(err, db) {
