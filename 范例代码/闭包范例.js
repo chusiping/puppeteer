@@ -13,5 +13,6 @@ var ttMyClass = (function (){      //定义一个类
     }
     // return { a1 : aa, b1 :bb }
 })();
-ttMyClass.aa();
-ttMyClass.aa();
+ttMyClass.aa(); //=1
+ttMyClass.aa(); //=2
+ttMyClass.bb(); //=3

@@ -27,4 +27,4 @@ app.get("/",(req,res)=>{
     }
 });
 
-app.listen(80)
+app.use('', express.static('./')).listen(3000);

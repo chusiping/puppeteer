@@ -23,6 +23,7 @@ app.all("/",(req,res,next)=>{
         var MsgSig = cryptor.getSignature(sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
         if (sVerifyMsgSig == MsgSig) {
             sEchoStr = cryptor.decrypt(sVerifyEchoStr).message;
+            // send('wx', 'FanBingQi');
             console.log(sEchoStr);
             res.send(sEchoStr);
         } else {
@@ -197,4 +198,4 @@ function send(fromUsername, toUsername) {
     console.log(wrapTpl);
     return wrapTpl;
 }
-app.listen(80)
+app.use('', express.static('./')).listen(80);

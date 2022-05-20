@@ -32,9 +32,12 @@ Content-Type: multipart/form-data
         page: "1",
         type:"0"
 
+### 企业微信后去token
+post https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwd8658d118708a9ae&corpsecret=_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc
+
 
 ### 企业微信发送消息
-post https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=QQwO6MB6A8Ze0J83xLzYGMyd8XrIowmcDHIMQvLzkVAJIiXwPsvOXhNz-EUbSZmfBW1_zWkzPn2eraUYJH4v-563TfFSjcHAsjSMvulhf0ImmMUfijfh7R9dgI0L4HEffrGbQmIDxXVHFSCmrQtX4qpA2eVCCa9GClsGAzjshkECSvnvr89LUWToNBRrKnLCcJbxuucIkB0vnOHCkZpObQ
+post https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=Os69A8PfXeom6gDxGaStGYiSnivMti_ftT3l_69h2navyoYBqWv2ce7SacWb-YELdM5YKCme_Sog4VGP6_uDXRyueqhfJWBxhDnsLDf6Ry39iMP5F17aG9wuPyLCrILGYSczF7l7ENesZ13RYAmgq2k3dWMGAZvPBKV92CGUUV8qWab9xCc28jaS9d8X23NX9x0LMl5uLMDiJXjlKZ3fPA
 Content-Type: multipart/json
 
 {"touser" : "FanBingQi","msgtype" : "text",   "agentid" : 1000003,   "text" : {       "content" : "ag3"   },   "safe":0,   "enable_id_trans": 0,   "enable_duplicate_check": 0,   "duplicate_check_interval": 1800}
