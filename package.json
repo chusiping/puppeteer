@@ -25,6 +25,7 @@
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.11",
     "mysql": "^2.18.1",
+    "node-schedule": "^2.1.0",
     "node-tesseract": "^0.2.7",
     "node-work-wechat": "^0.2.0",
     "pomelo-logger": "^0.1.7",

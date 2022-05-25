@@ -9,6 +9,7 @@ const lib_AllStockCode = require('./lib_AllStockCode');
 var destPath = './download/point.txt'
 const sleep = () => new Promise((res, rej) => setTimeout(res, 1000));
 var stock_arr = lib_AllStockCode.codes2;
+const schedule = require('node-schedule');
 
 // var sqlite3 = require('sqlite3');
 // var usersDB = new sqlite3.Database("../database/ClosePrice.db");
@@ -201,7 +202,6 @@ const AppendData = (async (appfile,content)=>{
     })
 });
 
-
 //参数1：股票数组 
 //参数2：多少天的价格
 //筛选结果：上涨天数最多，上涨幅度最大
@@ -218,10 +218,22 @@ if(arg.length >0)
 {
     if(arg[0] == "2") {
         fenxi(-20,20);
-    }else
+    }else if(arg[0] == "1"){
         hdcode(stock_arr,60);
+    }else if(arg[0] == "3"){
+        console.log("schedule定时执行等待中...:");
+        let rule = new schedule.RecurrenceRule();       // https://segmentfault.com/a/1190000022455361
+        // rule.second = [0, 10, 20, 30, 40, 50];       //每十秒实行
+        // rule.minute = 30;rule.second = 0;            //每小时 30 分执行
+        rule.hour=15;rule.minute =01;rule.second =30;   //每天 15点01 点执行
+        let job = schedule.scheduleJob(rule, () => {
+            console.log("schedule开始:");
+            hdcode(stock_arr,60);
+        });
+        // job.cancel();可以使用 cancel() 终止一个运行中的任务
+    }
 }else{
-    console.log('请输入参数:1 为爬取数据 2 为分析数据');
+    console.log('请输入参数:1 为爬取数据 2 为分析数据 3 定时轮询执行');
 }
 
 

@@ -32,8 +32,12 @@ Content-Type: multipart/form-data
         page: "1",
         type:"0"
 
-### 企业微信后去token
+### 企业微信获取token
 post https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwd8658d118708a9ae&corpsecret=_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc
+
+
+### 企业微信获取token 2
+post https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wwd8658d118708a9ae&secret=_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc
 
 
 ### 企业微信发送消息
@@ -42,6 +46,14 @@ Content-Type: multipart/json
 
 {"touser" : "FanBingQi","msgtype" : "text",   "agentid" : 1000003,   "text" : {       "content" : "ag3"   },   "safe":0,   "enable_id_trans": 0,   "enable_duplicate_check": 0,   "duplicate_check_interval": 1800}
 
+### 模拟提交微信测试接口 -- 文本 Content-Type:application/json 和  multipart/json
+post http://127.0.0.1:8080/send_wx
+Content-Type: multipart/json
 
-### 企业微信token
-POST https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwd8658d118708a9ae&corpsecret=_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc
+{"touser" : "FanBingQi","msgtype" : "text", "text" :"tst22", "agentid":1000003,"UID" : "BF4E3603-135C-48F1-9DBB-479A6FD5BBF8" }
+
+### 模拟提交微信测试接口 -- 图片
+post http://127.0.0.1:8080/up_file
+Content-Type: multipart/json
+
+{"type":"image","filePath" :"./te3.png"}
