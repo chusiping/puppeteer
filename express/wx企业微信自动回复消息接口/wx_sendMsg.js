@@ -21,7 +21,6 @@ const SendMsg = async (req,res,type)=>{
 
 app.all("/send_wx", (req, res, next) => {
     if( req.method == 'POST' && gUID == req.query.UID ){    //UUID鉴权
-        console.log("15::")
         SendMsg(req,res,req.query.type).then(x=>{ res.send(x) });
     }
     else{

@@ -8,12 +8,13 @@
             https://developer.work.weixin.qq.com/devtool/interface/alone?id=10112 (在线调用接口传素材)
     在线测试:https://developer.work.weixin.qq.com/devtool/interface/alone?id=10167
 */
+var sd = require('silly-datetime');
 var exec = require('child_process'); 
 module.exports = {
     token: 'aa123',
-    corpid: 'wwd86xxxxxxx08a9ae',
-    encodingAESKey: 'youandmearexxxxxxxx233445566778899',
-    corpsecret : '_toJoCPz-jx-xxxxxxxxxT8jFYfYXbF_Cc',
+    corpid: 'wwd865xxxxxxxxxx187xxxxa9ae',
+    encodingAESKey: 'youandmearetsssssssssssle112233445566778899',
+    corpsecret : '_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc',
     url_getToken : `curl 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=_corpid_&corpsecret=_corpsecret_'`,
     url_sendText : `curl 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=_token_' -H "Content-Type:application/json" -X POST -d '_msg_'`,
     url_upfile : `curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=_token_&type=_type_" -H "Content-Type:multipart/form-data"  -F "file=@_filePath_" -v`,
@@ -32,9 +33,19 @@ module.exports = {
             case "image":
                 rt.image = { "media_id" : obj.media_id} 
                 break;   
+            case "file":
+                rt.file = { "media_id" : obj.media_id} 
+                break;  
+            case "textcard":
+                rt.textcard = { "title" : obj.title, "description": obj.description, "url":obj.url} ;
+                break;      
             default:
+                rt.msgtype = "image"; 
+                rt.image = { "media_id" : "xxx"}; 
                 break;
         }
+        let msgTZ = `${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')} 发送消息主体:  ${JSON.stringify(rt)} \n`;
+        console.log(msgTZ);
         return rt;
     },
     upImageVideo:function(upObj){    //上传素材获得media-id
@@ -42,13 +53,15 @@ module.exports = {
             let url = this.url_getToken.replace('_corpid_',this.corpid).replace('_corpsecret_',this.corpsecret);
             this.eCurl(url).then(x1=>{  //获取token值
                 let urlsend = this.url_upfile.replace('_type_',upObj.type).replace('_token_',x1.access_token).replace('_filePath_',upObj.filePath);
-                    this.eCurl(urlsend).then(x2=>{ //填充token值和上传文件路径
-                        if(x2.errmsg == "ok"){
+                exists2(upObj.filePath).then(xx3 =>{
+                    if(xx3){
+                        this.eCurl(urlsend).then(x2=>{ //填充token值和上传文件路径
                             resolve(x2); 
-                        }else{
-                            reject(x2);
-                        }
-                    })
+                        });
+                    }else{
+                        resolve({"err":"文件不存在"}); 
+                    }
+                })
             });
         })
     },
@@ -71,11 +84,9 @@ module.exports = {
                 var Json_msg = JSON.stringify(this.textMsg(obj)) //this.textMsg(obj);
                 let urlsend = this.url_sendText.replace('_msg_',Json_msg).replace('_token_',x1.access_token);
                     this.eCurl(urlsend).then(x=>{ //发送信息和图片
-                        if(x.errmsg == "ok"){
-                            resolve(x); 
-                        }else{
-                            reject(x);
-                        }
+                        resolve(x); 
+                    }).catch(exp=>{
+                        reject(exp);
                     })
             });
         })
@@ -101,6 +112,13 @@ module.exports = {
         });
     }
 };
+async function exists2(path) {
+    return new Promise(resolve => {
+        fs.stat(path, (err) => {
+        resolve(err ? false : true);
+        });
+    })
+}
 
 
 
@@ -109,17 +127,27 @@ module.exports = {
     1. multipart 不是 application
     
     //通过测试 发送文本   
-    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST \
+    clear && curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST \
     -d \
-    "{\"touser\" : \"FanBingQi\",\"msgtype\" : \"text\", \"msgContent\" :\"3333\",\"agentid\":\"1000003\"}"
+    '{"touser" : "FanBingQi","msgtype" : "text", "msgContent" :"33\n\n 444","agentid":"1000003"}'
 
     //通过测试 发送图片
     curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST -d \
-    "{\"touser\" : \"FanBingQi\",\"msgtype\" : \"image\",\"agentid\":1000003, \"media_id\" :\"3TXEMZAGVIaNSMubZrWWTLHbSfME0NVS-PpiMh1LpVQLN5H8kW4XWAiphJxPWwE5V\"}" 
+    '{"touser" : "FanBingQi","msgtype" : "image","agentid":1000003, "media_id" :"3TXEMZAGVIaNSMubZrWWTLHbSfME0NVS-PpiMh1LpVQLN5H8kW4XWAiphJxPWwE5V"}' 
 
+    发文件
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST -d \
+    '{"touser" : "FanBingQi","msgtype" : "file","agentid":1000003, "media_id" :"3XRGDLYJkClAzMk8R71k1kvYLezUv8Zg86ian760yvEhyBpuEDAdD-pkvtndlsJUk"}'
 
-    //通过测试 本地接口上传测试
+    发卡片
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST -d \
+    '{"touser" : "FanBingQi","msgtype" : "textcard","agentid":1000003, "title" : "test" ,"description" : "<div class=gray>2016年9月26日</div> <div class=normal>恭喜你抽中iPhone 7一台，领奖码：xxxx</div><div class=highlight>请于2016年10月10日前联系行政同事领取</div>","url" : "URL", "btntxt":"更多"  }'
+
+    //通过测试 本地接口上传测试  
+    图片
     curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=up" -H "Content-Type:multipart/json" -X POST -d "{\"type\":\"image\",\"filePath\" :\"./te3.png\" }"
+    文件
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=up" -H "Content-Type:multipart/json" -X POST -d "{\"type\":\"file\",\"filePath\" :\"./sys.docx\" }"
 
 
     //windows 通过测试上传图片
