@@ -10,14 +10,35 @@
 */
 var sd = require('silly-datetime');
 var exec = require('child_process'); 
+var fs =  require("fs");
+const { response } = require('express');
 module.exports = {
     token: 'aa123',
-    corpid: 'wwd865xxxxxxxxxx187xxxxa9ae',
-    encodingAESKey: 'youandmearetsssssssssssle112233445566778899',
-    corpsecret : '_toJoCPz-jx-npE8IW7sucyehx4feQT8jFYfYXbF_Cc',
+    corpid: 'wwd865xxxxxxa9ae',
+    encodingAESKey: 'yxxxxxxxxxxxxxxxxxxxxxxxxx9',
+    corpsecret : '_toJoCxxxxxxxxxxxxxxxxxxxxxxxxxxxjFYfYXbF_Cc',
+    tongxunlu_secret : 'ED4xxxxxxxxxxxxxxxxxxxxxxxxPeeA',
     url_getToken : `curl 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=_corpid_&corpsecret=_corpsecret_'`,
     url_sendText : `curl 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=_token_' -H "Content-Type:application/json" -X POST -d '_msg_'`,
     url_upfile : `curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=_token_&type=_type_" -H "Content-Type:multipart/form-data"  -F "file=@_filePath_" -v`,
+    url_department : `curl "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=_token_"`, 
+    url_userlist : `curl "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=_token_&department_id=_dptid_&fetch_child=_IsFor_"`,
+    
+
+    getUserList : async function(obj) {    //获取部门下的用户列表
+        let url = this.url_getToken.replace('_corpid_',this.corpid).replace('_corpsecret_',this.tongxunlu_secret);
+        let rt_token = await this.eCurl(url);
+        let urlsend = this.url_userlist.replace('_dptid_',obj.dptid).replace('_token_',rt_token.access_token).replace('_IsFor_',obj.IsFor); //isfor 0 1 是否遍历所有子部门
+        let rt = await this.eCurl(urlsend);
+        return rt;
+    },
+    getDptList : async function (obj) {    //获取所有部门
+        let url = this.url_getToken.replace('_corpid_',this.corpid).replace('_corpsecret_',this.tongxunlu_secret);
+        let rt_token = await this.eCurl(url);
+        let urlsend = this.url_department.replace('_token_',rt_token.access_token);
+        let rt = await this.eCurl(urlsend);
+        return rt;
+    },
     textMsg : function(obj) {  //消息统一类,可以区分文本,图片,视频
         let rt = {};
         rt.touser = obj.touser;
@@ -30,6 +51,7 @@ module.exports = {
         switch (obj.msgtype) {
             case "text":
                 rt.text = {"content":"测试信息 - " + obj.msgContent};
+                break;   
             case "image":
                 rt.image = { "media_id" : obj.media_id} 
                 break;   
@@ -38,7 +60,11 @@ module.exports = {
                 break;  
             case "textcard":
                 rt.textcard = { "title" : obj.title, "description": obj.description, "url":obj.url} ;
-                break;      
+                break;  
+            case "dpt":
+                rt.dptid = obj.dptid
+                rt.IsFor = obj.IsFor;
+                break;  
             default:
                 rt.msgtype = "image"; 
                 rt.image = { "media_id" : "xxx"}; 
@@ -70,7 +96,7 @@ module.exports = {
             exec.exec(cmdStr, function(err,stdout,stderr){  //命令行执行curl
                 if(err) {
                     reject('error:'+stderr); 
-                } else {
+                } else { 
                     var data = JSON.parse(stdout);  //curl成功返回data
                     resolve((data));
                 }
@@ -149,6 +175,13 @@ async function exists2(path) {
     文件
     curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=up" -H "Content-Type:multipart/json" -X POST -d "{\"type\":\"file\",\"filePath\" :\"./sys.docx\" }"
 
+    获取所有部门列表
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=dpt" -H "Content-Type:multipart/json" -X POST -d \
+    '{"msgtype":"dpt"}'
+
+    获取部门人员列表
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=user" -H "Content-Type:multipart/json" -X POST -d \
+    '{"msgtype":"dpt","dptid" : 1, "IsFor":1}'
 
     //windows 通过测试上传图片
     curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=HHkgFfQYr9X4rLcPq-Npvq5HFUh2B7JMoyZMQS28MnMG17S87Ayhq8yJvKJ06UaO4NCfTDH406BDW81TR--dOEsLyP228H6a9f-QQhx1lARTFI5ZtUbxqNZ7A-LaBHLtAImJveYwlB1m4yjmYjSkAE38w8diPhG5vLaNMTLfryAfELIj5cjkGriF8KusLtiJ86ax_FXnm5n33_yehjW8qg&type=image" -H "Content-Type:multipart/form-data"  -F "file=@C:\Users\Administrator\Desktop\te3.png" -v
