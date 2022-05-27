@@ -14,10 +14,10 @@ var fs =  require("fs");
 const { response } = require('express');
 module.exports = {
     token: 'aa123',
-    corpid: 'wwd865xxxxxxa9ae',
-    encodingAESKey: 'yxxxxxxxxxxxxxxxxxxxxxxxxx9',
-    corpsecret : '_toJoCxxxxxxxxxxxxxxxxxxxxxxxxxxxjFYfYXbF_Cc',
-    tongxunlu_secret : 'ED4xxxxxxxxxxxxxxxxxxxxxxxxPeeA',
+    corpid: 'wwd89ae',
+    encodingAESKey: 'you66778899',
+    corpsecret : '_toJofYXbF_Cc',
+    tongxunlu_secret : 'ED4DPeeA',
     url_getToken : `curl 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=_corpid_&corpsecret=_corpsecret_'`,
     url_sendText : `curl 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=_token_' -H "Content-Type:application/json" -X POST -d '_msg_'`,
     url_upfile : `curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=_token_&type=_type_" -H "Content-Type:multipart/form-data"  -F "file=@_filePath_" -v`,
@@ -48,9 +48,10 @@ module.exports = {
         rt.enable_id_trans = 0;
         rt.enable_duplicate_check = 0;
         rt.duplicate_check_interval = 1800;
+        if(obj.toparty != null){ rt.toparty = obj.toparty ;} 
         switch (obj.msgtype) {
             case "text":
-                rt.text = {"content":"测试信息 - " + obj.msgContent};
+                rt.text = {"content":"[此次是测试信息请忽略] " + obj.msgContent};
                 break;   
             case "image":
                 rt.image = { "media_id" : obj.media_id} 
@@ -152,6 +153,12 @@ async function exists2(path) {
     测试命令: 
     1. multipart 不是 application
     
+    //测试发送带连接的部门群发
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST \
+    -d \
+    '{"toparty":2,"touser" : "","msgtype" : "text", "msgContent" :" <a href=\"http://work.weixin.qq.com\">邮件中心视频实况</a> 2022-5-27 15:58","agentid":"1000003"}'
+
+
     //通过测试 发送文本   
     clear && curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST \
     -d \
@@ -182,6 +189,11 @@ async function exists2(path) {
     获取部门人员列表
     curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=user" -H "Content-Type:multipart/json" -X POST -d \
     '{"msgtype":"dpt","dptid" : 1, "IsFor":1}'
+
+    部门群发消息
+    curl "http://127.0.0.1:8080/send_wx?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8&type=send" -H "Content-Type:multipart/json" -X POST \
+    -d \
+    '{"toparty":2,"touser" : "","msgtype" : "text", "msgContent" :"12 \n\n 444\n 2022-5-27 15:49","agentid":"1000003"}'
 
     //windows 通过测试上传图片
     curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=HHkgFfQYr9X4rLcPq-Npvq5HFUh2B7JMoyZMQS28MnMG17S87Ayhq8yJvKJ06UaO4NCfTDH406BDW81TR--dOEsLyP228H6a9f-QQhx1lARTFI5ZtUbxqNZ7A-LaBHLtAImJveYwlB1m4yjmYjSkAE38w8diPhG5vLaNMTLfryAfELIj5cjkGriF8KusLtiJ86ax_FXnm5n33_yehjW8qg&type=image" -H "Content-Type:multipart/form-data"  -F "file=@C:\Users\Administrator\Desktop\te3.png" -v
