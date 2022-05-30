@@ -40,6 +40,7 @@ module.exports = {
         return rt;
     },
     textMsg : function(obj) {  //消息统一类,可以区分文本,图片,视频
+        if(obj==null) return {};  
         let rt = {};
         rt.touser = obj.touser;
         rt.msgtype = obj.msgtype;

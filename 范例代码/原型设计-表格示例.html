@@ -1,0 +1,156 @@
+<!-- 
+    excel转htm：https://tableconvert.com/excel-to-html
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://form.making.link/public/lib/form-making/dist/FormMaking.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.semanticui.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" >
+    
+</head>
+<body>
+    <div id="app">
+        <div  style="width: 1000px;margin-top: 10px;margin-left: auto;margin-right: auto; text-align: center;">
+            <table id="tb">
+                <tr>
+                    <td>序号</td>
+                    <td>信息ID</td>
+                    <td>信息内容</td>
+                    <td>日期</td>
+                    <td>接受对象</td>
+                    <td>类型</td>
+                    <td>所属单位</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1001</td>
+                    <td>xxx超速</td>
+                    <td>2022-5-15</td>
+                    <td>张三</td>
+                    <td>app</td>
+                    <td>佛山项目</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>1002</td>
+                    <td>xxx违规打电话</td>
+                    <td>2022-5-16</td>
+                    <td>李四</td>
+                    <td>钉钉</td>
+                    <td>资产部</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>1003</td>
+                    <td>xxx超速</td>
+                    <td>2022-5-17</td>
+                    <td>张三</td>
+                    <td>微信</td>
+                    <td>信息化部</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>1004</td>
+                    <td>xxx违规打电话</td>
+                    <td>2022-5-18</td>
+                    <td>李四</td>
+                    <td>app</td>
+                    <td>佛山项目</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>1005</td>
+                    <td>xxx超速</td>
+                    <td>2022-5-19</td>
+                    <td>张三</td>
+                    <td>钉钉</td>
+                    <td>资产部</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>1006</td>
+                    <td>xxx违规打电话</td>
+                    <td>2022-5-20</td>
+                    <td>李四</td>
+                    <td>微信</td>
+                    <td>信息化部</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>1007</td>
+                    <td>xxx超速</td>
+                    <td>2022-5-21</td>
+                    <td>张三</td>
+                    <td>app</td>
+                    <td>佛山项目</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- 关键字 cdn文件 cdn引用 -->
+    <script src="https://cdn.bootcss.com/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://form.making.link/public/lib/form-making/dist/FormMaking.umd.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = '#app div table'; 
+            $(table).attr("class","table  table-bordered table-hover");
+            // $("#app div table tr:eq(0)").append("<td>ddd</td>");
+            var trList = $(table).find("tr");
+            for (var i=0;i<trList.length;i++) {
+                var tr = trList[i];
+                if(i==0){
+                    $(tr).append("<td>操作</td>");
+                }else{
+                    $(tr).append('<td>'+  btn('详情','btn-warning') + btn('编辑','btn-primary') + btn('删除','btn-danger')+'</td>' );
+                }
+            }
+            ;
+        });
+        let btn = (sname,sty)=> {
+            return `<button type="button" class="btn  btn-xs ${sty}">${sname}</button> `;
+        }
+    </script>
+</body>
+</html>
+
+<!-- 
+    Bootstrap 表格类样式
+☑  .table：基础表格，为任意 <table> 添加基本样式 (只有横向分隔线)
+☑  .table-striped：斑马线表格
+☑  .table-bordered：带边框的表格
+☑  .table-hover：鼠标悬停高亮的表格
+☑  .table-condensed：紧凑型表格
+☑  .table-responsive：响应式表格 
+
+
+.btn-lg	这会让按钮看起来比较大。
+.btn-sm	这会让按钮看起来比较小。
+.btn-xs	这会让按钮看起来特别小。
+.btn-block	这会创建块级的按钮，会横跨父元素的全部宽度。
+
+标准的按钮 
+<button type="button" class="btn btn-default">默认按钮</button>
+提供额外的视觉效果，标识一组按钮中的原始动作 
+<button type="button" class="btn btn-primary">原始按钮</button>
+表示一个成功的或积极的动作 
+<button type="button" class="btn btn-success">成功按钮</button>
+ 信息警告消息的上下文按钮 
+<button type="button" class="btn btn-info">信息按钮</button>
+ 表示应谨慎采取的动作 
+<button type="button" class="btn btn-warning">警告按钮</button>
+ 表示一个危险的或潜在的负面动作 
+<button type="button" class="btn btn-danger">危险按钮</button>
+ 并不强调是一个按钮，看起来像一个链接，但同时保持按钮的行为 
+<button type="button" class="btn btn-link">链接按钮</button>
+
+-->

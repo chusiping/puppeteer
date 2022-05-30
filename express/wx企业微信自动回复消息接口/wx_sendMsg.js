@@ -32,6 +32,11 @@ const SendMsg = async (req,res,type)=>{
 } 
 
 app.all("/send_wx", (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')  //设置跨域,允许不同域访问
+    res.header('Access-Control-Allow-Headers', 'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method' )
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE')
+    res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE')
+
     if( req.method == 'POST' && gUID == req.query.UID ){    //UUID鉴权
         SendMsg(req,res,req.query.type).then(x=>{ res.send(x) });
     }
@@ -39,5 +44,5 @@ app.all("/send_wx", (req, res, next) => {
         res.send("{errcode: -1,errmsg : 'author error!' }"); //UUID错误无权访问
     }
 });
-
+ 
 app.use('', express.static('./')).listen(8080); 
