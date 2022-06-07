@@ -1,7 +1,7 @@
 var codes1 = [
-    { code : '002714', name: '牧原股份'},
-    { code : '000002', name: '万科Ａ'},
-    { code : '000010', name: 'ST美丽'},
+    { code : '000151', name: '中成股份'},
+    { code : '600062', name: '华润双鹤'},
+    { code : '603908', name: '牧高笛'},
     { code : '000004', name: '国农科技'} 
 ];
 var codes2 = [

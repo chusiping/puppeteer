@@ -1,6 +1,20 @@
 var fs = require('fs');
 var path = require('path');
 
+
+//通过函数: 接受参数执行方法 node addto_JQJK.js 1000  qqq
+exports.ExecArg = (func) =>{
+    var arg = process.argv.splice(2);
+    if(arg.length >0)
+    {
+        let miao = arg[0];      //参数1 时间轮训间隔
+        let cookie = arg[1];    //参数2 cookie 字符串
+        func(miao,cookie);
+    }else{
+        func();
+    }
+}
+
 exports.RowIndex = (content='') => {
     var num = 0;
     return function (content='') {

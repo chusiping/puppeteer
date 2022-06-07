@@ -16,12 +16,12 @@ app.get("/",(req,res)=>{
 });
 
 app.get("/top",(req,res)=>{
-    var dd = req.query.day;
+    var _day = req.query.day;
     var _date2 = req.query.date;
-    dd =  ~dd+1;
+    _day =  ~_day+1;
     (async()  => {
         try {
-            const rt = await fenxi(dd,30,_date2);
+            const rt = await fenxi(_day,30,_date2);
             await res.render("index",{ data : rt.data , href : _href, codes : rt.codes });
         } catch (error) {
             res.send("异常 : "+ error + "\n"+ _href);
@@ -51,7 +51,7 @@ var fenxi = (async (recentDay,cutTop,_date2)=>{
             arr_all.push(rt);
         }
     }
-    var str = sortData(arr_all,"zhangfu_now",cutTop);
+    var str = sortData(arr_all,"zhangfu_now",cutTop,recentDay);
     return str;
 });
 
@@ -119,7 +119,7 @@ function 高低价差(array)
     rt = ((zuigaojia - zuidijia)/zuidijia * 100) ;
     return rt.toFixed(2);
 }
-function sortData(arryrt,type,cut=4000)
+function sortData(arryrt,type,cut=4000,recentDay)
 {   
     arryrt.sort(compare(type)); //选择zhang ，还是zhangfu 排序
     var codes = "";             //"000653,600454 ...."
@@ -134,8 +134,16 @@ function sortData(arryrt,type,cut=4000)
         hrefgoog = `<a href='https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q=${arryrt[i].name}+site%3Acaifuhao.eastmoney.com&oq=${arryrt[i].name}+site%3Acaifuhao.eastmoney.com'  target='_blank'>${arryrt[i].code}</a> `
         Wencai = `<a href='http://www.iwencai.com/unifiedwap/result?tid=stockpick&qs=sl_box_main_ths&w=${arryrt[i].name}'   target='_blank'>${arryrt[i].code}</a>` ;
         var istr = i < 9 ? 0 + (i+1).toString() : (i+1).toString();
-        string += `<br>${istr} <a href='https://q.stock.sohu.com/cn/${arryrt[i].code}/index.shtml' target='_blank'>${arryrt[i].name}</a> ${Wencai} ${codeAdd} 上涨天数：${arryrt[i].zhang}% , 振幅：${arryrt[i].zhangfu}% , 涨幅：${arryrt[i].zhangfu_now}% , ${arryrt[i].stet}` ;
-        //string += `<br>${istr} <a href='http://quote.eastmoney.com/${arryrt[i].code}.html' target='_blank'>${arryrt[i].name}</a> ${Wencai} ${codeAdd} 上涨天数：${arryrt[i].zhang}% , 振幅：${arryrt[i].zhangfu}% , 涨幅：${arryrt[i].zhangfu_now}% , ${arryrt[i].stet}` ;
+        
+        //原来模板 
+        //string += `<br>${istr} <a href='https://q.stock.sohu.com/cn/${arryrt[i].code}/index.shtml' target='_blank'>${arryrt[i].name}</a> ${Wencai} ${codeAdd} 上涨天数：${arryrt[i].zhang}% , 振幅：${arryrt[i].zhangfu}% , 涨幅：${arryrt[i].zhangfu_now}% , ${arryrt[i].stet}` ;
+
+        var string_模板 = `<br> _序号_ <a href='https://q.stock.sohu.com/cn/_代码_/index.shtml' target='_blank'>_名称_</a> _问财_ _添加_ _recentDay_天涨幅：_当前涨幅_% ,上涨天数：_涨天数_% , 振幅：_振幅_% ,  _上涨率_` ;
+
+        var zhang_ = arryrt[i].zhang.length == 5 ? "0"+arryrt[i].zhang : arryrt[i].zhang;
+
+        string += string_模板.replace('_序号_',istr).replace('_代码_',arryrt[i].code).replace('_名称_',arryrt[i].name).replace('_问财_',Wencai).replace('_添加_',codeAdd).replace('_涨天数_',zhang_).replace('_振幅_',arryrt[i].zhangfu).replace('_当前涨幅_',arryrt[i].zhangfu_now).replace('_上涨率_',arryrt[i].stet).replace('_recentDay_',- recentDay);
+
         codes += arryrt[i].code+",";
         if( (HuanHang > 9) && (HuanHang % 10) == 0) codes += "<br>"; //一行显示太长，换三行
         HuanHang++;
