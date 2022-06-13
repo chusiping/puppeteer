@@ -7,7 +7,7 @@ var config = require('./config.js');
 const app = express();
 app.engine('html',ejs.__express);  
 app.set('view engine', 'html');  
-
+var config = require('./config_module.js');
 
 
 app.all("/",(req,res,next)=>{
@@ -18,13 +18,15 @@ app.all("/",(req,res,next)=>{
     var sVerifyEchoStr = decodeURIComponent(req.query.echostr);
     var sEchoStr;
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.corpid);
-    /* 验证 www.mapked.com 接受企业微信 */
+    /*  验证 www.mapked.com 接受企业微信  
+        http://www.mapked.com:8080?msg_signature=xxx&timestamp=xxxx&nonce=xxx&echostr=xxxx/
+    */
     if (method == 'GET') {
         var MsgSig = cryptor.getSignature(sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
         if (sVerifyMsgSig == MsgSig) {
             sEchoStr = cryptor.decrypt(sVerifyEchoStr).message;
             // send('wx', 'FanBingQi');
-            console.log(sEchoStr);
+// console.log("手机信息：",sEchoStr);
             res.send(sEchoStr);
         } else {
             res.send("-40001_invaild MsgSig")
@@ -61,7 +63,7 @@ app.all("/",(req,res,next)=>{
                     }
                     var decrypted = cryptor.decrypt(encryptMessage);
                     var messageWrapXml = decrypted.message;
-                    // console.log(messageWrapXml); //打印收到的xml格式字符串
+// console.log(messageWrapXml); //打印收到的xml格式字符串
                     if (messageWrapXml === '') {
                         res.status(401).end('-40005_Invalid corpId');
                         console.log('40005_Invalid');
@@ -76,11 +78,13 @@ app.all("/",(req,res,next)=>{
                         var msgType = message.MsgType;
                         var fromUsername = message.ToUserName;
                         var toUsername = message.FromUserName;
-                        console.log("Msg row 77 : " + message.Content)
+console.log("Msg row 81 : " + message.Content)
                         switch (msgType) {
                             case 'text':
                                 var sendContent = send(fromUsername, toUsername);
-                                console.log("Msg row 81 : " + sendContent)
+                                console.log("Msg row 85 : " + fromUsername + " - " + toUsername );
+                                send(fromUsername, toUsername);
+// console.log("Msg row 81 : " + sendContent)
                                 res.status(200).end(sendContent);
                                 break;
                             //其他逻辑根据业务需求进行处理
@@ -195,7 +199,7 @@ function send(fromUsername, toUsername) {
         '<TimeStamp>' + timestamp + '</TimeStamp>' +
         '<Nonce><![CDATA[' + nonce + ']]></Nonce>' +
         '</xml>';
-    console.log(wrapTpl);
+    // console.log(wrapTpl);
     return wrapTpl;
 }
 app.use('', express.static('./')).listen(80);

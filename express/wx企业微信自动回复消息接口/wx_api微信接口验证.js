@@ -17,6 +17,7 @@ app.get("/",(req,res)=>{
     var cryptor = new WXBizMsgCrypt('aa123', 'youandmearetheworldpeople112233445566778899', 'wwd8658d118708a9ae');
     if (method == 'GET') {
         var MsgSig = cryptor.getSignature(sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
+        res.send(JSON.stringify(MsgSig))
         if (sVerifyMsgSig == MsgSig) {
             sEchoStr = cryptor.decrypt(sVerifyEchoStr).message;
             console.log(sEchoStr);
@@ -27,4 +28,4 @@ app.get("/",(req,res)=>{
     }
 });
 
-app.use('', express.static('./')).listen(3000);
+app.use('', express.static('./')).listen(80);

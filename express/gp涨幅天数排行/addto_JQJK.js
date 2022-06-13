@@ -29,19 +29,36 @@ var eCurl = function(cmdStr) { //命令行执行curl
         });
     });
 }
+//自选股已经存在列表,返回数组
+var myStockExist = async function (_cookie) {
+
+    let cook = _cookie == null ? cookie() : _cookie ;
+    let mystock = 'curl --cookie "'+ cook +'"  "http://myfavor.eastmoney.com/v4/webouter/ggdefstkindexinfos?appkey=d41d8cd98f00b204e9800998ecf8427e&cb=jQuery331008460323221682065_1654668930577&_=_time_" --referer http://quote.eastmoney.com/';
+// console.log(mystock)
+    mystock = mystock.replace('_time_', + Math.floor(Date.now() / 1000))
+    var rt = await eCurl(mystock);
+    var patt = /\$\d{6}\$/g;
+    var rt2 = rt.match(patt);
+    var rt3 = rt2.map(x=> x.replaceAll("$",""));
+    return rt3 ;
+}
 
 //循环定时执行
 var ForX = async function (miao,_cookie){
     let codeArr = await getZXG();
     let _miao_ = miao == null ? 2000 : miao;
     let cook = _cookie == null ? cookie() : _cookie ;
-    let url2 = 'curl --cookie "'+ cook +'" https://t.10jqka.com.cn/newcircle/group/modifySelfStock/?callback=modifyStock&op=add&stockcode=_code_&_=_time_';
+    let url2 = 'curl --cookie "'+ cook +'" https://t.10jqka.com.cn/newcircle/group/modifySelfStock/?callback=modifyStock&op=add&stockcode=_code_&_=_time_';  //同花顺自选股
 
-    url2 = 'curl --cookie "'+ cook +'" "http://myfavor.eastmoney.com/v4/webouter/as?appkey=d41d8cd98f00b204e9800998ecf8427e&cb=jQuery33103190186058732998_165458125273&g=1&sc=_zero_%24_code_&_=_time_" --referer http://quote.eastmoney.com/'
+    url2 = 'curl --cookie "'+ cook +'" "http://myfavor.eastmoney.com/v4/webouter/as?appkey=d41d8cd98f00b204e9800998ecf8427e&cb=jQuery33103190186058732998_165458125273&g=1&sc=_zero_%24_code_&_=_time_" --referer http://quote.eastmoney.com/';
 
-
+    let Exsit = await myStockExist();
     for (let i = 0; i < codeArr.length; i++) {
         const el = codeArr[i];
+        if(Exsit.includes(el)){
+            console.log(el + " - 此自选股已经存在");
+            continue;
+        } 
         let _zero_ = getZero(el);
         let uurl = url2.replace('_code_',el).replace('_time_', + Math.floor(Date.now() / 1000)).replace('_zero_',_zero_); 
 // console.log("1::\t\t"+uurl + "\n"); 
@@ -56,7 +73,6 @@ var getZero = (code)=>{
     if(code.substring(0,1) == "6") rt = "1";
     return rt;
 }
-
 
 lib.ExecArg(ForX);
 
