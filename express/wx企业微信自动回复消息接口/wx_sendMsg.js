@@ -45,4 +45,5 @@ app.all("/send_wx", (req, res, next) => {
     }
 });
  
-app.use('', express.static('./')).listen(8080); 
+console.log(`微信信息下推接口服务,"http://121.4.43.207:3001/send_wx?type=send&UID="+data.UID`)
+app.use('', express.static('./')).listen(3001); 
