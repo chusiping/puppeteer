@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const request = require('request');
-var baidu = require("./lib_myFunc"); //old: var baidu = require("./lib_OCR_baidu");
+var baidu = require("../public/_LibNode");
 var mf = require("./lib_myFunc");
 const fs = require('fs').promises;
 
