@@ -1,5 +1,48 @@
 var fs = require('fs');
 var path = require('path');
+var AipOcrClient = require("baidu-aip-sdk").ocr;
+
+// 上传文件到目录: let rt = await MyLib.upFile(req,'./temp_pic/1655562957_3444134456.png'); 
+// 注意文件实际还没有完全传完,需要 await sleep下 
+exports.upFile = async (req,SetNewName) => {
+    return new Promise((resolve, reject) => {
+        let fileSize = 1000;
+        let msg_empty = { status: false, message: "空文件!" };
+        let msg_big = { status: false, message: "文件不能大于 " + fileSize + " k!" };
+        let msg_ok = { status: true, message: "上传成功" , filePath :"" , ocr_words : "" };
+        let msg_err = { status: false, message: "error!" };
+    
+        try {
+            if(!req.files) { resolve(msg_empty)  } 
+            else {
+                let avatar = req.files.pic;
+                let size =  (avatar.size / 1024).toFixed(2); //小数位数
+                if (size > fileSize) { resolve(msg_big)   } else 
+                {
+                    let _Path = SetNewName + path.extname(avatar.name);
+                    var nonce = parseInt((Math.random() * 100000000000), 10); //sui
+                    avatar.mv(_Path);
+                    msg_ok.filePath = _Path;
+                    resolve(msg_ok) ;
+                }
+            }
+        } catch (err) { reject(msg_err) } //res.status(500).send(err);
+    });
+} 
+
+// 调用ocr : let code = await MyLib.OCR(rt.filePath);
+exports.OCR = async (_file) => {
+    var APP_ID = "19608996";
+    var API_KEY = "GvhzbLmCcr2uDhgzeh5pYuzi";
+    var SECRET_KEY = "pL7n4MUtKbWTIwEtyGrHjdAiqGEAKl87";
+    var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
+    var image = await fs.readFileSync(_file);
+    var base64Img = new Buffer.from(image).toString('base64'); 
+    var rt = await client.generalBasic(base64Img);
+    return rt;
+    // var obj = (rt.words_result)[0].words;
+    // return JSON.stringify(obj)
+};
 
 
 //通过函数: 接受参数执行方法 node addto_JQJK.js 1000  qqq
