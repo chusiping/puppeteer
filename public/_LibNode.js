@@ -15,16 +15,18 @@ exports.upFile = async (req,SetNewName) => {
         try {
             if(!req.files) { resolve(msg_empty)  } 
             else {
-                let avatar = req.files.pic;
-                let size =  (avatar.size / 1024).toFixed(2); //小数位数
-                if (size > fileSize) { resolve(msg_big)   } else 
-                {
-                    let _Path = SetNewName + path.extname(avatar.name);
-                    var nonce = parseInt((Math.random() * 100000000000), 10); //sui
-                    avatar.mv(_Path);
-                    msg_ok.filePath = _Path;
-                    resolve(msg_ok) ;
-                }
+                let avatar = req.files.file;
+                if(avatar){
+                    let size =  (avatar.size / 1024).toFixed(2); //小数位数
+                    if (size > fileSize) { resolve(msg_big)   } else 
+                    {
+                        let _Path = SetNewName + path.extname(avatar.name);
+                        var nonce = parseInt((Math.random() * 100000000000), 10); //sui
+                        avatar.mv(_Path);
+                        msg_ok.filePath = _Path;
+                        resolve(msg_ok) ;
+                    }
+                }else{ resolve(msg_empty) }
             }
         } catch (err) { reject(msg_err) } //res.status(500).send(err);
     });
@@ -32,9 +34,9 @@ exports.upFile = async (req,SetNewName) => {
 
 // 调用ocr : let code = await MyLib.OCR(rt.filePath);
 exports.OCR = async (_file) => {
-    var APP_ID = "19608996";
-    var API_KEY = "GvhzbLmCcr2uDhgzeh5pYuzi";
-    var SECRET_KEY = "pL7n4MUtKbWTIwEtyGrHjdAiqGEAKl87";
+    var APP_ID = "196xxx6";
+    var API_KEY = "GvhzxxxxxDhgzeh5pYuzi";
+    var SECRET_KEY = "pL7n4xxxxxxxxxxxxxAiqGEAKl87";
     var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
     var image = await fs.readFileSync(_file);
     var base64Img = new Buffer.from(image).toString('base64'); 
