@@ -2,8 +2,25 @@ var fs = require('fs');
 var path = require('path');
 var AipOcrClient = require("baidu-aip-sdk").ocr;
 
+// key:遍历删除文件
+// 删除文件清除指定文件夹下所有文件和文件夹 : MyLib.delDir('./temp_pic');
+function delDir (path){
+    let files = [];
+    if(fs.existsSync(path)){
+        files = fs.readdirSync(path);
+        files.forEach((file, index) => {
+            let curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()){
+                delDir(curPath); //递归删除文件夹
+            } else {
+                fs.unlinkSync(curPath); //删除文件
+                console.log("删除文件 : "+ curPath)
+            }
+        });
+    }
+}
 // 上传文件到目录: let rt = await MyLib.upFile(req,'./temp_pic/1655562957_3444134456.png'); 
-// 注意文件实际还没有完全传完,需要 await sleep下 
+// 注意文件实际还没有完全传完,需要 await sleep下 , 指定req.files.file,否则出错
 exports.upFile = async (req,SetNewName) => {
     return new Promise((resolve, reject) => {
         let fileSize = 1000;
@@ -60,6 +77,8 @@ exports.ExecArg = (func) =>{
     }
 }
 
+//key:自增序号
+//在闭包里自增序列号  const IndexA = lib.RowIndex(); //闭包循环累加实例
 exports.RowIndex = (content='') => {
     var num = 0;
     return function (content='') {
@@ -182,7 +201,7 @@ Date.prototype.format = function(fmt) {
     }
    return fmt; 
 }       
-//2.时间转义
+//2.时间转义 await lib.handTime(str.trim() | "3小时前" | "3分钟前" | "3天前" | "刚刚" )
 function handTime(str)
 {       
     var reg=/\d+(小时前)|\d+(分钟前)|\d+(天前)|(昨天)|^\d+$|(刚刚)/;
@@ -243,7 +262,7 @@ function handTime(str)
         return str_  
     }
 }
-//3.线程睡眠间隔3秒
+//3.线程睡眠间隔3秒 await lib.sleep(30000);
 async function sleep(time = 3000) {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -288,3 +307,4 @@ exports.ClearTitleHtml = ClearTitleHtml;
 exports.statPromisify = statPromisify 
 exports.listDir = listDir
 exports.ReBuildRs = ReBuildRs
+exports.delDir = delDir
