@@ -14,10 +14,10 @@ var fs =  require("fs");
 const { response } = require('express');
 module.exports = {
     token: 'aa123',
-    corpid: 'wwd89ae',
-    encodingAESKey: 'you66778899',
-    corpsecret : '_toJofYXbF_Cc',
-    tongxunlu_secret : 'ED4DPeeA',
+    corpid: '',
+    encodingAESKey: '',
+    corpsecret : '',
+    tongxunlu_secret : '',
     url_getToken : `curl 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=_corpid_&corpsecret=_corpsecret_'`,
     url_sendText : `curl 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=_token_' -H "Content-Type:application/json" -X POST -d '_msg_'`,
     url_upfile : `curl "https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=_token_&type=_type_" -H "Content-Type:multipart/form-data"  -F "file=@_filePath_" -v`,

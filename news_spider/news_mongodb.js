@@ -1,6 +1,6 @@
 //新闻聚合优化版【2021-5-18】：单实例浏览器进程
 const puppeteer = require('puppeteer');
-const lib = require('./_LibNode.js');
+const lib = require('../public/_LibNode.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongodb = "mongodb://192.168.1.16:27017";
 var sy_sleep = require('system-sleep');

@@ -51,9 +51,9 @@ exports.upFile = async (req,SetNewName) => {
 
 // 调用ocr : let code = await MyLib.OCR(rt.filePath);
 exports.OCR = async (_file) => {
-    var APP_ID = "196xxx6";
-    var API_KEY = "GvhzxxxxxDhgzeh5pYuzi";
-    var SECRET_KEY = "pL7n4xxxxxxxxxxxxxAiqGEAKl87";
+    var APP_ID = "";
+    var API_KEY = "";
+    var SECRET_KEY = "";
     var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
     var image = await fs.readFileSync(_file);
     var base64Img = new Buffer.from(image).toString('base64'); 
