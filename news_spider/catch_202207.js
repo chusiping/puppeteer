@@ -31,7 +31,6 @@ var urls = [
         url: ["https://www.appinn.com/category/online-tools/"],
         regHref:'<h2(\\s|.)*?</h2>|<div class="post-title">(\\s|.)*?</div>',
         regDate:"(.(分钟前|小时前|天前))|(\\d{4}(-|/)\\d{1,2}(-|/)\\d{1,2})|(\\d{1,2}月(\s|.)*\\d{4})",
-        // regDate:"(\\d{1,2}月(\s|.)*\\d{4})",
         IsShow : true,
         IsCuteTitle:false,
         IsFixHref : false 
@@ -50,10 +49,10 @@ var urls = [
         site:"myzaker.com", 
         url: ["https://www.myzaker.com/"],
         each:'[class="article-wrap"]', 
-        regHref:'<div class="article-content"(\\s|.)*?</div>', 
-        regDate:"(.(分钟前|小时前|天前))|(\\d{4}(-|/)\\d{1,2}(-|/)\\d{1,2})|(\\d{1,2}月(\s|.)*\\d{4})", 
+        regHref:'', 
+        regDate:"(.(分钟前|小时前|天前))|(\\d{4}(-|/)\\d{1,2}(-|/)\\d{1,2})", 
         IsShow : true,
-        IsCuteTitle:true ,
+        IsCuteTitle:false ,  //不取多行的第一行
         IsFixHref : false 
     },
     {
@@ -77,20 +76,6 @@ var urls = [
         IsFixHref : true 
     }
 ];
-
-// urls = [
-//     {
-//         site:"stcn", 
-//         url: ["https://kuaixun.stcn.com/"],
-//         each:'#news_list2 li', 
-//         regHref:'', //如果为空, 则添加外层的div 
-//         regDate:"(.(分钟前|小时前|天前))|(\\d{4}(-|/)\\d{1,2}(-|/)\\d{1,2})|(\\d{1,2}月(\s|.)*\\d{4})", 
-//         IsShow : true,
-//         IsCuteTitle:false 
-//     }
-// ];
-
-
 
 
 //1 curl 方法返回html或json eCurl =
@@ -117,10 +102,18 @@ logger.debug(obj_site.url, new Date());
     $(str).each(function(i, item){    
         let html = $(this).html();
         let title_str =  getRegStr(html,obj_site.regHref); //title
-        let tm_title =  $(title_str).find('a').text(); //作废: let tm_title = $(title_str).text().trim();
-        let html_date = getRegStr(html, obj_site.regDate);
+
+        let tm_title =  $(title_str).find('a').first().text().trim(); //作废: let tm_title = $(title_str).text().trim();
+        if(tm_title==null || tm_title=="") tm_title = $(title_str).find('a').first().attr('title');
+        if(obj_site.IsCuteTitle) tm_title = tm_title.substr(0,tm_title.indexOf('\n')); //多个换行主题的第一行
+
         let tm_href =  $(title_str).find('a').attr('href');
-        if(obj_site.IsCuteTitle)tm_title = tm_title.substr(0,tm_title.indexOf('\n'));
+        let html_date = getRegStr(html, obj_site.regDate);
+
+// console.log(title_str)
+// console.log(tm_title)
+// console.log(tm_title); process.exit()
+
 
         objHref.site = obj_site.site;
         objHref.href = FixHref(tm_href,obj_site);
@@ -130,7 +123,6 @@ logger.debug(obj_site.url, new Date());
 
 logger.debug(JSON.stringify(objHref));
         rt.push(objHref)
-        // return false;
     });
     return str;
 }
@@ -168,8 +160,11 @@ var ForUrlPage = async(obj) => {
 //3.c 修正href的相对链接 './aa.html'=>'http://xxx.com/aa.html'
 var FixHref = (href,obj_site) => {
     var rt = href;
-    if(obj_site.IsFixHref){
+    if(href.indexOf("./")==0){
         rt = obj_site.url + href.replace('./','');
+    }
+    if(href.indexOf("//www")==0){
+        rt = href.replace('//','http://');
     }
     return rt;
 }
