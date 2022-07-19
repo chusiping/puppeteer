@@ -1,18 +1,18 @@
 //新闻聚合优化版【2022-1-30】：单实例浏览器进程
-const puppeteer = require('puppeteer');
 const lib = require('../public/_LibNode.js');
 const schedule = require('node-schedule');
 const sleep = (tim) => new Promise((res, rej) => setTimeout(res, tim));
 const SqliteDB = require('../public/_LibSqlite.js').SqliteDB;
 const file = "new_spider.db";
 const sqliteDB = new SqliteDB(file);
-var IndexA = lib.RowIndex(); //递增
-var IndexB = lib.RowIndex();
+// var IndexA = lib.RowIndex(); //递增
+// var IndexB = lib.RowIndex();
 const cheerio = require('cheerio')
 var fs = require('fs');
-var log4js = require('log4js');
-var logger = log4js.getLogger();
-log4js.configure({appenders: [{ type:'file',filename: './log/default.log'}]}) //log4js 日志
+// var log4js = require('log4js');
+// var logger = log4js.getLogger();
+var sd = require('silly-datetime');
+// log4js.configure({appenders: [{ type:'file',filename: './log/default.log'}]}) //log4js 日志
 
 var urls = [
     {
@@ -94,12 +94,15 @@ var eCurl = async(url)=>
 }
 // 2 对html处理返回jons
 var getSqliteData = async(html,obj_site) => {
-    objHref = {};
+   
     rt = [];
     const $ = cheerio.load(html)
     let str= $(obj_site.each);
-logger.debug(obj_site.url, new Date()); 
-    $(str).each(function(i, item){    
+// logger.debug(obj_site.url, new Date()); 
+    var eachcount=0;
+    $(str).each(function(i, item){   
+        eachcount++ //因为是异步的所有要加循环
+        objHref = {}; 
         let html = $(this).html();
         let title_str =  getRegStr(html,obj_site.regHref); //title
 
@@ -110,21 +113,20 @@ logger.debug(obj_site.url, new Date());
         let tm_href =  $(title_str).find('a').attr('href');
         let html_date = getRegStr(html, obj_site.regDate);
 
-// console.log(title_str)
-// console.log(tm_title)
-// console.log(tm_title); process.exit()
-
-
         objHref.site = obj_site.site;
-        objHref.href = FixHref(tm_href,obj_site);
-        objHref.title = tm_title;
-        objHref.date_source = html_date;
-        objHref.date = lib.handTime(html_date)  ; 
-
-logger.debug(JSON.stringify(objHref));
+        objHref.title = tm_title;        
+        objHref.url = FixHref(tm_href,obj_site);
+        objHref.AddTime = lib.handTime(html_date) ;
+        // objHref.date_source = html_date;
+        // objHref.date = lib.handTime(html_date)  ; 
         rt.push(objHref)
+        if(eachcount>=$(str).length){
+            return rt;
+        }
+        // logger.debug("row 126 :"+IndexA(), new Date());
+        // logger.debug(JSON.stringify(objHref));
     });
-    return str;
+    return rt;
 }
 var getRegStr =(html,reg) => {
     if(reg=="") return "<div>"+ html + "</div>";
@@ -152,10 +154,19 @@ var RebuildPageRS = (obj) => {
 //3.B 循环数组里的每个页面
 var ForUrlPage = async(obj) => {
     var site_Arr = RebuildPageRS(obj) //重组urls数组
+    var count = 1;
     for (const obj_site of site_Arr) {        //循环页面
         var PageCodeOrJson = await eCurl(obj_site.url); //取得页面title的html集合
-        let obj = getSqliteData(PageCodeOrJson,obj_site)
+        let obj = await getSqliteData(PageCodeOrJson,obj_site)
+        for (let x = 0; x < obj.length; x++) {
+            const item = obj[x];
+            // logger.debug("162"+JSON.stringify(item)+IndexA(), new Date());
+            InsertDB(item);
+            count++;
+        }
+
     }   
+    console.log("本地循环总计条数:" + count +  " - " + sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss') )
 }
 //3.c 修正href的相对链接 './aa.html'=>'http://xxx.com/aa.html'
 var FixHref = (href,obj_site) => {
@@ -169,16 +180,40 @@ var FixHref = (href,obj_site) => {
     return rt;
 }
 
+// 每个对象插入一条记录 InsertDB = 
+var InsertDB = async (item) =>{
+    return new Promise((resolve, reject) => {
+        var rt = Object.values(item) //对象转为数组
+        var insertTileSql = "insert or ignore into news(site, title, url,AddTime,IsDel,type) values(?, ?, ?, ?, ?, ?)";
+        // console.log(IndexA())
+        try {
+            sqliteDB.insertData(insertTileSql,[rt]);
+            resolve("ok");
+        } catch (error) {
+            console.log(error)
+            reject("error");
+        }
+    });
+}
+
+// var InsertDB = async (item) =>{
+//     var rt = Object.values(item) //对象转为数组
+//     var insertTileSql = "insert or ignore into news(site, title, url,AddTime,IsDel,type) values(?, ?, ?, ?, ?, ?)";
+//     sqliteDB.insertData(insertTileSql,[rt]);
+// }
+
 //5 每3个小时定时轮询
 (async()=>{
-    fs.unlinkSync("./log/default.log")
-    ForUrlPage(urls);
-    // let rule = new schedule.RecurrenceRule();       
-    // // rule.minute = 30;rule.second = 0;   
-    // console.log("爬出新闻 : schedule定时执行等待中...:");
-    // let job = schedule.scheduleJob(rule, () => {
-    //     console.log( "schedule开始:");
-    // });
+    // fs.unlinkSync("./log/default.log")
+    // ForUrlPage(urls);
+    let rule = new schedule.RecurrenceRule();       
+    rule.minute = 30;rule.second = 0;   
+    console.log("爬新闻等待中...:");
+    let job = schedule.scheduleJob(rule, () => {
+        var dt = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+        console.log( dt + " 新闻 schedule开始:");
+        ForUrlPage(urls);
+    });
 })();
 
 
