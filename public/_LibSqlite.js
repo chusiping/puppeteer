@@ -33,9 +33,12 @@ DB.SqliteDB.prototype.insertData = function(sql, objects){
     DB.db.serialize(function(){
         var stmt = DB.db.prepare(sql);
         for(var i = 0; i < objects.length; ++i){
-            stmt.run(objects[i]);
+            try {
+                stmt.run(objects[i]);
+            } catch (error) {
+                console.log(error)
+            }
         }
-    
         stmt.finalize();
     });
 };

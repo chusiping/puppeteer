@@ -15,7 +15,7 @@ var df  = {
 }
 var JQK  = {
     name : "同花顺",
-    cookie : function() { return "__utmc=156575163; __utmz=156575163.1627262428.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=156575163.1268590257.1627262428.1646796534.1646971540.9; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1654499599; historystock=HK6066%7C*%7C002761%7C*%7C600062%7C*%7C600769%7C*%7C600519; searchGuide=sg; user=MDpjaHVzaXBpbmc6Ok5vbmU6NTAwOjg2NzY0MzE0OjcsMTExMTExMTExMTEsNDA7NDQsMTEsNDA7NiwxLDQwOzUsMSw0MDsxLDEwMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOzEwMiwxLDQwOjI3Ojo6NzY3NjQzMTQ6MTY1NTM1OTk1NTo6OjEyNjAyOTE3ODA6NDAyNDQ1OjA6MWYzYzMzZTQ1OWVmM2Y0ZDdiOTM4YTRjYTg4MGVmZTQwOmRlZmF1bHRfNDow; userid=76764314; u_name=chusiping; escapename=chusiping; ticket=547983787e368b3351f5654069f321a1; user_status=0; utk=a983ac2319b34e2b33d0fadc1f0db9a7; Hm_lvt_da7579fd91e2c6fa5aeb9d1620a9b333=1654498861; Hm_lpvt_da7579fd91e2c6fa5aeb9d1620a9b333=1655360474; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1655360475; v=AwPaTk4XZcALPCk07vUCe899ksyueJaJ0Qjb7TXkW0TZxy26vUgnCuHcay5G"},
+    cookie : function() { return "__utmc=156575163; __utmz=156575163.1627262428.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=156575163.1268590257.1627262428.1646796534.1646971540.9; historystock=HK6066%7C*%7C002761%7C*%7C600062%7C*%7C600769%7C*%7C600519; searchGuide=sg; log=; user=MDpjaHVzaXBpbmc6Ok5vbmU6NTAwOjg2NzY0MzE0OjcsMTExMTExMTExMTEsNDA7NDQsMTEsNDA7NiwxLDQwOzUsMSw0MDsxLDEwMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOzEwMiwxLDQwOjI3Ojo6NzY3NjQzMTQ6MTY1NzA5OTM0NDo6OjEyNjAyOTE3ODA6NDAxODU2OjA6MTM3NDM2ZTcwMTkzZTIxYTRiNzA4NTc2ZDdmNzQ1M2ZmOmRlZmF1bHRfNDow; userid=76764314; u_name=chusiping; escapename=chusiping; ticket=19c7039170d83f8d3e928115982e5fe6; user_status=0; utk=0758a1ce3e8003afd200fc6cc4c960dc; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1657099351; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1657099393; v=Ax7HnUPw8Iz26yTorIn3OIoCb79j3-JZdKGWPcinimFc67BpMG8yaUQz5kKb"},
     url : function(){ return 'curl -A "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0" --cookie "'+ this.cookie() +'" "https://t.10jqka.com.cn/newcircle/group/modifySelfStock/?callback=modifyStock&op=add&stockcode=_code_&_=_time_"   --referer http://t.10jqka.com.cn/' },
 
     //使用东方财务的列表数据循环删除
@@ -112,11 +112,25 @@ var getZero2 = (code)=>{
 }
 
 (async()=>{
-    console.log("schedule定时执行等待中...:");
+    const IsPara = ()=>{
+        var arg = process.argv.splice(1);
+        if(arg.length > 1)
+            return true
+        else    
+            return false
+    };
+    
     let rule = new schedule.RecurrenceRule();       // https://segmentfault.com/a/1190000022455361
-    // rule.second = [0, 2, 4, 6, 8, 10];           //每十秒实行
-    // rule.minute = 30;rule.second = 0;            //每小时 30 分执行
-    rule.hour=01;rule.minute =01;rule.second =30;   //每天 01点01 点执行
+    // rule.second = [0, 2, 4, 6, 8, 10];           // 每十秒实行
+    // rule.minute = 30;rule.second = 0;            // 每小时 30 分执行
+    if(!IsPara()) {
+        // rule.second = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
+        ForX(500,site.JQK);
+        ForX(500,site.df);
+    }else{
+        rule.hour=01;rule.minute =01;rule.second =30;   //每天 01点01 点执行
+    }
+    console.log("schedule定时执行等待中...:");
     let job = schedule.scheduleJob(rule, () => {
         console.log("addto_JQK.js - schedule开始:");
         ForX(500,site.JQK);
@@ -124,4 +138,5 @@ var getZero2 = (code)=>{
     });
 })();
 
-//调用方式(旧的) : node addto_JQJK.js 1000  qqq
+// 2022-7-6 17:26
+// 调用方式(旧的) : node addto_JQJK.js 1000  qqq

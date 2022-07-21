@@ -1,6 +1,22 @@
 var fs = require('fs');
 var path = require('path');
 var AipOcrClient = require("baidu-aip-sdk").ocr;
+var exec = require('child_process'); 
+
+
+//执行cmd命令 var rt = await eCurl(url);
+exports.eCurl = function(cmdStr) { //命令行执行curl
+    return new Promise((resolve,reject)=>{
+        exec.exec(cmdStr, function(err,stdout,stderr){  //命令行执行curl
+            if(err) {
+                reject('error:'+stderr); 
+            } else {   
+                // var data = JSON.parse(stdout);  //curl成功返回data
+                resolve((stdout));
+            }
+        });
+    });
+}
 
 // key:遍历删除文件
 // 删除文件清除指定文件夹下所有文件和文件夹 : MyLib.delDir('./temp_pic');
@@ -79,11 +95,11 @@ exports.ExecArg = (func) =>{
 
 //key:自增序号
 //在闭包里自增序列号  const IndexA = lib.RowIndex(); //闭包循环累加实例
-exports.RowIndex = (content='') => {
+exports.RowIndex = (content='',isPrint=true) => {
     var num = 0;
     return function (content='') {
     num++;
-    console.log(content + " - " +num);
+    if(isPrint) console.log(content + " - " +num);
     }
 }
 
