@@ -21,7 +21,7 @@ var sits = async()=>{
 var content = async(site) => {
     return new Promise((resolve, reject) => {
         var t = new Date();//你已知的时间
-        var str_ =  t.setTime(t.setDate(t.getDate() - 10)); //日期加减
+        var str_ =  t.setTime(t.setDate(t.getDate() - 3)); //日期加减
         var str2_ = sd.format(new Date(str_), 'YYYY-MM-DD');
         let sql = `select * from news where site = '${site}' and AddTime > '${str2_}' order by AddTime desc `; 
         db.all(sql ,function(err,row){
@@ -65,27 +65,6 @@ app.all("/",async(req,res)=>{
 });
 
 
-// http://127.0.0.1:3000/get_site
-app.get("/get_site",(req,res)=>{
-    db.all("select distinct site from news",function(err,row){
-        res.json(row); 
-    })
-});
-// http://127.0.0.1:3000/get_list?site=baidu
-// http://127.0.0.1:3000/get_list?site=donews
-app.get("/get_list",(req,res)=>{
-    var site = req.query.site;
-    (async()  => {
-        try {   
-            db.all(`select * from news where site = '${site}' order by AddTime desc ` ,function(err,row){
-                res.json(row); 
-            })
-        } catch (error) {
-            res.json({"err":error});
-        }
-    })();
-});
-
 var tempDiv=()=>{
     return tempeStr = `   
     <div class="item">
@@ -111,7 +90,7 @@ var template = (_content_)=>{
     </div>
 <style type="text/css">    
 .masonry { column-count: 5; column-gap: 0; margin-left: 10px;margin-right: 10px; margin-top: 5px;}
-.item { break-inside: avoid; box-sizing: border-box; padding: 5px; border:solid 1px rgb(180, 177, 179);margin: 3px;}
+.item { height:500px;overflow:auto; break-inside: avoid; box-sizing: border-box; padding: 5px; border:solid 1px rgb(180, 177, 179);margin: 3px;}
 .item a{ list-style: none; margin-bottom: 8px; margin-left: 3px; display: list-item; color: rgb(58, 23, 166); font-size: 12px; line-height: 20px; text-decoration: none;color: black}
 .row { width: 90%; display: flex;float: right }
 .row2 { float: left; font-size: 12px;}
