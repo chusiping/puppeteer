@@ -34,14 +34,21 @@ exports.top = function (req, res, next) {
     var arrHisData = [];
     var _day = req.query.day;
     var _date2 = req.query.date;
+    var _isapi = req.query.isapi == null ? "" : req.query.isapi;
     _day =  ~_day+1;
     var _date = sd.format(new Date(), 'YYYY-MM-DD');
     var _href = "<a href=\"/top?day=10&date=" + _date + "\">排行</a>";
     let init = async ()=> {
         try {
             const rt = await fenxi(_day,30,_date2);
+
             // res.send(rt);
-            await res.render("top",{ data : rt.data , href : _href, codes : rt.codes });
+            if(_isapi == ""){
+                await res.render("top",{ data : rt.data , href : _href, codes : rt.codes });
+            }else{
+                res.send(rt.codes.replaceAll("<br>",""));
+            }
+
         } catch (error) {
             res.send("异常 : "+ error + "\n"+ _href);
         } 
