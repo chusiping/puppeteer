@@ -1,0 +1,549 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>zxg</title>
+    <script type="text/javascript" src="https://js.jrjimg.cn/lib/jquery-1.7.min.js"></script>
+    <base target="_blank"/>
+</head>
+<body>
+
+
+<style type="text/css">    
+.masonry { column-count: 5; column-gap: 0; margin-left: 200px;margin-right: 200px; margin-top: 5px;}
+.item { break-inside: avoid; box-sizing: border-box; padding: 3px; border:solid 0px rgb(180, 177, 179);margin: 1px;}
+.item a{ color: rgb(58, 23, 166); font-size: 15px; }
+#dv_bk2 {  text-align: center;  margin-left: 20px; margin-right: 20px;   /* display: flex;*/ flex-wrap: wrap; }
+.nowidth2 {  width: 290px !important;}
+input.text-l {   padding: 10px;    font-size: 1.14286em;}
+.primary {
+    border: none;
+     background-color: #467B96; 
+     cursor: pointer; 
+     border-radius: 2px;
+     color: #FFF; 
+}   
+.btn{
+    height: 40px;
+    width: 120px;
+    font-size: 1.14286em;
+    font-weight: bold;
+    display: inline;
+}
+
+#tab03 {
+    text-align: center;
+}
+button, input, select, textarea {
+    line-height: normal;
+}
+body {
+    display: block;
+    margin: 8px;
+}
+body, button, input, select, textarea {
+    font: 12px/24px tahoma,Helvetica,arial,sans-serif;
+}
+table.tableMSA {
+    margin: 0 auto;
+    width: 971px;
+    *width: 972px;
+    border: 1px #E6E6E6 solid;
+    border-collapse: collapse;
+}
+table.tableMSA th {
+    background: #F9F7F5;
+    font: normal 12px '宋体';
+     border-top: 0;
+    border-bottom: 1px #E6E6E6 solid;
+}
+table.tableMSA td {
+    font: normal 12px 'Tahoma';
+    text-align: right;
+    padding-right: 3px;
+    border-top: 0;
+    border-bottom: 1px #E6E6E6 solid;
+}
+</style>
+<div class="boxbfb MostOne" id="tab_sw">
+       
+        <!-- 板块股 star -->
+        <div class="tab-inner" id="tab03" style="display:block;">
+            <div>			
+				<div id="edit_code_bk" style="display: inline-block;">
+	                <textarea id="custcodes_bk" rows="3" cols="100" style="display:'block';"></textarea>
+                    <div>
+                        <select id="sele_bk2" class="btn">
+                        </select>
+                        <input id="ipt_bk" type="text" class="text-l">
+    	                <button id="btn_savebk" class="primary btn" type="button" onclick="setbk();">保存自选股</button>
+                        <button id="btn_freshbk" class="btn" type="button" onclick="get_bk2();">刷新</button>
+                        <!--<input id="ipt_target_name" class="text-l" type="text" size=8> 代码 <input id="ipt_target1" type="text" class="text-l" size=8>  -->
+                        <div id="show_kuisun" class="btn"></div>
+                        <div id="show_kuisun2" class="btn"></div>
+                        <div id="msg_save_bk" class="na_popup"></div>
+                    </div>
+                </div>
+                <div id="copyCode" style="text-align:left;margin-left: 30px;"></div>
+                <div id="dv_bk2" class="masonry">
+                </div>
+			</div>
+        </div>
+        <!-- 板块股 end  -->
+</div>
+<script type="text/javascript" src="lib.js"></script>
+<!-- <script type="text/javascript" src="../skin1/jscss/browser.js"></script> -->
+<script language="JavaScript"> 
+    /******************************* 函数树状图 ************************************/
+    //页面载入
+    //      +get_bk2();
+    //          -get_bk_price
+    //             -setTables(rt)
+    //                 -$("#dv_bk2").html(html)
+    //                        
+
+    /******************************* 文档载入 ************************************/
+    var custcodes_v = "";   //拼音转证券代码变量
+    var cache = {};         //拼音转证券代码变量
+	var link_sele = '';
+    $(document).ready(function(){        
+        $(".na_popup").propup();                      
+        setHoverDelay();                    //tab菜单悬停延迟
+        get_bk_one();
+        get_bk2();        
+        set_Interval(get_bk_price,12000);     
+        // autocomplet_tgPrice(); 
+        // autocomplet_tgPrice("#ipt_target_name","#ipt_target1") ;
+        $('#custcodes_bk').keyup(function(){        //change监听
+            var tp = $("#custcodes_bk").val().replace('，','').replace(' ',',').replace(',,',',');
+            // alert(tp);
+            $("#custcodes_bk").val(tp);
+        });
+        sqllog();
+        showZxgCodeStr();
+        (async()=>{
+            // await get_bk_one2();
+            // let rt = await getBkData('ETF');
+            // console.log(rt);
+
+        })();
+    });
+    function showZxgCodeStr()
+    {
+        // $.get("/get_bk2?code=bkzxg_%E8%87%AA%E9%80%89&showtype=1", function(result){ 
+        $.get("/get_bk2", function(result){ 
+            if(result.length > 0) { 
+                arr = result.split(',');
+                var html="";
+                var row = 12;
+                for (var i = 0; i < arr.length; i++) {
+                    if(i!=0 && (i % (row+1))==0 )html+="<br>";
+                    html+=arr[i]+",";
+                }
+                $("#copyCode").html(html);
+            }
+        });  
+    }
+    function seleHref(link_sele,code,cname)
+    {
+        var link = '';
+        if(link_sele == '')  link_sele = 'sina';
+
+        if(link_sele == '东方财富') link = '<a href=http://quote.eastmoney.com/'+ code.replace('cn_','') +'.html?'+ code.replace('cn_','')  +'" target=_blank >'+ cname +'</a>';
+        if(link_sele == '中财网')   link = '<a href=http://quote.cfi.cn/quote_'+ code.replace('cn_','') +'.html target=_blank >'+ cname +'</a>';
+        if(link_sele == 'sohu')    link = '<a href=https://q.stock.sohu.com/cn/'+ code.replace('cn_','') +'/index.shtml target=_blank >'+ cname +'</a>';  
+        if(link_sele == 'sina')    link = '<a href=http://finance.sina.com.cn/realstock/company/'+ SetStock(code.replace('cn_','')) +'/nc.shtml target=_blank >'+ cname +'</a>';  
+        if(code.indexOf('5')==0)   link = '<a href=https://finance.sina.com.cn/fund/quotes/'+ code.replace('cn_','') +'/bc.shtml target=_blank >'+ cname +'</a>';  
+        return link;
+    }
+    function verifyCodeFormat(){
+        var tp = $("#custcodes_bk").val();
+        if(/^\d{6}(,\d{6})*$/.test(tp)){
+            return true;
+        }
+        else
+            return false; 
+    }
+    /******************************* tab菜单悬停延迟 ************************************/ 
+    function setHoverDelay()
+    {
+        var trigger = null;
+        var $li = $('#tab_sw div ul li');
+        $($li. eq(0) .addClass('cur').find('a').attr('ref')).siblings('.tab-inner').hide();
+        $li.hover(function(){
+                var _this = $(this);  
+                trigger = setTimeout(function(){
+                    $($(_this).find('a').attr('ref')).show().siblings ('.tab-inner').hide();
+                    $(_this).addClass('cur').siblings ('.cur').removeClass('cur');                    
+                },20)                        
+            },
+            function(){clearTimeout(trigger); }
+        );
+    }
+    var gb_bkcode,gb_bkworth = []; 
+    function setbk()
+    {
+        if(!verifyCodeFormat()) return false;
+        var mydata = $("#custcodes_bk").val(); mydata = mydata.replace(/:/g,"-");
+        var bkname = $("#sele_bk2").val(), newbk = $("#ipt_bk").val(); 
+        bkname = newbk == "" ? bkname : newbk; 
+        mydata = mydata.replace(/\n/g,'');
+        $.get("/set_bkzxg?&code="+mydata+"&bkname="+bkname, function(result){ 
+            if(result == "ok") { $('#msg_save_bk').html(" <font color='red'>保存成功!</font>") ;$('#msg_save_bk').show().delay(500).hide(0);}
+            get_bk2();
+        });  
+    }
+   
+    //读取某个指定板块的代码串(逗号)
+    async function getBkData(bkname){
+      return new Promise((resolve,reject) =>{   
+         $.getJSON("/get_bk2?&code=bkzxg_"+bkname, function(result){  
+            if(result.length == 0) {  console.log("getBkData:读取数据失败!"); 
+                reject(""); 
+            }else{
+                var fd = result[0]["content"];    
+                resolve(fd);            
+                // $("#custcodes_bk").val(fd);
+            }
+        });  
+      });
+    }
+
+
+    async function GetVal_selebk2()
+    {
+        return new Promise((resolve, reject) => {
+            $("#sele_bk2").change(function(){
+                resolve($("#sele_bk2").val());
+            });
+        });
+    }
+
+
+    async function get_bk_one()
+    {
+        $("#sele_bk2").change(function(){
+            $("#ipt_bk").val(''); 
+            bkname = $("#sele_bk2").val();       
+            if(bkname=="") { $("#custcodes_bk").val(''); return; }     
+            sum = "";
+            $("#custcodes_bk").show();
+            $.getJSON("/get_bk2?&code=bkzxg_"+bkname, function(result){  
+                if(result.length == 0) {  console.log("get_bk_one:读取数据失败!"); return; }               
+                var fd = result[0]["content"];                
+                $("#custcodes_bk").val(fd);
+                $("#copyCode").html(fd);
+            });  
+        });
+		//选择目标链接网站
+		$("#sele_url").change(function(){
+            link_sele = $("#sele_url").val();   
+			get_bk_price();			
+        });
+    }
+    
+    function get_bk2()
+    {
+        $("#custcodes_bk").hide();
+        var sum = "",checkRpt = "";
+        var rt=$.getJSON("/get_bk2", function(result){     
+        $("#sele_bk2").empty();
+        $("#sele_bk2").append('<option value ="" selected>选择板块</option>');
+            $.each(result, function(i, item) {
+                var fd = result[i]["content"];                
+                var pri_t = 0;
+                var bkname_t = result[i]["opt"].replace("bkzxg_","");
+                var codes = fd.split(","); 
+
+                for (index = 0; index < codes.length; index++) {
+                    f1 = "cn_" + codes[index] + "-" + result[i]["opt"].replace("bkzxg_","")+"-" ;
+                    if(index > 0 || i>0  ) { f1 = "," + f1; }                      
+                    sum = sum + f1;                     
+                } 
+                if(checkRpt != bkname_t ){  
+                        $("#sele_bk2").append("<option value='"+ bkname_t +"'>"+ bkname_t +"</option>");
+                        checkRpt =  bkname_t; 
+                }            
+            });  
+        });            
+        rt.complete(function(){ 
+            gb_bkcode = sum;  
+            get_bk_price();
+        });        
+    }
+    //202-8-21 把回调函数独立出来,动态绘制table表格显示报价
+    function setTables(data)
+    {   
+        var html = "" , checkLine = "" ,rept = 0;
+        var bk_NO = 5;
+        result=[];result = data;
+
+        $.each(result, function(i, item) {                
+            var code = result[i][0];   
+            var cname = result[i][1];   
+            var cprice = result[i][2];   
+            var _cprice = accurateDecimal(cprice,2,true); //补零函数
+            var cpercent = result[i][3];  
+            
+            var cbk = result[i][bk_NO]; 
+            var arr_cbk = cbk.split(""),  cbk_str = "";
+
+            showKuiSun(code,_cprice)
+
+            for ( index = 0; index < arr_cbk.length; index++) {
+                //bak cbk_str = cbk_str + arr_cbk[index] + "<br>";
+                cbk_str = cbk_str + arr_cbk[index] ;
+            }
+            /******************************* table ************************************/
+            if(checkLine!=cbk)
+            {
+                rept = 1;
+                html = html + '<div class="item">\
+                                <table class="tableMSA nowidth2" id="tableMSA">\
+                                    <thead id="id_bk">\
+                                        <th colspan=5 style="font-size:18px;font-weight:bold;">'+ cbk_str +'</th> \
+                                    </thead>';
+            }
+            if(cbk_str=='ETF') _cprice = cprice;
+            // var ys3 = cpercent.replace('%','') >=  0 ? "red" : "green";
+            // var ys_float = cpercent.replace('%','') >=  0 ? "float:right;" : "float:left;";
+            var ys3,ys_float,ys_wd,chart_str;
+            if( cpercent.replace('%','') >= 0 ) { 
+                ys3 = "#cad2e1";      ys_wd = cpercent.replace('%','').replace('-','') * 10; 
+                if(code.substring(0, 1)=="3"){ ys_wd = ys_wd / 2;  }
+                // chart_str = '<div style="width:50%;float:left;align-text:left;">'+ cpercent +'%</div><div style="float:left;background-color:red;width:'+ ys_wd +'px;height:12px;"></div>'
+            }  
+            else{
+                ys3 = "#d0d493";    ys_wd = cpercent.replace('%','').replace('-','') * 10;  
+                if(code.substring(0, 1)=="3"){ ys_wd = ys_wd / 2;  }                  
+                // chart_str = '<div style="width:50%;float:right;">'+ cpercent +'%</div><div style="float:right;background-color:green;width:'+ ys_wd +'px;height:12px;"></div>'
+            }  
+            if(cpercent > 0) cpercent = "+" + cpercent;
+            var wh = (gb_bkworth[i] * _cprice /10000).toFixed(2);
+            var colspan = rept == 1 ? '<td class="e1" rowspan=tt_'+ cbk_str +' ><div style="font-size:15px;font-weight:900;color:#1854bf">'+ cbk_str +'<div/></td>' : "";
+            html = html + '<tr>';       
+            // html = html + colspan;   
+            //html = html + '<td><a href="http://quote.eastmoney.com/'+ code.replace('cn_','') +'.html?'+ code.replace('cn_','')  +'" target=_blank >'+ cname +'</a></td>'; 
+            html = html + '<td>'+ seleHref(link_sele,code,cname) + ' <a onclick="op3(\''+ cname +'\')"><img src="wenhao2.jpg" /> </a><a onclick="delcode(\''+ code +'\',\''+ cbk_str +'\',this,\''+ cname + '\')"><img src="del.png" width="12" height="12" /> </td>'
+            
+            // html = html + '<td style="padding:0px;margin:0px"><a href="https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q='+ cname +'+site:caifuhao.eastmoney.com&oq='+ cname +'+site:caifuhao.eastmoney.com&as_qdr=d" target="_blank"><img src="wenhao2.jpg" /></a></td>'
+            html = html + '<td> '+ _cprice +' </td>'; 
+            html = html + '<td style="padding:2px;width:70px;"><div style="padding:0px;margin:0px;float:left;background-color:'+ ys3 +';width:'+ ys_wd +'%;height:12px;"></div></td>';   
+            html = html + '<td class="'+ ys3 +'">'+ cpercent +'%</td>';   
+            html = html + '</tr>';
+            checkLine = cbk;
+            if( (i+1 == result.length ) || (checkLine != result[i+1][bk_NO])    )
+            {
+                html = html + '</table></div>';
+                html = html.replace('tt_' + cbk_str,rept);
+            }
+            /******************************* end ************************************/     
+           
+            rept ++;
+        });  
+        $("#dv_bk2").html(html);
+    }
+    //景天里后面的图形链接
+    function GetHrefs(u)
+    {
+        var cname = u.replace(' ','');
+        var str = '<a href="https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q='+ cname +'+site:eastmoney.com&oq='+ cname +'+site:eastmoney.com&as_qdr=w" target="_blank"><img src="wenhao2.jpg" /></a>';
+        str = str + ' <a href="http://www.iwencai.com/stockpick/search?tid=stockpick&qs=sl_box_main_ths&w='+ cname +'" target="_blank"><img src="wencai.jpg" /></a>';
+        return str;     //caifuhao.eastmoney.com
+    }
+    function op3(cname) {
+        //参考url https://www.cnblogs.com/chris-oil/p/4205517.html
+        var mycars=new Array();
+        mycars[0]= 'https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q='+ cname +'+site:eastmoney.com&oq='+ cname +'+site:eastmoney.com&as_qdr=w';
+        mycars[1]= 'http://www.iwencai.com/stockpick/search?tid=stockpick&qs=sl_box_main_ths&w='+ cname ;
+        $.each(mycars, function (i, url) {
+            window.open(url, "_blank","");  
+        });
+    };
+    //点击则清楚input里对应的代码
+    function delcode(code,bkname,obj,gpname) {
+        $.get("/delcode?code="+ code +"&bkname=bkzxg_"+bkname, function(result){  
+            if(result.length == 0) {  console.log("get_bk_one:读取数据失败!"); return; }               
+            if(result == "ok") { $('#msg_save_bk').html(" <font size='5' color='red'>"+ gpname +"删除成功!</font>") ;$('#msg_save_bk').show().delay(1000).hide(0);}
+            $(obj).closest('tr').remove();
+        });  
+    }
+    //格式化逗号：,,=>,
+    function FormatDouHao(params) {
+        var _pms = params.replace(',,',',');  
+        if(_pms.substr(0,1) == ",") _pms = _pms.substr(1)
+        if(_pms.substr(_pms.length-1) == ",") _pms = _pms.substr(0,_pms.length-1)
+        return _pms;
+    }
+    //对报价回来的[]数据进行排序
+    function ascend(x,y){
+        return y[3] - x[3];  //价格是2，涨幅比例是3
+    }
+    function sortArr(result)
+    {
+        checkLine = "";cbk = "";
+        var int = -1; var int_= 0;
+        var ar = new Array();
+        $.each(result, function(i, item) {   
+            var cbk = result[i][5];    
+            if(checkLine!=cbk)  //每次产生新的组的时候，配置参数
+            {
+                int ++;
+                ar[int] = new Array();
+                checkLine = cbk;
+                int_= 0 ;
+            }
+            ar[int][int_] =  result[i];
+            int_ ++;
+        });
+        //价格排序  
+        $.each(ar, function(i, item) {   
+            if(i!=1) { ar[i].sort(ascend)}; //如果不属于固定股，就进行排序
+        });  
+        //重新输出
+        var rt = new Array();var xx = 0;
+        $.each(ar, function(i, item) {   
+            $.each(ar[i], function(ii, item2) {   
+                rt[xx] = ar[i][ii];
+                xx++;
+            }); 
+        }); 
+        return rt;
+        //console.log(rt);
+    }
+    
+    
+    //2020-8-21 改用post方法提交，防止url过程报错
+    function get_bk_price()
+    {       
+        //***** 方法一 *************
+        var url_ = "/exec_getSinaPrice";  
+        // console.log(gb_bkcode.substr(0,99)+" ...... ");  
+        $.post(url_, {"P_code":gb_bkcode} , function(result){
+            // var rt = sortArr(JSON.parse(result));   //排序整理
+            // console.log("get_bk_price(): " + JSON.stringify(rt).substr(0,99)+" ...... ");
+            // setTables(rt);                          //渲染表格
+            setTables(result); 
+            // setNOtifiy(result);
+        });
+       
+
+        //***** 方法二 *************
+        // var url_ = "api_stock.js?exec_getSinaPrice";  
+        // $.ajax({ 
+        //     url:url_, 
+        //     type:"post",
+        //     data: {"P_code": gb_bkcode},
+        //     datatype:"json",
+        //     success:function(data){ 
+        //         setTables(JSON.parse(data));
+        //     }, 
+        //     error:function(){ 
+        //         console.log("get_bk_price 失败"); 
+        //     }
+        // }); 
+    }
+    //2021-7 设定触发的条件，代码，涨幅，跌幅，或者某个敏感价格位置，任意一个条件，
+    //每次获取api的数据都要检查一次条件，一旦符合立即触发
+    var hiscode = []; //已经浏览过的代码，防止重复提示
+    function setNOtifiy(result)
+    {
+        hiscode = [];
+        mycodes = [{'code':'601066','pc_up':'3','pc_down':'-0.5','price_up':'26.7','price_down':'0'}];
+        mycodes = forLocalStorageKey('waining_');
+        //1 从集合中寻找匹配代码的数据集合
+        //2 api的数据集合和设定的条件逐一匹配
+        //3 任意一个条件成功，即发出通知[{'code':'601006','pc':'3',price:''}]
+        // msg = [];
+        $.each(result, function(i, item) {                
+            var code = result[i][0];   
+            var cname = result[i][1];   
+            var cprice = result[i][2];   
+            var cpercent = result[i][3].replace('%','');  
+            for (let x = 0; x < mycodes.length; x++) {
+                const el = mycodes[x];
+                msg = "";
+                for (let xx = 0; xx < hiscode.length; xx++) {
+                    const el = hiscode[xx];         
+                    if(code==el) return false;    //检查已经重复的code，就不再出提示      
+                }
+                if(code == el.code){
+                    hiscode.push(code);
+                    if(el.pc_up != '0' &&  parseFloat(cpercent) > parseFloat(el.pc_up) )
+                    {
+                        msg = cname+" 涨幅超过"+el.pc_up+"%";
+                    };
+                    if(el.pc_down != '0' && parseFloat(cpercent) < parseFloat(el.pc_down)  )
+                    {
+                        msg = cname+" 跌超过"+el.pc_down+"%";
+                    };
+                    if(el.price_up != '0' && parseFloat(cprice)  >  parseFloat(el.price_up)  )
+                    {
+                        msg = cname+" 向上超过"+el.price_up;
+                    };
+                    if(el.price_down != '0' && parseFloat(cprice)  <  parseFloat(el.price_down)  )
+                    {
+                        msg = cname+" 向下超过"+el.price_down;                        
+                    };
+                    if(msg!="")mesgNotice(msg);
+                }
+            }
+        });
+    }
+    $('#form-submit').click(function(){
+        var inputq1 = $('#input-q1').val();      
+        var sele_v = $('#sele').val();
+        var url = "";      
+        var href1="https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q="+ inputq1 +"+site:caifuhao.eastmoney.com&oq=" + inputq1+"+site:caifuhao.eastmoney.com";
+        var href2="http://www.iwencai.com/stockpick/search?tid=stockpick&qs=sl_box_main_ths&w="+ inputq1  ;
+        var href = 'href' + sele_v; 
+        // console.log(eval(href));
+        window.open(eval(href), '_blank');
+    });
+    function sqllog()
+    {
+        // console.log("SELECT * from t_option where opt like '%bkzxg%' order by md5+0;");
+    }
+    function setNOtify2()
+    {
+
+    }
+    var myDate = new Date(); 
+    function mesgNotice(msg) {
+        Mk_time = new Date();
+        if(Mk_time > myDate ) {
+            console.log("Notification开始提示：" + Mk_time.Format('yyyy-MM-dd hh:mm:ss'));
+            if (window.Notification && Notification.permission !== "denied") {
+                Notification.requestPermission(function (status) {
+                    var notice_ = new Notification('新的消息', { body: msg });
+                    notice_.onclick = function () { //单击消息提示框，进入浏览器页面
+                        t = new Date(); 
+                        myDate = t.setTime(t.setMinutes(t.getMinutes() + parseInt(5)));// 设置已读，10分钟内不再重复提醒
+                        console.log("Notification已点击提示：" + new Date(myDate).Format('yyyy-MM-dd hh:mm:ss') );
+                        window.focus();
+                    }
+                });
+            }
+            else{
+                // console.log('Notification.permission is ' + Notification.permission);            
+            }
+        }
+    }
+    function showKuiSun (code,now_price)
+    {
+        var str = "";
+        if(code=="601066") {
+            var rt =  6600*now_price - 279835 ;
+            str += " 中心建投:"+ rt
+            $("#show_kuisun").html(str);
+        }
+        if(code=="601225") {
+            var rt =  3600*now_price -  94521 ;
+            str += " 山西煤业:"+ rt
+            $("#show_kuisun2").html(str);
+        }
+        
+    }
+</script>
+</body>
+</html>    
+

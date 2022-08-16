@@ -4,6 +4,23 @@ var AipOcrClient = require("baidu-aip-sdk").ocr;
 var exec = require('child_process'); 
 
 
+//返回mysql的sql数据结果promise对象  调用：lib.query('mysql-slave1', sql).then
+exports.query = (myDBlink,sql,ArrConn) => {
+    return new Promise((resolve, reject)=>{
+        ArrConn.forEach(conn => {
+            if( myDBlink == conn.host ) {
+                conn.obj.query(sql,function (err, result) {
+                    rt = [];
+                    result.forEach(x => { rt.push(x);});
+                    resolve(rt);
+                    if(err){ reject("error:"+err);}
+                });
+            };
+        });
+    })
+}; 
+
+
 //执行cmd命令 var rt = await eCurl(url);
 exports.eCurl = function(cmdStr) { //命令行执行curl
     return new Promise((resolve,reject)=>{
@@ -35,6 +52,8 @@ function delDir (path){
         });
     }
 }
+
+
 // 上传文件到目录: let rt = await MyLib.upFile(req,'./temp_pic/1655562957_3444134456.png'); 
 // 注意文件实际还没有完全传完,需要 await sleep下 , 指定req.files.file,否则出错
 exports.upFile = async (req,SetNewName) => {
