@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="stylesheet" href="https://form.making.link/public/lib/form-making/dist/FormMaking.css">
+</head>
+<body>
+  <div id="app">
+    <fm-generate-form
+      :data="jsonData" 
+      :remote="remoteFuncs" 
+      :value="editData" 
+      :remote-option="dynamicData"
+      ref="generateForm"
+    >
+    </fm-generate-form>
+  </div>
+  <script src="https://unpkg.com/vue@2.6.14"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://form.making.link/public/lib/form-making/dist/FormMaking.umd.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        jsonData: {"list":[{"type":"fileupload","icon":"icon-wenjianshangchuan","options":{"defaultValue":[],"width":"500px","tokenFunc":"funcGetToken","token":"","tokenType":"datasource","domain":"https://tcdn.form.making.link/","disabled":false,"tip":"图片格式应当是png,jpg格式","action":"http://192.168.12.14:3000/ocr?UID=BF4E3603-135C-48F1-9DBB-479A6FD5BBF8","customClass":"","limit":1,"multiple":false,"isQiniu":false,"labelWidth":100,"isLabelWidth":false,"hidden":false,"dataBind":true,"headers":[],"required":false,"validatorCheck":false,"validator":"","withCredentials":false,"remoteFunc":"func_zxv9qnux","remoteOption":"option_zxv9qnux","tableColumn":false,"hideLabel":false},"events":{"onChange":"","onSelect":"giqn47oe","onUploadSuccess":"giqn47oe","onUploadError":"","onRemove":""},"name":"上传OCR图片","key":"zxv9qnux","model":"fileselel","rules":[]},{"type":"html","icon":"icon-html","options":{"defaultValue":"<b style=\"color: red;\">\n1. 上传文件字段名指定为 file<br>\n2. api地址 http://192.168.12.14:3000/ocr?UID=xxxxxxxxxxxxxxxx<br>\n3. 指定调用标识 UID<br> \n4. 返回为json,  status:true,代表成功\nocr_words 为对象数组 [{},{},{},{},{},] \n</b>","labelWidth":100,"isLabelWidth":false,"hidden":false,"dataBind":true,"required":false,"remoteFunc":"func_ku6mtrj7","remoteOption":"option_ku6mtrj7","tableColumn":false},"events":{"onChange":""},"name":"OCR接口说明","key":"ku6mtrj7","model":"html_ku6mtrj7","rules":[]}],"config":{"labelWidth":100,"labelPosition":"right","size":"default","customClass":"","ui":"element","layout":"horizontal","width":"700px","hideLabel":false,"hideErrorMessage":false,"eventScript":[{"key":"mounted","name":"mounted","func":""},{"key":"refresh","name":"refresh","func":""},{"key":"vrd4syxq","name":"onSelect_up","func":"const {file} = arguments[0]\r\n\r\nif (file.size > (1024 * 1024)) {\r\n  // 返回 false; 将不会继续上传\r\n  this.$message.error(\"图片不能大于1M\");\r\n  return false\r\n}else{\r\n  console.log(file);\r\n}"},{"key":"giqn47oe","name":"onUploadSuccess_ok","func":" this.$message.success(\"上传成功,请查看response返回\");"}],"dataSource":[]}},
+        editData: {},
+        remoteFuncs: {
+        },
+        dynamicData: {
+        }
+      }
+    })
+  </script>
+</body>
+</html>

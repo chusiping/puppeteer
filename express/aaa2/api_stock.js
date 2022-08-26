@@ -3,6 +3,7 @@
 var SqliteDB = require('../../public/_LibSqlite.js').SqliteDB;
 var file     = "aaa2.db";
 var DB = new SqliteDB(file);
+var exec = require('child_process'); 
 
 const express = require('express')
 const fileUpload = require('express-fileupload');
@@ -128,7 +129,11 @@ var get_bk2 = function(req, res, next) {
         // DB.close();
     };  
     function dataDeal(objects){
-    res.send(JSON.stringify(objects))
+        if(req.query.showtype!=null){
+            res.send(objects[0].content)
+        }else{
+            res.send(JSON.stringify(objects))
+        }
     }
     getDATA();
 }
@@ -176,10 +181,89 @@ console.log(sql);
     getDATA();
 }
 
+//获取分时图数据-自制k线
+var getMinite_KLine = function(req, res, next) {
+
+    let GetSixCode = function (x){
+        let mk = "sz";
+        if(x.substring(0,1) == "6") mk = "sh";
+        if(x.substring(0,1) == "5") mk = "sh";
+        return mk+x;
+    };  
+    var getDATA = async()=>
+    {
+        let code = req.query.code;
+        if(req.query.code==null) return "error: no code!";
+        if(req.query.code.length != 6) return "error: code must be six !";
+        let code2 = GetSixCode(code)
+        let arr = [];
+        var url = 'curl "https://quotes.sina.cn/cn/api/openapi.php/CN_MinlineService.getMinlineData?symbol='+ code2 +'&callback=var%20t1sh515220=&dpc=1"';
+        var rt = await eCurl(url);
+        var patt = /\/\*<script>.*<\/script>\*\//g; //替换   /*<script>location.href='//sina.com';</script>*/
+        var rt2 = rt.replace(patt,'');
+
+        patt = /\{"m".*?\}/g
+        rt2 = rt2.match(patt);
+        rt2 = rt2.map(x=> arr.push(JSON.parse(x)));
+        let obj = {};
+        obj.code = code; obj.data = arr;
+        return obj;
+    };
+
+
+    async function exec(){
+        let  rt = await getDATA();
+        res.send(rt);
+    }
+    exec();
+}
+
+var test = function(req, res, next) {
+    let str_getPrice_FromSina = function (){
+        return new Promise((resolve, reject) => { 
+            let _code =  GetSixCode(req.query.code);
+            var site = { url: 'http://hq.sinajs.cn/list=' + _code, headers: { referer: "https://finance.sina.com.cn"}
+            }
+            request.get(site).pipe(iconv.decodeStream('gb2312')).collect(function(err, body) {
+                resolve(body)
+            });
+        });
+    };
+    async function exec(){
+        let  rt = await str_getPrice_FromSina();
+        res.send(rt);
+    }
+    exec();
+}
+
+
+let GetSixCode = function (code){
+        let mk = "sz";
+        if(code.substring(0,1) == "6") mk = "sh";
+        if(code.substring(0,1) == "5") mk = "s_sh";
+        return mk+code;
+};  
+var eCurl = function(cmdStr) { //命令行执行curl
+    return new Promise((resolve,reject)=>{
+        exec.exec(cmdStr, function(err,stdout,stderr){  //命令行执行curl
+            if(err) {
+                reject('error:'+stderr); 
+            } else {   
+                // var data = JSON.parse(stdout);  //curl成功返回data
+                resolve((stdout));
+            }
+        });
+    });
+}
+
+console.log('app.use(express.static(".")).listen(3004);')
 app.all("/exec_getSinaPrice", exec_getSinaPrice);//获取报价
 app.all("/get_bk2", get_bk2);           //获取所有板块的列表
 app.all("/set_bkzxg", set_bkzxg);       //更新自选股的列表
 app.all("/delcode", delcode);           //删除某个股票
+app.all("/getMinite_KLine", getMinite_KLine); //获取分时图sina的数据
+app.all("/test", test); //获取分时图sina的数据 http://127.0.0.1:3004/test?code=601066
+
 app.use(express.static(".")).listen(3004);
 
 

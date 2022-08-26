@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>分时图</title>
+  <style>
+    .charts-wrap .m-line{height:500px;width: 80%;margin: 0 auto;} 
+    .commColor span{
+      float: right !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="charts-wrap">
+    <div id="m-line" class="m-line"></div>
+  </div>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/charts-demo-data.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/charts-demo.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var mChart = echarts.init(document.getElementById('m-line'));
+    getmData(function(res){
+      getInfo(function(res2){
+        res.yestclose = res2[2]
+        mChart.setOption(initMOption(res, 'hs'));
+      })
+    })  
+</script>
+</body>
+</html>

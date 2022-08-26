@@ -119,18 +119,12 @@ table.tableMSA td {
             $("#custcodes_bk").val(tp);
         });
         sqllog();
-        showZxgCodeStr();
-        (async()=>{
-            // await get_bk_one2();
-            // let rt = await getBkData('ETF');
-            // console.log(rt);
-
-        })();
+        // showZxgCodeStr();
     });
     function showZxgCodeStr()
     {
         // $.get("/get_bk2?code=bkzxg_%E8%87%AA%E9%80%89&showtype=1", function(result){ 
-        $.get("/get_bk2", function(result){ 
+        $.get("/get_bk2?code=bkzxg_%E8%87%AA%E9%80%89&showtype=zichuan", function(result){ 
             if(result.length > 0) { 
                 arr = result.split(',');
                 var html="";
@@ -417,12 +411,8 @@ table.tableMSA td {
     {       
         //***** 方法一 *************
         var url_ = "/exec_getSinaPrice";  
-        // console.log(gb_bkcode.substr(0,99)+" ...... ");  
         $.post(url_, {"P_code":gb_bkcode} , function(result){
-            // var rt = sortArr(JSON.parse(result));   //排序整理
-            // console.log("get_bk_price(): " + JSON.stringify(rt).substr(0,99)+" ...... ");
-            // setTables(rt);                          //渲染表格
-            setTables(result); 
+            setTables(sortArr(result)); 
             // setNOtifiy(result);
         });
        
