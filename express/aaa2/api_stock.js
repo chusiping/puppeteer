@@ -218,7 +218,23 @@ var getMinite_KLine = function(req, res, next) {
     exec();
 }
 
-var test = function(req, res, next) {
+
+var code2Name = async function(req, res, next) {
+    let code2name_ = function (){
+        return new Promise((resolve, reject) => { 
+            let _code =  (req.query.code);
+            var site = `https://q.stock.sohu.com/app1/stockSearch?method=search&callback=str&type=all&keyword=${_code}&_=${Math.floor(Date.now() / 1000)}`
+            request.get(site).pipe(iconv.decodeStream('gb2312')).collect(function(err, body) {
+                resolve(body)
+            });
+        });
+    };
+    let  rt = await code2name_();
+    rt = rt.replace('str(','').replace(']]})',']]}');
+    res.send(JSON.parse(rt));
+}
+// 获取收盘价sina的数据 http://127.0.0.1:3004/closePrice?code=601066
+var closePrice = function(req, res, next) {
     let str_getPrice_FromSina = function (){
         return new Promise((resolve, reject) => { 
             let _code =  GetSixCode(req.query.code);
@@ -240,7 +256,7 @@ var test = function(req, res, next) {
 let GetSixCode = function (code){
         let mk = "sz";
         if(code.substring(0,1) == "6") mk = "sh";
-        if(code.substring(0,1) == "5") mk = "s_sh";
+        if(code.substring(0,1) == "5") mk = "sh";
         return mk+code;
 };  
 var eCurl = function(cmdStr) { //命令行执行curl
@@ -262,8 +278,8 @@ app.all("/get_bk2", get_bk2);           //获取所有板块的列表
 app.all("/set_bkzxg", set_bkzxg);       //更新自选股的列表
 app.all("/delcode", delcode);           //删除某个股票
 app.all("/getMinite_KLine", getMinite_KLine); //获取分时图sina的数据
-app.all("/test", test); //获取分时图sina的数据 http://127.0.0.1:3004/test?code=601066
-
+app.all("/closePrice", closePrice);                 //获取收盘价的数据 http://127.0.0.1:3004/closePrice?code=601066
+app.all("/code2Name", code2Name);       //获取分时图sina的数据 http://127.0.0.1:3004/code2Name?code=601066
 app.use(express.static(".")).listen(3004);
 
 

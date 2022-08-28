@@ -61,7 +61,7 @@ var eCurl = function(cmdStr) { //命令行执行curl
 var myStockExist = async function (obj) {
     let mystock = obj.url_have();
 // console.log(mystock)
-    mystock = mystock.replace('_time_', + Math.floor(Date.now() / 1000))
+    mystock = mystock.replace('_time_', + Math.floor(Date.now() / 1000)) //时间戳
     var rt = await eCurl(mystock);
     // rt = unescape(rt.replace(/\\u/g, '%u'));
 // console.log(rt)

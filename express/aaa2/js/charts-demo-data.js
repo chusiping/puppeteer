@@ -1,10 +1,11 @@
+let api = "http://127.0.0.1:3004";
 //代码来源： https://gitee.com/ls_web/echarts-demo
 function getmData(_code) { //分时图 改为promise写法
     return new Promise((resolve, reject) => {
         var mdata = { "data": [] }
         $.ajax({
             // url: "http://data.gtimg.cn/flashdata/hushen/minute/sh601066.js?maxage=110&0.28163905744440854",
-            url: "http://127.0.0.1:3004/getMinite_KLine?code="+_code,  //分时数据
+            url: api + "/getMinite_KLine?code="+_code,  //分时数据
             dataType: "json",
             cache: "false",
             type: "GET",
@@ -32,7 +33,7 @@ let GetSixCode = function (code){
 function getInfo(_code) { //获取股票昨天的收盘价格
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "http://127.0.0.1:3004/test?code="+_code,
+            url: api + "/closePrice?code="+_code,
             dataType: "script",
             cache: "false",
             type: "GET",
@@ -40,6 +41,22 @@ function getInfo(_code) { //获取股票昨天的收盘价格
                 t_code = GetSixCode(_code);
                 var info = eval('hq_str_'+t_code).split(",")
                 resolve(info)
+            },
+            error: function () {
+                reject("查询信息失败")
+            }
+        })
+    });
+}
+function getCode2Name(_code) { //代码转股票名称
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: api + "/code2Name?code="+_code,
+            dataType: "json",
+            cache: "false",
+            type: "GET",
+            success: function (rt) {
+                resolve(rt)
             },
             error: function () {
                 reject("查询信息失败")
