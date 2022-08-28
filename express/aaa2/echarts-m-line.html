@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +7,11 @@
     <title>分时图</title>
     <style>
         .charts-wrap .m-line {
-            height: 500px;
-            width: 80%;
+            height: 400px;
+            width: 50%;
             margin: 0 auto;
             border: solid 1px;
         }
-
         .commColor span {
             float: right !important;
         }
@@ -22,20 +20,31 @@
 
 <body>
     <div class="charts-wrap">
-        <div id="m-line" class="m-line"></div>
+        <div id="m-line0" class="m-line"></div>
     </div>
+    
+    <div class="charts-wrap">
+        <div id="m-line1" class="m-line"></div>
+    </div>
+
+
     <script src="./js/jquery.min.js"></script>
     <script src="./js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="./js/charts-demo-data.js" type="text/javascript" charset="utf-8"></script>
     <script src="./js/charts-demo.js" type="text/javascript" charset="utf-8"></script>
     <script>
-        var mChart = echarts.init(document.getElementById('m-line'));
-        getmData(function (res) {
-            getInfo(function (res2) {
-                res.yestclose = res2[2]
-                mChart.setOption(initMOption(res, 'hs'));
-            })
-        })
+        (async()=>{
+            let array = ['601066','300565']
+            for (let x = 0; x < array.length; x++) {
+                const el = array[x];
+                eval("var mchart"+ x +" =  echarts.init(document.getElementById('m-line"+ x +"'));");
+                
+                let res = await  getmData(el);  
+                let res2 = await getInfo(el);  
+                res.yestclose = res2[2];
+                (eval("mchart"+x)).setOption(initMOption(res, 'hs'));
+            }
+        })()
     </script>
 </body>
 
