@@ -29,6 +29,7 @@ var exec_getSinaPrice = function (req, res, next) {
     //函数：正则取6位数字，返回逗号隔开的串值  cn_512760-ETF-,cn_512880-ETF-,cn_512800-ETF =>  612760,612800
     let str_common_GetSixCode = function (rt){
         var patt = /\d{6}/g;
+        if(rt==null) return [];
         var rt2 = rt.match(patt);
         var rt3 = rt2.map(x=> {
             let mk = "sz";
@@ -64,6 +65,7 @@ var exec_getSinaPrice = function (req, res, next) {
     let GetArrBK = function(){
         let code = req.body.P_code
         // var patt = /_.*-/g;
+        if(code == null) return [];
         var rt2 = code.split(',')
         let rt = [];
         for (let x = 0; x < rt2.length; x++) {
@@ -273,7 +275,7 @@ var eCurl = function(cmdStr) { //命令行执行curl
 }
 
 console.log('app.use(express.static(".")).listen(3004);')
-app.all("/exec_getSinaPrice", exec_getSinaPrice);//获取报价
+app.all("/exec_getSinaPrice", exec_getSinaPrice);//获取报价 http://127.0.0.1:3004/exec_getSinaPrice?code=601066
 app.all("/get_bk2", get_bk2);           //获取所有板块的列表
 app.all("/set_bkzxg", set_bkzxg);       //更新自选股的列表
 app.all("/delcode", delcode);           //删除某个股票

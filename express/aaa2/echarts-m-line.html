@@ -47,15 +47,20 @@
             (eval("mchart"+_x)).setOption(initMOption(res, 'hs'));
         }
         (async()=>{
-            let array = ['601066','300565','512880','002142']
+            let array = ['000001','601066','512880','002142']
             await gerDiv(array);
+            
+            let Inter = 5000;   
+            var t = new Date();//你已知的时间
+            str = t.getHours().toString() + t.getMinutes().toString(); 
             for (let x = 0; x < array.length; x++) {
                 const el = array[x];
-                setInterval(function () {
+                setInterval(function (Inter) {
                     getDataAll(el,x) ;
                 },
-                5000,)
+                Inter)
             }
+            if(parseInt(str) > 1500 ) Inter = 9999999
         })()
         //循环获取数据
         
