@@ -49,21 +49,19 @@
         (async()=>{
             let array = ['000001','601066','512880','002142']
             await gerDiv(array);
-            
-            let Inter = 5000;   
             var t = new Date();//你已知的时间
             str = t.getHours().toString() + t.getMinutes().toString(); 
-            for (let x = 0; x < array.length; x++) {
-                const el = array[x];
-                setInterval(function (Inter) {
-                    getDataAll(el,x) ;
-                },
-                Inter)
+            if(parseInt(str) < 1501 ) {
+                for (let x = 0; x < array.length; x++) {
+                    setInterval(function (Inter) { getDataAll(array[x], x);}, 5000)
+                }
+            }else{
+                for (let x = 0; x < array.length; x++) {
+                    getDataAll(array[x], x);
+                }
             }
-            if(parseInt(str) > 1500 ) Inter = 9999999
         })()
         //循环获取数据
-        
     </script>
 </body>
 
