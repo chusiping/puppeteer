@@ -6,28 +6,89 @@ var borderColor = "#bebebe"; // 图标边框色，会影响坐标轴上悬浮框
 // ma  颜色
 var ma5Color = "#39afe6";
 var ma10Color = "#da6ee8";
+/**
+ * 15:20 时:分 格式时间增加num分钟
+ * @param {Object} time 起始时间
+ * @param {Object} num
+ */
+function addTimeStr(time, num) {
+  var hour = time.split(':')[0];
+  var mins = Number(time.split(':')[1]);
+  var mins_un = parseInt((mins + num) / 60);
+  var hour_un = parseInt((Number(hour) + mins_un) / 24);
+  if (mins_un > 0) {
+    if (hour_un > 0) {
+      var tmpVal = ((Number(hour) + mins_un) % 24) + "";
+      hour = tmpVal.length > 1 ? tmpVal : '0' + tmpVal;//判断是否是一位
+    } else {
+      var tmpVal = Number(hour) + mins_un + "";
+      hour = tmpVal.length > 1 ? tmpVal : '0' + tmpVal;
+    }
+    var tmpMinsVal = ((mins + num) % 60) + "";
+    mins = tmpMinsVal.length > 1 ? tmpMinsVal : 0 + tmpMinsVal;//分钟数为 取余60的数
+  } else {
+    var tmpMinsVal = mins + num + "";
+    mins = tmpMinsVal.length > 1 ? tmpMinsVal : '0' + tmpMinsVal;//不大于整除60
+  }
+  return hour + ":" + mins;
+}
 
+//获取增加指定分钟数的 数组  如 09:30增加2分钟  结果为 ['09:31','09:32'] 
+function getNextTime(startTime, endTIme, offset, resultArr) {
+  var result = addTimeStr(startTime, offset);
+  resultArr.push(result);
+  if (result == endTIme) {
+    return resultArr;
+  } else {
+    return getNextTime(result, endTIme, offset, resultArr);
+  }
+}
+
+
+/**
+ * 不同类型的股票的交易时间会不同  
+ * @param {Object} type   hs=沪深  us=美股  hk=港股
+ */
+var time_arr = function (type) {
+  if (type.indexOf('us') != -1) {//生成美股时间段
+    var timeArr = new Array();
+    timeArr.push('09:30')
+    return getNextTime('09:30', '16:00', 1, timeArr);
+  }
+  if (type.indexOf('hs') != -1) {//生成沪深时间段
+    var timeArr = new Array();
+    timeArr.push('09:30');
+    timeArr.concat(getNextTime('09:30', '11:30', 1, timeArr));
+    timeArr.push('13:00');
+    timeArr.concat(getNextTime('13:00', '15:00', 1, timeArr));
+// console.log(timeArr)
+    return timeArr;
+  }
+  if (type.indexOf('hk') != -1) {//生成港股时间段
+    var timeArr = new Array();
+    timeArr.push('09:30');
+    timeArr.concat(getNextTime('09:30', '11:59', 1, timeArr));
+    timeArr.push('13:00');
+    timeArr.concat(getNextTime('13:00', '16:00', 1, timeArr));
+    return timeArr;
+  }
+
+}
 
 
 var get_m_data = function (m_data, type) {
-    var priceArr = new Array();
-    var vol = new Array();
-    // var times = time_arr(type);
-    var times = new Array();
-    $.each(m_data.data, function (i, v) {
-        if(v[0]!="09:25:00") {
-            // console.log(i,v.toString())
-            // return;
-            priceArr.push(v[1]);
-            vol.push(v[2]); //目前数据没有均价，取值提前一位
-            times.push(v[0])
-        }
-    })
-    return {
-        priceArr: priceArr,
-        vol: vol,
-        times: times  //生成242条?
-    }
+  var priceArr = new Array();
+  var vol = new Array();
+  var times = time_arr(type);
+  $.each(m_data.data, function (i, v) {
+    priceArr.push(v[1]);
+    vol.push(v[2]); //目前数据没有均价，取值提前一位
+  })
+  return {
+    priceArr: priceArr,
+    vol: vol,
+    times: times
+  }
 }
 
 
@@ -44,14 +105,14 @@ function initMOption(m_data, type) {
     var baseNumber = Number(m_data.yestclose).toFixed(2) //昨日收盘价
     var _minVal = Number(baseNumber - baseNumber * handle_num()).toFixed(4);
     var _maxVal = (Number(baseNumber) + baseNumber * handle_num()).toFixed(4);
-    console.log(handle_num(),_minVal,_maxVal,)
+// console.log(handle_num(),_minVal,_maxVal,)
     var _interval = Math.abs(Number((baseNumber - _minVal) / 5));
 
     function handle_num() {
         var _heighPrice = Math.abs((Math.max.apply(null, m_datas.priceArr) - baseNumber) / baseNumber).toFixed(4);//最高价
         var _lowerPrice = Math.abs((baseNumber - Math.min.apply(null, m_datas.priceArr)) / baseNumber).toFixed(4);//最低价
         _rt = _heighPrice > _lowerPrice ? _heighPrice : _lowerPrice;
-        console.log("row:68->" + _rt)
+// console.log("row:68->" + _rt)
         return parseFloat(_rt) + 0.002
     }
     function format_y(v) {
