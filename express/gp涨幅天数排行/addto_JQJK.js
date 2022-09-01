@@ -145,9 +145,11 @@ var getZero2 = (code)=>{
     }else{
         rule.hour=18;rule.minute =00;rule.second =00;   //每天 01点01 点执行
     }
-    console.log("schedule定时执行等待中...:");
+
+    console.log(`${sd.format(new Date(), 'YYYY-MM-DD')}schedule定时执行等待中...:`);
     let job = schedule.scheduleJob(rule, () => {
-        console.log("addto_JQK.js - schedule开始:");
+        let msg = `"addto_JQK.js - schedule开始${sd.format(new Date(), 'YYYY-MM-DD')}:"`;
+        console.log(msg);
         ForX(400,site.JQK,0);
         ForX(500,site.df,1);
         ForX(600,site.df,3);

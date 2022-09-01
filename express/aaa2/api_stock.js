@@ -253,6 +253,23 @@ var closePrice = function(req, res, next) {
     }
     exec();
 }
+//获取历史日线价格
+var HistoryPrice =  async function(req, res, next) {
+    let GetData = function (){
+        return new Promise((resolve, reject) => { 
+            let _code =  GetSixCode(req.query.code);
+            let daylen = req.query.daylen;
+            var url = `http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=${_code}&scale=240&ma=20&datalen=${daylen}`
+            var site = { url: url, headers: { referer: "https://finance.sina.com.cn"}
+            }
+            request.get(site).pipe(iconv.decodeStream('gb2312')).collect(function(err, body) {
+                resolve(body)
+            });
+        });
+    };
+    let  rt = await GetData();
+    res.send(JSON.parse(rt));
+}
 
 
 let GetSixCode = function (code){
@@ -282,6 +299,7 @@ app.all("/delcode", delcode);           //删除某个股票
 app.all("/getMinite_KLine", getMinite_KLine); //获取分时图sina的数据
 app.all("/closePrice", closePrice);                 //获取收盘价的数据 http://127.0.0.1:3004/closePrice?code=601066
 app.all("/code2Name", code2Name);       //获取分时图sina的数据 http://127.0.0.1:3004/code2Name?code=601066
+app.all("/HistoryPrice", HistoryPrice);  //获取历史数据  http://127.0.0.1:3004/HistoryPrice?code=601066$daylen=10
 app.use(express.static(".")).listen(3004);
 
 
