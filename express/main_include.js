@@ -65,6 +65,7 @@ exports.top = function (req, res, next) {
                 const le = object[key];
                 var splice_data = le.data.slice(recentDay) 
                 var rt = to_txtRow(le.name,le.code,splice_data)
+                if(rt==null) continue;
                 arr_all.push(rt);
             }
         }
@@ -82,6 +83,10 @@ exports.top = function (req, res, next) {
         gp.name = name;gp.code = code;gp.zhang = day_zhang; gp.zhangfu = zhangfu;gp.zhangfu_now = zhangfu_now;gp.stet = 开始结束日期(arryhistory);
         var stockObj = {};
         stockObj.name = name;stockObj.code = code,stockObj.data = arryhistory;
+        if(gp.stet == null || gp.stet == "" )
+        {
+            return null;
+        }
         arrHisData.push(stockObj);
         return gp;
     }
@@ -124,9 +129,16 @@ exports.top = function (req, res, next) {
 
     let 开始结束日期 =  function (array)
     {
-        var st = array.at(0).day;
-        var et = array.at(-1).day;
-        return `\t总${array.length}天，开始于：${st}[${array.at(0).close}] , 结束于：${et}[${array.at(-1).close}] `;
+        var st开始日期 = array.at(0).day;
+        var et结束日期 = array.at(-1).day;
+        //排除停牌股票和退市股票
+
+        var t = new Date();///计算日期 计算时间 日期加减
+        let str_ = sd.format(t, 'YYYYMMDD');
+        let str2 = sd.format(new Date(et结束日期), 'YYYYMMDD');
+        let cha距当天多少天 = parseInt(str_) - parseInt(str2)
+        if(array.at(0).close < 2 || cha距当天多少天 > 3 )    return "";  //1块多的st或退市股不计算
+        return `\t总${array.length}天，开始于：${st开始日期}[${array.at(0).close}] , 结束于：${et结束日期}[${array.at(-1).close}] `;
     }
     let sortData = function (arryrt,type,cut=4000,recentDay)
     {   

@@ -46,7 +46,7 @@ var getZXG = async()=>
 var getTop = async()=>
 {
 
-    var t = new Date();///计算时间计算,时间加减
+    var t = new Date();///计算日期 计算时间 日期加减
     var str_ =  t.setTime(t.setDate(t.getDate() - 1)); //日期加减
     str_ = sd.format(new Date(str_), 'YYYY-MM-DD');
     var url = 'curl "http://www.mapked.com:3000/top?day=10&date='+str_+'&isapi=1"';
