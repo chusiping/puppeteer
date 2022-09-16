@@ -166,7 +166,7 @@ exports.top = function (req, res, next) {
             string += string_模板.replace('_序号_',istr).replace('_代码_',arryrt[i].code).replace('_名称_',arryrt[i].name).replace('_问财_',Wencai).replace('_添加_',codeAdd).replace('_涨天数_',zhang_).replace('_振幅_',arryrt[i].zhangfu).replace('_当前涨幅_',arryrt[i].zhangfu_now).replace('_上涨率_',arryrt[i].stet).replace('_recentDay_',- recentDay);
 
             codes += arryrt[i].code+",";
-            if( (HuanHang > 9) && (HuanHang % 10) == 0) codes += "<br>"; //一行显示太长，换三行
+            if( (HuanHang > 14) && (HuanHang % 15) == 0) codes += "<br>"; //一行显示太长，换三行
             HuanHang++;
             if((i+1) == cut) break;
         }

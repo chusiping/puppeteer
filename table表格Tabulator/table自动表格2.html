@@ -1,0 +1,139 @@
+<!-- 代码参考 
+http://www.htmleaf.com/jQuery/Table/201512262954.html
+https://github.com/olifolkerd/tabulator     
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/tabulator-tables@4.8.1/dist/js/tabulator.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@4.8.1/dist/css/tabulator.min.css" />
+    </head>
+    <body>
+        <div>
+            <select id="filter-field">
+                <option></option>
+                <option value="name" selected>Name</option>
+                <option value="progress">Progress</option>
+                <option value="gender">Gender</option>
+                <option value="rating">Rating</option>
+                <option value="col">Favourite Colour</option>
+                <option value="dob">Date Of Birth</option>
+                <option value="car">Drives</option>
+                <option value="function">Drives & Rating < 3</option>
+            </select>
+ 
+            <select id="filter-type">
+                <option value="=">=</option>
+                <option value="<"><</option>
+                <option value="<="><=</option>
+                <option value=">">></option>
+                <option value=">=">>=</option>
+                <option value="!=">!=</option>
+                <option value="like" selected>like</option>
+            </select>
+ 
+            <input id="filter-value" type="text" placeholder="value to filter">
+ 
+            <button id="filter-clear">Clear Filter</button>
+        </div>
+ 
+        <div id="example-table"></div>
+        <script>
+            //define data array
+            var tabledata = [
+                {id: 1, name: "Oli Bob", progress: 12, gender: "male", rating: 1, col: "red", dob: "14/04/1984", car: 1, lucky_no: 5},
+                {id: 2, name: "Mary May", progress: 1, gender: "female", rating: 2, col: "blue", dob: "14/05/1982", car: true, lucky_no: 10},
+                {id: 3, name: "张三", progress: 42, gender: "female", rating: 0, col: "green", dob: "22/05/1982", car: "true", lucky_no: 12},
+                {id: 4, name: "Brendon Philips", progress: 100, gender: "male", rating: 1, col: "orange", dob: "01/08/1980", lucky_no: 18},
+                {id: 5, name: "王五", progress: 16, gender: "female", rating: 5, col: "yellow", dob: "31/01/1999", lucky_no: 33},
+                {id: 6, name: "Frank Harbours", progress: 38, gender: "male", rating: 4, col: "red", dob: "12/05/1966", car: 1, lucky_no: 2},
+                {id: 7, name: "李四", progress: 23, gender: "male", rating: 3, col: "green", dob: "14/05/1985", car: true, lucky_no: 63},
+                {id: 8, name: "Gemma Jane", progress: 60, gender: "female", rating: 0, col: "red", dob: "22/05/1982", car: "true", lucky_no: 72},
+                {id: 9, name: "Emily Sykes", progress: 42, gender: "female", rating: 1, col: "maroon", dob: "11/11/1970", lucky_no: 44},
+                {id: 10, name: "James Newman", progress: 73, gender: "male", rating: 5, col: "red", dob: "22/03/1998", lucky_no: 9},
+                {id: 11, name: "Martin Barryman", progress: 20, gender: "male", rating: 5, col: "violet", dob: "04/04/2001"},
+                {id: 12, name: "Jenny Green", progress: 56, gender: "female", rating: 4, col: "indigo", dob: "12/11/1998", car: true},
+                {id: 13, name: "Alan Francis", progress: 90, gender: "male", rating: 3, col: "blue", dob: "07/08/1972", car: true},
+                {id: 14, name: "John Phillips", progress: 80, gender: "male", rating: 1, col: "green", dob: "24/09/1950", car: true},
+                {id: 15, name: "Ed White", progress: 70, gender: "male", rating: 0, col: "yellow", dob: "19/06/1976"},
+                {id: 16, name: "Paul Branderson", progress: 60, gender: "male", rating: 5, col: "orange", dob: "01/01/1982"},
+                {id: 17, name: "Gemma Jane", progress: 50, gender: "female", rating: 2, col: "red", dob: "14/04/1983", car: true},
+                {id: 18, name: "Emma Netwon", progress: 40, gender: "female", rating: 4, col: "brown", dob: "07/10/1963", car: true},
+                {id: 19, name: "Hannah Farnsworth", progress: 30, gender: "female", rating: 1, col: "pink", dob: "11/02/1991"},
+                {id: 20, name: "Victoria Bath", progress: 20, gender: "female", rating: 2, col: "purple", dob: "22/03/1986"},
+            ];
+ 
+            //initialize table
+//Define variables for input elements
+            var fieldEl = document.getElementById("filter-field");
+            var typeEl = document.getElementById("filter-type");
+            var valueEl = document.getElementById("filter-value");
+ 
+//Custom filter example
+            function customFilter(data) {
+                return data.car && data.rating < 3;
+            }
+ 
+//Trigger setFilter function with correct parameters
+            function updateFilter() {
+                var filterVal = fieldEl.options[fieldEl.selectedIndex].value;
+                var typeVal = typeEl.options[typeEl.selectedIndex].value;
+ 
+                var filter = filterVal == "function" ? customFilter : filterVal;
+ 
+                if (filterVal == "function") {
+                    typeEl.disabled = true;
+                    valueEl.disabled = true;
+                } else {
+                    typeEl.disabled = false;
+                    valueEl.disabled = false;
+                }
+ 
+                if (filterVal) {
+                    table.setFilter(filter, typeVal, valueEl.value);
+                }
+            }
+ 
+//Update filters on value change
+            document.getElementById("filter-field").addEventListener("change", updateFilter);
+            document.getElementById("filter-type").addEventListener("change", updateFilter);
+            document.getElementById("filter-value").addEventListener("keyup", updateFilter);
+ 
+//Clear filters on "Clear Filters" button click
+            document.getElementById("filter-clear").addEventListener("click", function () {
+                fieldEl.value = "";
+                typeEl.value = "=";
+                valueEl.value = "";
+ 
+                table.clearFilter();
+            });
+ 
+//Build Tabulator
+            var table = new Tabulator("#example-table", {
+                data: tabledata, //assign data to table
+                layout: "fitColumns",
+                pagination: "local",
+                paginationSize: 10,
+                paginationSizeSelector: [5, 10, 15, 20],
+                movableColumns: true,
+                paginationCounter: "rows",
+                columns: [
+                    {title: "Name", field: "name", width: 200},
+                    {title: "Progress", field: "progress", formatter: "progress", sorter: "number"},
+                    {title: "Gender", field: "gender"},
+                    {title: "Rating", field: "rating", formatter: "star", hozAlign: "center", width: 100},
+                    {title: "Favourite Color", field: "col"},
+                    {title: "Date Of Birth", field: "dob", hozAlign: "center", sorter: "date"},
+                    {title: "Driver", field: "car", hozAlign: "center", formatter: "tickCross"},
+                ],
+            });
+ 
+        </script>
+    </body>
+</html>
+
+
+<!-- http://www.htmleaf.com/jQuery/Table/201512262954.html -->

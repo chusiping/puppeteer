@@ -21,7 +21,7 @@ var SqlRs = [
                                 limit 30000 `}
         ];
         var redis = require('redis')
-        var client = redis.createClient('6379', '127.0.0.1');
+        var client = redis.createClient('6379', 'redis.qy');
         client.auth('redis@qiaoyin.com!@#'); 
 
 ConnRs.forEach(conn => {

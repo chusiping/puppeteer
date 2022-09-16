@@ -85,6 +85,7 @@ function to_txtRow(name,code,arryhistory)
     gp.name = name;gp.code = code;gp.zhang = day_zhang; gp.zhangfu = zhangfu;gp.zhangfu_now = zhangfu_now;gp.stet = 开始结束日期(arryhistory);
     var stockObj = {};
     stockObj.name = name;stockObj.code = code,stockObj.data = arryhistory;
+    
     arrHisData.push(stockObj);
     var rt={};
     rt.stockObj = stockObj; rt.gp = gp;
