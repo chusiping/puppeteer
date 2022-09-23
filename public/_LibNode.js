@@ -3,8 +3,11 @@ var path = require('path');
 var AipOcrClient = require("baidu-aip-sdk").ocr;
 var exec = require('child_process'); 
 
-
-//返回mysql的sql数据结果promise对象  调用：lib.query('mysql-slave1', sql).then
+/* ConnRs 是数组,可以链接多个数据库
+    var ConnRs = 
+    [{charset: 'utf-8',host:'mysql-slave1',  obj: mysql.createConnection({host:'119.23.57.45',  user:'yuefeng_read', password : 'yuefeng!@#100', database : 'yuefeng'})}];
+    返回mysql的sql数据结果promise对象  调用：lib.query("mysql-slave1",sql,ConnRs).then
+*/
 exports.query = (myDBlink,sql,ArrConn) => {
     return new Promise((resolve, reject)=>{
         ArrConn.forEach(conn => {

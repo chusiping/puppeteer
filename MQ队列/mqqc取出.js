@@ -10,3 +10,7 @@ let dodata = async (data) =>{
     await mq.init('tm1');
     await mq.getData(dodata,'tm1');
 })()
+
+// ##单个确认发布  https://blog.51cto.com/u_15080025/4368994
+// Channel channel = connection.createChannel();
+// channel.confirmSelect();
