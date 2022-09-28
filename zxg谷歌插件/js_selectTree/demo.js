@@ -9,7 +9,7 @@ var zNodes = [
         {id: 24, pId: 2, name: "青蛙刀圣1993"},
         {id: 25, pId: 2, name: "电影最TOP唯一官方频道"},
         {id: 26, pId: 2, name: "小涛讲电影"},
-    {id: 3, pId: 0, name: "其他"},
+    {id: 3, pId: 0, name: "其他", open: true},
         {id: 31, pId: 3, name: "EHPMusicChannel"},
         {id: 32, pId: 3, name: "URBAN DANCE CAMP"},
         {id: 33, pId: 3, name: "醫道搬運工"},

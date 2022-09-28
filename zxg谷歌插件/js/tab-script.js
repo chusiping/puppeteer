@@ -52,7 +52,6 @@ $(function () {
         forOpen(Site, this.id);
         console.log(this.id);
         save_input("#key", "keyWord");
-       
     });
     let google3=(data)=>{
         var windowParam = "height=510,width=750";
@@ -97,7 +96,7 @@ const sz = (code) => {
 // 调用：forOpen(Site[this.id]);
 var forOpen = (site, buttonName) => {
     var url = site[buttonName];
-    var key = $("#key").val().replace("，", ",");
+    var key = $("#demo").val().replace("，", ",");//"#key"  换成  "#demo"
     if (buttonName == "gupiao") key = key.replaceAll(" ", ",");
     var Things = key.split(',');
     for (let i = 0; i < Things.length; i++) {
