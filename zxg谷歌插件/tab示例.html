@@ -1,0 +1,57 @@
+<!-- 参考地址
+  https://www.cnblogs.com/liuxianan/p/chrome-plugin-develop.html
+  <link rel="stylesheet" href="https//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>我的搜索-tab-script.js</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="css/newTab.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <base target="_blank">
+</head>
+
+<body>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">搜索</a></li>
+            <li><a href="#tabs-2">常用</a></li>
+            <li><a href="#tabs-3">待定</a></li>
+        </ul>
+
+        <!-- tab 1 -->
+        <div id="tabs-1">
+            <input id="key" type="text" style="width: 500px">
+            <input id="common" type="submit" value="谷歌搜">
+            <input id="youtube" type="submit" value="youtube搜">
+            <input id="youdao" type="submit" value="单词搜">
+            <input id="taobao" type="submit" value="taobao搜">
+            <input id="twitter" type="submit" value="twitter搜">
+            <input id="gupiao" type="submit" value="股名" title="支持空格，逗号">
+            <input id="gupiao_code" type="submit" value="股代码" title="支持空格，逗号">
+            <iframe frameborder="0" id="mylink" width="95%" height="1200" src="newtab_iframe.html">
+            </iframe>
+        </div>
+
+        <div id="tabs-2" style="height:900px;overflow:auto">
+
+        </div>
+
+        <div id="tabs-3" style="height:900px;overflow:auto">
+        </div>
+
+
+    </div>
+</body>
+
+</html>
+
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/jquery-ui-1.31.1.js"></script>
+<script src="js/tab-script.js"></script>
+<script src="js/jquery.cookie.js"></script>

@@ -1,0 +1,209 @@
+<!-- 参考地址
+  https://www.cnblogs.com/liuxianan/p/chrome-plugin-develop.html
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>新标签页</title>
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="css/newTab.css">
+  <base target="_blank">
+</head>
+<body>
+  <div id="wrapper" class="wrapper"></div>
+  <a class="scl" href="http://202.114.64.105:8080/eportal/index.jsp?wlanuserip=8ea115e72453e07d204cad895ba2769d&wlanacname=29185648f4390d7911ef4b72391e17a9&ssid=&nasip=07e38f2323f330cd5ffcc3a203a63100&snmpagentip=&mac=11f91d772fe0b740e4ea51b1b1996d96&t=wireless-v2&url=096e8e7059e430e083d28bd1997d6c398f3c08c737495b2fe98713e6195541bf2880d0d92acf2250&apmac=&nasid=29185648f4390d7911ef4b72391e17a9&vid=f9e2bf31a199f88d&port=bb13fa65ec170962&nasportid=ac41d60d7f138208bea8d2af9b4c564c052b824d511bc64cbbdb558577e03f54">
+    <img title="校园网上网认证" src="img/online.png"/>
+  </a>
+  <div class="ding" id="ding">
+    <div class="content">
+          <span class="title">证券财经</span>
+          <a href="https://cn.investing.com/indices/usa-indices">
+            <div class="box">
+              <img src="img/ywcq.png"/>
+              <span>美股指数</span>
+            </div>
+          </a>  
+          <a href="http://stock.10jqka.com.cn/">
+            <div class="box">
+              <img src="img/ths.png"/>
+              <span>同花顺</span>
+            </div>
+          </a>  
+          <a href="http://gu.qq.com/hkHSI/zs">
+            <div class="box">
+              <img src="img/hs.png"/>
+              <span>恒升指数</span>
+            </div>
+          </a>      
+    </div>
+    <div class="content">
+      <span class="title">翻墙新闻</span>
+      <a href="https://wallstreetcn.com/"><div class="box">
+        <img src="img/hej.png"/>
+        <span>华尔街见闻</span>
+      </div></a>
+      <a href="https://cn.reuters.com/"><div class="box">
+        <img src="img/lts.png"/>
+        <span>路透社</span>
+      </div></a>
+      <a href="https://www.renminbao.com/"><div class="box">
+        <img src="img/rmb.png"/>
+        <span>人民报</span>
+      </div></a>
+      <a href="https://www.bannedbook.org/"><div class="box">
+        <img src="img/jww.png"/>
+        <span>明镜网</span>
+      </div></a>      
+      <a href="https://www.voachinese.com/"><div class="box">
+        <img src="img/voa.png"/>
+        <span>美国知音</span>
+      </div></a>        
+      <a href="http://www.dwnews.com/"><div class="box">
+        <img src="img/dww.png"/>
+        <span>多维网</span>
+      </div></a>      
+      <a href="https://m.secretchina.com/"><div class="box">
+        <img src="img/kzg.png"/>
+        <span>看中国</span>
+      </div></a>      
+      <a href="https://mnewstv.com/"><div class="box">
+        <img src="img/hjm.png"/>
+        <span>世界门</span>
+      </div></a>  
+      <a href="https://www.pin-cong.com/"><div class="box">
+        <img src="img/cong.png"/>
+        <span>品葱</span>
+      </div></a>      
+      <a href="https://www.backchina.com/portal.php"><div class="box">
+        <img src="img/bkq.png"/>
+        <span>倍可亲</span>
+      </div></a>      
+      <a href="https://www.youtube.com/results?search_query=Ted.came+%E4%B8%AD%E8%8B%B1%E6%96%87%E5%AF%B9%E7%85%A7"><div class="box">
+        <img src="img/ted.png"/>
+        <span>Ted双语</span>
+      </div></a>
+    </div>
+    <div class="content">
+      <span class="title">新闻</span>
+      <a href="https://www.thepaper.cn/"><div class="box">
+        <img src="img/pp.png"/>
+        <span>澎湃网</span>
+      </div></a>        
+      <a href="http://www.ftchinese.com/"><div class="box">
+        <img src="img/ft.png"/>
+        <span>FT中文网</span>
+      </div></a>      
+      <a href="http://www.caixin.com/"><div class="box">
+        <img src="img/cx.png"/>
+        <span>财新网</span>
+      </div></a>
+      <a href="http://www.takungpao.com/"><div class="box">
+        <img src="img/dgw.png"/>
+        <span>大公网</span>
+      </div></a>
+      <a href="https://news.sina.com.cn/"><div class="box">
+        <img src="img/sina.png"/>
+        <span>新浪新闻</span>
+      </div></a>
+      <a href="http://finance.qq.com/l/usstock/scroll.htm"><div class="box">
+        <img src="img/mgwd.png"/>
+        <span>美股外电</span>
+      </div></a>
+      <a href="http://finance.huanqiu.com/"><div class="box">
+        <img src="img/hqcj.png"/>
+        <span>环球财经</span>
+      </div></a>
+      <a href="http://chuansong.me/"><div class="box">
+        <img src="img/csm.png"/>
+        <span>传送门</span>
+      </div></a>  
+    </div>
+    <div class="content">
+      <span class="title">计算机软硬件</span>
+      <a href="https://thimble.mozilla.org/zh-CN/anonymous/0857e134-c8ef-4d4b-b339-d35c825334b2"><div class="box">
+        <img src="img/html.png"/>
+        <span>在线html</span>
+      </div></a>
+      <a href="http://www.iheima.com/"><div class="box">
+        <img src="img/hmw.png"/>
+        <span>黑马网</span>
+      </div></a>
+      <a href="https://www.csdn.net/"><div class="box">
+        <img src="img/csdn.png"/>
+        <span>CSDN</span>
+      </div></a>    
+      <a href="http://www.open-open.com/"><div class="box">
+        <img src="img/sdky.png"/>
+        <span>深度开源</span>
+      </div></a>      
+      <a href="http://www.51cto.com/"><div class="box">
+        <img src="img/51cto.png"/>
+        <span>51CTO</span>
+      </div></a>    
+      <a href="http://web.jobbole.com/"><div class="box">
+        <img src="img/bole.png"/>
+        <span>伯乐在线</span>
+      </div></a>    
+      <a href="https://www.iplaysoft.com/"><div class="box">
+        <img src="img/yyc.png"/>
+        <span>异元次</span>
+      </div></a>        
+      <a href="https://www.appinn.com/"><div class="box">
+        <img src="img/xzrj.png"/>
+        <span>小众软件</span>
+      </div></a>    
+      <a href="http://www.10tiao.com/html/337/201706/2660100224/1.html"><div class="box">
+        <img src="img/st.png"/>
+        <span>10条</span>
+      </div></a>        
+      <a href="http://dataunion.org/15876.html"><div class="box">
+        <img src="img/sm.png"/>
+        <span>数盟</span>
+      </div></a>  
+      <a href="https://tech.sina.com.cn/"><div class="box">
+        <img src="img/xlkj.jpg"/>
+        <span>新浪科技</span>
+      </div></a>  
+      <a href="https://www.tmtpost.com/"><div class="box">
+        <img src="img/tmt.jpg"/>
+        <span>钛媒体</span>
+      </div></a>            
+    </div>
+    <div class="content">
+      <span class="title">黑客安全</span>
+      <a href="https://www.test404.com/"><div class="box">
+        <img src="img/test404.png"/>
+        <span>test404</span>
+      </div></a>    
+      <a href="http://www.freebuf.com/sectool/14047.html"><div class="box">
+        <img src="img/buf.png"/>
+        <span>freebuf</span>
+      </div></a>    
+      <a href="http://www.77169.cn/"><div class="box">
+        <img src="img/hm.png"/>
+        <span>华盟网</span>
+      </div></a>      
+      <a href="http://www.cnhonkerarmy.com/portal.php"><div class="box">
+        <img src="img/hmsq.png"/>
+        <span>红盟社区</span>
+      </div></a>      
+      <a href="https://www.kanxue.com/"><div class="box">
+        <img src="img/kx.png"/>
+        <span>看雪</span>
+      </div></a>          
+    </div>
+    <div class="content">
+      <span class="title">其他</span>
+      <a href="http://www.fengniao.com/"><div class="box">
+        <span>蜂鸟</span>
+      </div></a>    
+    </div>
+
+  </div>
+</body>
+
+</html>
+
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/newTab.js"></script>
