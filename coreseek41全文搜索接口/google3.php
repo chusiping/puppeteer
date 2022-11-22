@@ -16,7 +16,7 @@ if($keyword!=null) {
 	$ids = $res['matches'];
 	$id = array_keys($ids);
 	$id = implode(',',$id);
-	mysql_connect("127.0.0.1",'root','1qaz@WSX');
+	mysql_connect("1172.18.1.208",'root','toor.1qaz@WSX');
 	mysql_query('use typecho');
 	mysql_query('SET NAMES UTF8');
 	$sql="select cid,title,text,FROM_UNIXTIME(created) date from typecho_contents where cid in($id) order by cid desc";

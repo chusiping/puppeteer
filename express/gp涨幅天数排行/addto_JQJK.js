@@ -91,6 +91,14 @@ let Get_aaa2自选股或top的排行集合 = async (bkNO) =>{
     return ZxgArr
 }
 
+let Get存在的股的Str = async  (obj,bkNO,_miao_) =>{
+    let url_del = obj.url_delete(bkNO);
+    let Exsit = await myStockExist(obj,bkNO);        //已经存在的股
+    msg = `${sd.format(new Date(), 'YYYY-MM-DD')} :: 已经存在的股(${Exsit.length})个\n ${[...Exsit]}` ;
+    console.log(msg);logger.log(msg);
+}
+
+
 let Delete存在的股 = async  (obj,bkNO,_miao_) =>{
         let url_del = obj.url_delete(bkNO);
         let Exsit = await myStockExist(obj,bkNO);        //已经存在的股
@@ -143,18 +151,30 @@ var getZero2 = (code)=>{
 }
 
 let run = async()=>{
-    await Delete存在的股(site.df,1,600);
+    // await Delete存在的股(site.df,1,600);
     await Delete存在的股(site.df,3,600);
-    await add添加到软件板块(site.df,1,600);
+    // await add添加到软件板块(site.df,1,600);
     await add添加到软件板块(site.df,3,600);
 };
 
-(async()=>{
-    if((process.argv.splice(1)).length > 1)  //有参数就执行定时,反之
-    {
-        run(); //node addto_JQJK.js 1
+let getCmd参数 = ()=>{
+    let arguments = process.argv.splice(2);		// 参数数组
+    var arg1 = arguments[0]; // 获取arg1
+    if(arg1 != undefined){
+        return arg1[0];
+    }else{
+        return null;
     }
-    else{
+}
+(async()=>{
+    console.log('')
+    console.log('\n▶ node addto_JQJK.js  参数 1：自动添加排行  2：获取软件的自选股  空：定时执行 \n')
+    let arr = getCmd参数();
+    if( arr==1 ){
+        run();
+    }else if( arr==2 ){
+        Get存在的股的Str(site.df,1,600);
+    }else {
         let rule = new schedule.RecurrenceRule();       // https://segmentfault.com/a/1190000022455361
         rule.hour=18;rule.minute =00;rule.second =00;   //每天 01点01 点执行
         msg = `addto_JQK.js - schedule定时执行等待:: ${sd.format(new Date(), 'YYYY-MM-DD')}:`;
@@ -162,5 +182,5 @@ let run = async()=>{
         let job = schedule.scheduleJob(rule, () => {
             run();
         });
-    }    
+    }  
 })();

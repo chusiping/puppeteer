@@ -15,6 +15,8 @@ var zNodes = [
         {id: 33, pId: 3, name: "醫道搬運工"},
         {id: 34, pId: 3, name: "《家有大中医》官方频道"}, 
         {id: 35, pId: 3, name: "零度解说"}, 
+        {id: 36, pId: 3, name: "Pan Piano"}, 
+        
 ];
 var selectObj;
 var defaults = {
