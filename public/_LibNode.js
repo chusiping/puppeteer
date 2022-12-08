@@ -337,6 +337,18 @@ var ClearTitleHtml = (str)=>{
     return rt;
 }
 
+var eCurl = function(cmdStr) { //命令行执行curl
+    return new Promise((resolve,reject)=>{
+        exec.exec(cmdStr, function(err,stdout,stderr){  //命令行执行curl
+            if(err) {
+                reject('error:'+stderr); 
+            } else {   
+                // var data = JSON.parse(stdout);  //curl成功返回data
+                resolve((stdout));
+            }
+        });
+    });
+}
 
 exports.handTime = handTime;
 exports.sleep = sleep;
@@ -346,3 +358,4 @@ exports.statPromisify = statPromisify
 exports.listDir = listDir
 exports.ReBuildRs = ReBuildRs
 exports.delDir = delDir
+exports.eCurl = eCurl
