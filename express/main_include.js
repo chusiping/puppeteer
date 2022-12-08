@@ -221,4 +221,17 @@ exports.ocr = async function (req, res, next) {
 }
 
 
+//东方财务 - 我的自选股列表
+exports.myStockExist = async function (req, res, next) {
+    let mystock = `curl --cookie "em_hq_fls=js; st_si=42671117262218; qgqp_b_id=0e771b8aa1190285582a8b6ca7938de3; em-quote-version=topspeed; p_origin=https%3A%2F%2Fpassport2.eastmoney.com; login_canskip=true; intellpositionL=1013.49px; yzmkey=92928e5dd2f6496d8c4e0bfd27244fd9; intellpositionT=2055.11px; login_apicontext=rhz3Y1cR5uZ5IpDRpN%2FVmj1YGOmoCLLbecJT8AcRdWX61DjNP4rk%2B3uQUHM%2FVssl912coOF61EmqPYD0TxzOcOCh0NCx6evgBgZIwBhV7aH7i5pHbspEXd09o6fjskxt%2Fe0jaO4N4YDKsFZcWTv7r5vm9dKWkBN5s3FUB1OgCB4%3D; mtp=1; ct=iYyz_fsnhBJb6GTebXeRKIbp3DRCpeodZAja2AJFXE0TRbzaa903yDrnyL9Wsf6TmmjAygqq2kBRulEDF-w3RE_xyPI_yyTqUb0Gtk1hAB6x4KTBbLF_Xgp7oo4n4xusU4qTJY1sqPxSBbWmMUdNWJg2OjGmc7w4xOfh5lF_-yM; ut=FobyicMgeV6W21ICVIh674b-4cT8YBaIDxfxf5hBLhgiiVlkCdk9OEyAaXgBfZQYi7vu62r2eFFB1RiQVSLTvluK0U_DUIOYwG1lUr-h75-z1opMZyrowt3ntpcCpmDBuzkbs-2e0d7G0DJpQDrI3WN51gbJfaxI-2p5AuYnzmBCc3jtHBCxEmSNE-_4zB19iyxCNDTfRDAp9lew4x7rg8K5ctGVmM5DPUmc47u04rAgydxorKLx6iW72zueQCFTp9X5q_Aqkdy9yQtUf2QaWeJe16t_yxOb; pi=3391013824560020%3b%3b%e5%bf%83__%e8%bf%9c%3bFbwEroScrhAnlsmh8HdQLplIvLP6bt9LkoQlyhp%2bSDAbF5FEV9wswCQIAiH8HZuxJgaNAcpIUKZwA8LE7%2b1wAuzndSZSRRyZ%2fdGGljUID0xJFyYrlPI%2fbvpkZgv3Rq0PVumRzY32UtIA3Q2uKO6jbQx0%2bc0o3JNbVMc9RkaFx37l06ky7Qh4OhsPfICbg7ZfQZ1lVoHq%3bCwuhWhkwM5j3ec%2b60V4fY%2fit9Q5J5fXrwZutDuwsqHQFFg1LVpl%2f%2fLa%2fYgIk2eWWl5dXBIYOSFRHrFT2dn%2fmzHxwWtxtZgHHVbkXJYGPVJ9EWis49T9bHXbzxfJeA%2f2BlaYDZZddeLRHGszG0YLHZM3ZKPXPOg%3d%3d; uidal=3391013824560020%e5%bf%83__%e8%bf%9c; sid=8960218; vtpst=|; HAList=a-sh-601975-%u62DB%u5546%u5357%u6CB9%2Ca-sz-000756-%u65B0%u534E%u5236%u836F%2Ca-sz-000957-%u4E2D%u901A%u5BA2%u8F66%2Ca-sz-002761-%u6D59%u6C5F%u5EFA%u6295%2Ca-sh-601066-%u4E2D%u4FE1%u5EFA%u6295%2Ca-sz-000722-%u6E56%u5357%u53D1%u5C55%2Ca-sz-002883-%u4E2D%u8BBE%u80A1%u4EFD%2Cty-90-BK0473-%u8BC1%u5238%2Ca-sz-002670-%u56FD%u76DB%u91D1%u63A7%2Ca-sz-002603-%u4EE5%u5CAD%u836F%u4E1A%2Ca-sz-002424-%u8D35%u5DDE%u767E%u7075%2Ca-sh-600062-%u534E%u6DA6%u53CC%u9E64; st_pvi=18891856310866; st_sp=2021-12-15%2009%3A14%3A12; st_inirUrl=http%3A%2F%2Fquote.eastmoney.com%2Fsz300967.html; st_sn=7084; st_psi=20220607154620191-113200301712-2515579100; st_asi=20220607154620191-113200301712-2515579100-Web_so_ss-3"  "http://myfavor.eastmoney.com/v4/webouter/ggdefstkindexinfos?appkey=d41d8cd98f00b204e9800998ecf8427e&cb=jQuery331008460323221682065_1654668930577&_=_time_" --referer http://quote.eastmoney.com/`;
+    mystock = mystock.replace('_time_', + Math.floor(Date.now() / 1000)) //时间戳
+    var rt = await MyLib.eCurl(mystock);
+    var rt2 = rt.match(/\$\d{6}\$/g);
+    if(rt2 == null ) return [];
+    var rt3 = rt2.map(x=> x.replaceAll("$",""));
+    console.log(  __filename + " >> exports.myStockExist >> \n" + rt3) //当前文件名
+    // data = rt3.join(',')
+    res.send(rt3.join(','))
+}
+
 

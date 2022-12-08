@@ -2,6 +2,7 @@ const sleep = (tim) => new Promise((res, rej) => setTimeout(res, tim));
 var exec = require('child_process'); 
 var sd = require('silly-datetime');
 var fs = require('fs');
+var sd = require('silly-datetime');
 const schedule = require('node-schedule');
 let stderr = fs.createWriteStream('./addto_JQK.log', {flags: 'w',  encoding: 'utf8', });//日志
 let logger = new console.Console(stderr);//???如何实现一条语句两个用处
@@ -49,7 +50,7 @@ var getTop = async()=>
     var t = new Date();///计算日期 计算时间 日期加减
     var str_ =  t.setTime(t.setDate(t.getDate() - 1)); //日期加减
     str_ = sd.format(new Date(str_), 'YYYY-MM-DD');
-    var url = 'curl "http://www.mapked.com:3000/top?day=10&date='+str_+'&isapi=1"';
+    var url = 'curl "http://121.4.43.207:3000/top?day=10&date='+str_+'&isapi=1"';
     msg = `获取接口数据::${url}` ;
     console.log(msg);logger.log(msg);
     var rt = await eCurl(url);
@@ -94,15 +95,14 @@ let Get_aaa2自选股或top的排行集合 = async (bkNO) =>{
 let Get存在的股的Str = async  (obj,bkNO,_miao_) =>{
     let url_del = obj.url_delete(bkNO);
     let Exsit = await myStockExist(obj,bkNO);        //已经存在的股
-    msg = `${sd.format(new Date(), 'YYYY-MM-DD')} :: 已经存在的股(${Exsit.length})个\n ${[...Exsit]}` ;
+    msg = `已经存在的股(${Exsit.length})个\n ${[...Exsit]}` ;
     console.log(msg);logger.log(msg);
 }
-
 
 let Delete存在的股 = async  (obj,bkNO,_miao_) =>{
         let url_del = obj.url_delete(bkNO);
         let Exsit = await myStockExist(obj,bkNO);        //已经存在的股
-        msg = `${sd.format(new Date(), 'YYYY-MM-DD')} :: 已经存在的股(${Exsit.length})个\n ${[...Exsit]}` ;
+        msg = `${sd.format(new Date(), 'YYYY-MM-DD HH:mm')} :: 已经存在的股(${Exsit.length})个\n ${[...Exsit]}` ;
         console.log(msg);logger.log(msg);
         for (let i = 0; i < Exsit.length; i++) {    //删除已存在的股
             const el = Exsit[i];
@@ -167,19 +167,22 @@ let getCmd参数 = ()=>{
     }
 }
 (async()=>{
-    console.log('')
+    let zhixing = sd.format(new Date(), 'YYYY-MM-DD HH:mm') + " 执行 >> "
     console.log('\n▶ node addto_JQJK.js  参数 1：自动添加排行  2：获取软件的自选股  空：定时执行 \n')
     let arr = getCmd参数();
     if( arr==1 ){
-        run();
+        console.log(zhixing)
+        // run();
     }else if( arr==2 ){
+        console.log(zhixing)
         Get存在的股的Str(site.df,1,600);
     }else {
         let rule = new schedule.RecurrenceRule();       // https://segmentfault.com/a/1190000022455361
         rule.hour=18;rule.minute =00;rule.second =00;   //每天 01点01 点执行
-        msg = `addto_JQK.js - schedule定时执行等待:: ${sd.format(new Date(), 'YYYY-MM-DD')}:`;
+        msg = `addto_JQK.js - schedule定时执行等待::`;
         console.log(msg);logger.log(msg);
         let job = schedule.scheduleJob(rule, () => {
+            console.log(zhixing)
             run();
         });
     }  
