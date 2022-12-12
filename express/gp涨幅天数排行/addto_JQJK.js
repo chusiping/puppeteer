@@ -172,7 +172,7 @@ let getCmd参数 = ()=>{
     let arr = getCmd参数();
     if( arr==1 ){
         console.log(zhixing)
-        // run();
+        run();
     }else if( arr==2 ){
         console.log(zhixing)
         Get存在的股的Str(site.df,1,600);

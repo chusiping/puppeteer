@@ -350,6 +350,14 @@ var eCurl = function(cmdStr) { //命令行执行curl
     });
 }
 
+//检查文件是否存在
+async function exists2(path) {
+    return new Promise(resolve => {
+        fs.stat(path, (err) => {
+        resolve(err ? false : true);
+        });
+    })
+}
 exports.handTime = handTime;
 exports.sleep = sleep;
 exports.Exp2Array = Exp2Array;
@@ -359,3 +367,4 @@ exports.listDir = listDir
 exports.ReBuildRs = ReBuildRs
 exports.delDir = delDir
 exports.eCurl = eCurl
+exports.exists2 = exists2

@@ -113,3 +113,9 @@ function dohtml(html)
 
 // select code, name ,count(1) from t_his_price group by name 
 // order by code 
+
+/*  ali-mysql-client
+为nodejs访问mysql数据库提供强大流畅的api的工具类库，目标是希望访问数据库逻辑都能使用一行代码完成，让访问数据库变得更加简单优雅。
+https:ithub.com/liuhuisheng/ali-mysql-client
+https://juejin.cn/post/6844903904728219661
+*/
