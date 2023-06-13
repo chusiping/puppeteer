@@ -6,6 +6,7 @@ var MyLib = require("../public/_LibNode");
 var path = require('path');
 const sleep = (tim) => new Promise((res, rej) => setTimeout(res, tim));
 const schedule = require('node-schedule');
+const RequestIp = require('@supercharge/request-ip')
 
 //自动重启 nodemon --exec node main.js
 
@@ -233,5 +234,17 @@ exports.myStockExist = async function (req, res, next) {
     // data = rt3.join(',')
     res.send(rt3.join(','))
 }
+
+exports.getIp = async function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')  //设置跨域,允许不同域访问
+    res.header('Access-Control-Allow-Headers', 'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method' )
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE')
+    res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE')
+    let ip = RequestIp.getClientIp(req)
+    let rt = ip.replace("::ffff:","")
+    let rt2 = 'var returnCitySN = { "cip" : "'+ rt +'" }'
+    res.send(rt2)
+}
+
 
 

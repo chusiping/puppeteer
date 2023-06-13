@@ -12,7 +12,7 @@ var lib = require('../public/_LibNode');
 
 
 const DbClient = require('ali-mysql-client');
-const db = new DbClient({ host : '192.168.1.144',user: 'root',password : '1qaz@WSX', port: '3306',database: 'news', });
+const db = new DbClient({ host : 'win7.qy',user: 'root',password : '1qaz@WSX', port: '3306',database: 'news', });
 
 //注释：读取AllHistoryData..txt文件，循环遍历插入数据
 let fenxi = (async (_date2)=>{
@@ -51,7 +51,7 @@ let FormData = (dataOBJ) => {
 
 let insertData = (async(param) => {
     await new Promise((resolve, reject) => {
-        var connection = mysql.createConnection({ host : '192.168.1.144',user: 'root',password : '1qaz@WSX', port: '3306',database: 'news', }); 
+        var connection = mysql.createConnection({ host : 'win7.qy',user: 'root',password : '1qaz@WSX', port: '3306',database: 'news', }); 
         var  userAddSql = 'INSERT IGNORE INTO t_his_price(code,name,date,open,high,low,close,vol) VALUES ? ';  
         //注释： var param = [['000001','平安银行','2021-07-02',22.720,22.740,21.760,21.810,107067756],['000001','平安银行','2021-07-05',21.690,22.150,21.090,22.060,85934129]]
         // console.log(userAddSql);

@@ -20,5 +20,6 @@ app.get('/sina', inc.sina)
 app.get('/top', inc.top)
 app.all('/ocr', inc.ocr)
 app.all('/myStockExist', inc.myStockExist)
+app.all('/getIp', inc.getIp)
 
 app.use(express.static("./html")).listen(3000);
