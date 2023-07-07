@@ -89,9 +89,9 @@ exports.upFile = async (req,SetNewName) => {
 
 // 调用ocr : let code = await MyLib.OCR(rt.filePath);
 exports.OCR = async (_file) => {
-    var APP_ID = "";
-    var API_KEY = "";
-    var SECRET_KEY = "";
+    var APP_ID = "19608996";
+    var API_KEY = "GvhzbLmCcr2uDhgzeh5pYuzi";
+    var SECRET_KEY = "pL7n4MUtKbWTIwEtyGrHjdAiqGEAKl87";
     var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
     var image = await fs.readFileSync(_file);
     var base64Img = new Buffer.from(image).toString('base64'); 
@@ -358,6 +358,7 @@ async function exists2(path) {
         });
     })
 }
+
 exports.handTime = handTime;
 exports.sleep = sleep;
 exports.Exp2Array = Exp2Array;
