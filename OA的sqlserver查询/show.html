@@ -4,11 +4,22 @@
   <meta charset="UTF-8">
   <title>JSON to Table</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style> table { border-collapse: collapse; width: 100%; }
+   th, td {
+     padding: 8px;
+     text-align: left;
+     border-bottom: 1px solid #ddd;
+   }
+   
+   th {
+     background-color: #f2f2f2;
+   }
+   </style>
 </head>
 <body>
 
 <input type="text" id="inputParam" value="2023"> <!-- 默认值为 "2023" -->
-<button onclick="fetchJson()">获取 JSON</button>
+<button onclick="fetchJson()">获取数据</button>
 
 <table id="myTable" border="1">
   <thead>

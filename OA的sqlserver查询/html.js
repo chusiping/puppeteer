@@ -101,6 +101,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
                 from workflow_requestbase re
                 where requestname like '工程项目结算审核流程%' and 
                 LEFT(re.createdate, 4)='_data_'
+                and status='归档'
 
             SELECT a.*,b.billformid bill_id,c.tablename 
             into #tp2
