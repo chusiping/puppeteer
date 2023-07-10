@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JSON to Table</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<input type="text" id="inputParam" value="2023"> <!-- 默认值为 "2023" -->
+<button onclick="fetchJson()">获取 JSON</button>
+
+<table id="myTable" border="1">
+  <thead>
+    <tr></tr> <!-- 表头将在 JavaScript 中生成 -->
+  </thead>
+  <tbody></tbody> <!-- 表格内容将在 JavaScript 中生成 -->
+</table>
+
+<script>
+$(document).ready(function() {
+   // 页面加载完成后立即执行 fetchJson()
+   fetchJson();
+});
+
+function fetchJson() {
+   // 清空表格内容
+   $('tbody').empty();
+
+   // 获取输入框的值作为参数
+   var inputParam = $('#inputParam').val();
+
+   $.ajax({
+      url: '/?data=' + inputParam,
+      dataType: 'json',
+      success: function(data) {
+         var tableHeaders = Object.keys(data[0]);
+         var tableRows = '';
+
+         // 创建表头
+         for (var i = 0; i < tableHeaders.length; i++) {
+            $('thead tr').append('<th>' + tableHeaders[i] + '</th>');
+         }
+
+         // 创建表格内容
+         for (var j = 0; j < data.length; j++) {
+            var rowData = Object.values(data[j]);
+
+            tableRows += '<tr>';
+            for (var k = 0; k < rowData.length; k++) {
+               tableRows += '<td>' + rowData[k] + '</td>';
+            }
+            tableRows += '</tr>';
+         }
+
+        $('tbody').append(tableRows);
+     },
+     error: function(error) {
+        console.log('获取数据失败:', error);
+     }
+   });
+}
+</script>
+
+</body>
+</html>
