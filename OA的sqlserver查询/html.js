@@ -85,6 +85,42 @@ var sql_2=` select b.billid, b.fieldname, b.fieldlabel,l.labelname,fielddbtype
             on b.fieldlabel=l.indexid and l.languageid=7
             where billid=_billid_`;
 
+var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
+            IF OBJECT_ID('tempdb..#tp2') IS NOT NULL  DROP TABLE #tp2;
+
+            select 
+                re.createdate rq,
+                re.creater ,
+                requestid,
+                LEFT(re.createdate, 7) as Ndata,
+                re.requestname,
+                SUBSTRING(requestnamenew, CHARINDEX('请示主题', requestnamenew) + LEN('请示主题:'), LEN(requestnamenew)) as newName
+                
+                into #tp1
+
+                from workflow_requestbase re
+                where requestname like '工程项目结算审核流程%' and 
+                LEFT(re.createdate, 4)='_data_'
+
+            SELECT a.*,b.billformid bill_id,c.tablename 
+            into #tp2
+            from #tp1 a 
+            LEFT JOIN workflow_form b 
+            on a.requestid=b.requestid
+            LEFT JOIN workflow_bill c  
+            on b.billformid=c.id
+
+            SELECT
+                a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题,b.bsje 报送金额
+            from 
+                #tp2 a LEFT JOIN formtable_main_175 b
+                on a.requestid=b.requestId
+                LEFT JOIN hrmresource c
+                ON a.creater= c.id
+            order by a.rq desc`
+
+
+
 // 查询某个流程表单内容 
 function  Query_flow(_flowName,res){
     let rs;
@@ -105,18 +141,28 @@ function  Query_flow(_flowName,res){
         let rt = SwitchName(rs,result)          //解释：替换成中文
         res.json(rt);  
     })
-}            
+}      
+
+function TongJI(_data,res){
+    let sql = sql_3.replace("_data_",_data);
+    MyQuery(sql).then(result => {       
+        res.json(result.recordset);    
+    })
+}
 
 
 app.get("/",(req,res)=>{
 
     let flowName = req.query.flowname;
+    let data = req.query.data;
 
-    if (!flowName) {
-        return res.status(400).send('缺少必需的参数flowName！');
-    }else{
-        Query_flow(flowName,res);
-    }
+    if (flowName) {
+        Query_flow(flowName,res);   
+    };
+
+    if (data) {
+        TongJI(data,res);   
+    };
 
 });
 
@@ -134,5 +180,12 @@ app.listen(3000)
 6. 测试
     127.0.0.1:3000/?flowname=采购立项审批流程(职能部门专用)-范秉淇-2023-05-29
     127.0.0.1:3000/?flowname=GCXMYJS2023040008
+
+7. TongJI统计下面格式
+    127.0.0.1:3000/?data=2023   127.0.0.1:3000/?data=2023-05
+    月份	请求标题	                            请示主题
+    4月	    工程项目结算审核流程-刘宁馨-2023-04-21	广州市荔湾区侨银办公大楼项目临时用电拆除工程结算申请
+    4月	    工程项目结算审核流程-刘正刚-2023-04-20	大园环卫车充电车棚工程完工结算
+
 
 */
