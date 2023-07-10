@@ -85,20 +85,10 @@ var sql_2=` select b.billid, b.fieldname, b.fieldlabel,l.labelname,fielddbtype
             on b.fieldlabel=l.indexid and l.languageid=7
             where billid=_billid_`;
 
-            
-// sql_1='SELECT top 3 id,lastname,mobile,created from hrmresource';
-
-app.get("/",(req,res)=>{
-
-    let flowName = req.query.flowname;
-
-    if (!flowName) {
-        return res.status(400).send('缺少必需的参数flowName！');
-    }
-
+// 查询某个流程表单内容 
+function  Query_flow(_flowName,res){
     let rs;
-    var str = CombinSql(flowName);
-    // var str = CombinSql("采购立项审批流程(职能部门专用)-范秉淇-2023-05-29")
+    var str = CombinSql(_flowName);
 
     MyQuery(str).then(result => {       //解释：返回result = requestID
         let requestID = result.recordset[0]["requestid"];
@@ -115,6 +105,18 @@ app.get("/",(req,res)=>{
         let rt = SwitchName(rs,result)          //解释：替换成中文
         res.json(rt);  
     })
+}            
+
+
+app.get("/",(req,res)=>{
+
+    let flowName = req.query.flowname;
+
+    if (!flowName) {
+        return res.status(400).send('缺少必需的参数flowName！');
+    }else{
+        Query_flow(flowName,res);
+    }
 
 });
 
