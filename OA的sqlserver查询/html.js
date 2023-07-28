@@ -66,6 +66,25 @@ function CombinSql(str) {
     }
 };
 
+function seleObj(str)
+{
+    let _ob ;
+    const myArray = [
+        { p1: "采购立项审批流程（环卫项目专用）",   p2: "b.htje 审批金额,b.yyje 预算金额" }, 
+        { p1: "采购立项审批流程(职能部门专用)",     p2: "b.htje 审批金额,b.yyje 预算金额" }, 
+        { p1: "工程项目立项审批流程",               p2: "b.bsje 报送金额" }, 
+        { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额" }
+    ];
+    for (let i = 0; i < myArray.length; i++) {
+        const obj = myArray[i];
+        if (obj.p1 == str) {
+            _ob = obj
+        }
+    }
+    return _ob;
+}
+
+
 var sql_1a=`DECLARE @billID VARCHAR(20)
             select @billID=billformid from workflow_form where requestid=_requestID_
 
@@ -99,7 +118,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
                 into #tp1
 
                 from workflow_requestbase re
-                where requestname like '工程项目结算审核流程%' and 
+                where requestname like '_seleItem_%' and 
                 LEFT(re.createdate, 4)='_data_'
                 and status='归档'
 
@@ -111,14 +130,26 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             LEFT JOIN workflow_bill c  
             on b.billformid=c.id
 
+
+            DECLARE @TableID VARCHAR(500)
+            DECLARE @query nvarchar(500)
+            
+            
+            SELECT top 1 @TableID = tablename from #tp2 
+            
+            set @query = '
             SELECT
-                a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题,b.bsje 报送金额
-            from 
-                #tp2 a LEFT JOIN formtable_main_175 b
+                a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题,_fd3_
+              from 
+                #tp2 a LEFT JOIN '+ @TableID +' b
                 on a.requestid=b.requestId
                 LEFT JOIN hrmresource c
                 ON a.creater= c.id
-            order by a.rq desc`
+            order by a.rq desc '
+            
+            exec(@query) 
+            
+            `
 
 
 
@@ -144,8 +175,11 @@ function  Query_flow(_flowName,res){
     })
 }      
 
-function TongJI(_data,res){
+function TongJI(_seleItem,_data,res){
     let sql = sql_3.replace("_data_",_data);
+    sql = sql.replace("_seleItem_",_seleItem);
+    let ob = seleObj(_seleItem);
+    sql = sql.replace("_fd3_",ob.p2)
     MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
@@ -155,6 +189,7 @@ function TongJI(_data,res){
 app.get("/",(req,res)=>{
 
     let flowName = req.query.flowname;
+    let seleItem = req.query.seleItem
     let data = req.query.data;
 
     if (flowName) {
@@ -162,7 +197,7 @@ app.get("/",(req,res)=>{
     };
 
     if (data) {
-        TongJI(data,res);   
+        TongJI(seleItem,data,res);   
     };
 
 });

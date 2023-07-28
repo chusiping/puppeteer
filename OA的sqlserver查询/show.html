@@ -19,8 +19,13 @@
 <body>
 
 <input type="text" id="inputParam" value="2023"> <!-- 默认值为 "2023" -->
+<select id="mySelect">
+   <option value="工程项目结算审核流程" selected>工程项目结算审核流程</option>
+   <option value="工程项目立项审批流程">工程项目立项审批流程</option>
+   <option value="采购立项审批流程（环卫项目专用）">采购立项审批流程（环卫项目专用）</option>
+   <option value="采购立项审批流程(职能部门专用)">采购立项审批流程(职能部门专用)</option>
+ </select>
 <button onclick="fetchJson()">获取数据</button>
-
 <table id="myTable" border="1">
   <thead>
     <tr></tr> <!-- 表头将在 JavaScript 中生成 -->
@@ -35,6 +40,8 @@ $(document).ready(function() {
 });
 
 function fetchJson() {
+   var seleItem = $('#mySelect').val();
+
    // 清空表格内容
    $('tbody').empty();
    $('thead tr').empty();
@@ -43,7 +50,7 @@ function fetchJson() {
    var inputParam = $('#inputParam').val();
 
    $.ajax({
-      url: '/?data=' + inputParam,
+      url: '/?seleItem='+ seleItem +'&data=' + inputParam,
       dataType: 'json',
       success: function(data) {
          var tableHeaders = Object.keys(data[0]);
