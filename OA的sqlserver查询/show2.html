@@ -68,7 +68,12 @@ function fetchJson() {
 
             tableRows += '<tr>';
             for (var k = 0; k < rowData.length; k++) {
-               tableRows += '<td>' + rowData[k] + '</td>';
+               if(k==0){
+                  tableRows += '<td><a href="content.html?flowCode=' + rowData[k] + '" target="_blank">' + rowData[k] + '</a></td>';
+               }else{
+                  tableRows += '<td>' + rowData[k] + '</td>';
+               }
+               
             }
             tableRows += '</tr>';
          }
