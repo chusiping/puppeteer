@@ -1,0 +1,50 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Display JSON Data in HTML Table</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <table id="myTable">
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>值</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    // 获取 URL 中的参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const flowCode = urlParams.get('flowCode');
+
+    // 构造 API 地址
+    const apiUrl = `/?flowname=${flowCode}`;
+
+
+
+    $.getJSON(apiUrl, function(data) {
+      $.each(data, function(i, item) {
+        var myObj = item;
+        let kk,vv ;
+        for (const key in myObj) {
+            if (myObj.hasOwnProperty(key)) {
+                kk = key;
+                vv = myObj[key];
+            }
+        }
+        $('#myTable tbody').append(`
+          <tr>
+            <td>${kk}</td>
+            <td>${vv}</td>
+          </tr>
+        `);
+
+      });
+    });
+  </script>
+</body>
+</html>

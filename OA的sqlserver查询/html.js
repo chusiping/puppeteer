@@ -108,6 +108,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             IF OBJECT_ID('tempdb..#tp2') IS NOT NULL  DROP TABLE #tp2;
 
             select 
+                re.requestmark flowID,
                 re.createdate rq,
                 re.creater ,
                 requestid,
@@ -119,8 +120,8 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
 
                 from workflow_requestbase re
                 where requestname like '_seleItem_%' and 
-                LEFT(re.createdate, 4)='_data_'
-                and status='归档'
+                LEFT(re.createdate, _len_)='_data_'
+              
 
             SELECT a.*,b.billformid bill_id,c.tablename 
             into #tp2
@@ -139,6 +140,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             
             set @query = '
             SELECT
+                a.flowID 流程编号,
                 a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题,_fd3_
               from 
                 #tp2 a LEFT JOIN '+ @TableID +' b
@@ -177,6 +179,7 @@ function  Query_flow(_flowName,res){
 
 function TongJI(_seleItem,_data,res){
     let sql = sql_3.replace("_data_",_data);
+    sql = sql.replace("_len_",_data.length);
     sql = sql.replace("_seleItem_",_seleItem);
     let ob = seleObj(_seleItem);
     sql = sql.replace("_fd3_",ob.p2)

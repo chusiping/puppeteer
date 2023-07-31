@@ -6,9 +6,10 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style> table { border-collapse: collapse; width: 100%; }
    th, td {
-     padding: 8px;
+     padding: 3px;
      text-align: left;
-     border-bottom: 1px solid #ddd;
+     border-bottom: 1px solid #827f7f;
+     font-size: 12px;
    }
    
    th {
@@ -25,7 +26,7 @@
    <option value="采购立项审批流程（环卫项目专用）">采购立项审批流程（环卫项目专用）</option>
    <option value="采购立项审批流程(职能部门专用)">采购立项审批流程(职能部门专用)</option>
  </select>
-<button onclick="fetchJson()">获取数据</button>
+<button onclick="fetchJson()">获取数据</button><br><br>
 <table id="myTable" border="1">
   <thead>
     <tr></tr> <!-- 表头将在 JavaScript 中生成 -->
@@ -67,7 +68,12 @@ function fetchJson() {
 
             tableRows += '<tr>';
             for (var k = 0; k < rowData.length; k++) {
-               tableRows += '<td>' + rowData[k] + '</td>';
+               if(k==0){
+                  tableRows += '<td><a href="content.html?flowCode=' + rowData[k] + '" target="_blank">' + rowData[k] + '</a></td>';
+               }else{
+                  tableRows += '<td>' + rowData[k] + '</td>';
+               }
+               
             }
             tableRows += '</tr>';
          }
