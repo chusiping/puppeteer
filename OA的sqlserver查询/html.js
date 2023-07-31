@@ -191,6 +191,19 @@ function TongJI(_seleItem,_data,res){
     })
 }
 
+function TongJI2(_seleItem,_data,res){
+    let sql = sql_3.replace("_data_",_data);
+    sql = sql.replace("_len_",_data.length);
+    sql = sql.replace("_seleItem_",_seleItem);
+    let ob = seleObj(_seleItem);
+    sql = sql.replace(",_fd3_","");
+    sql = sql.replace("_status_",""); //是否显示状态
+    console.log(sql)
+    MyQuery(sql).then(result => {       
+        res.json(result.recordset);    
+    })
+}
+
 
 app.get("/",(req,res)=>{
 
@@ -204,6 +217,22 @@ app.get("/",(req,res)=>{
 
     if (data) {
         TongJI(seleItem,data,res);   
+    };
+
+});
+
+app.get("/all",(req,res)=>{
+
+    let flowName = req.query.flowname;
+    let seleItem = req.query.seleItem
+    let data = req.query.data;
+
+    if (flowName) {
+        Query_flow(flowName,res);   
+    };
+
+    if (data) {
+        TongJI2(seleItem,data,res);   
     };
 
 });

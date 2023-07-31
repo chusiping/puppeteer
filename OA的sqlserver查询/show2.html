@@ -19,13 +19,9 @@
 </head>
 <body>
 
-<input type="text" id="inputParam" value="2023"> <!-- 默认值为 "2023" -->
-<select id="mySelect">
-   <option value="工程项目结算审核流程" selected>工程项目结算审核流程</option>
-   <option value="工程项目立项审批流程">工程项目立项审批流程</option>
-   <option value="采购立项审批流程（环卫项目专用）">采购立项审批流程（环卫项目专用）</option>
-   <option value="采购立项审批流程(职能部门专用)">采购立项审批流程(职能部门专用)</option>
- </select>
+<input type="text" id="inputParam" value="2023-7"> 
+<input type="text" id="mySelect" value="工程项目结算审核流程"> 
+
 <button onclick="fetchJson()">获取数据</button><br><br>
 <table id="myTable" border="1">
   <thead>
@@ -51,7 +47,7 @@ function fetchJson() {
    var inputParam = $('#inputParam').val();
 
    $.ajax({
-      url: '/?seleItem='+ seleItem +'&data=' + inputParam,
+      url: '/all?seleItem='+ seleItem +'&data=' + inputParam,
       dataType: 'json',
       success: function(data) {
          var tableHeaders = Object.keys(data[0]);
