@@ -2,20 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>JSON to Table</title>
+  <title>流程</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style> table { border-collapse: collapse; width: 100%; }
-   th, td {
-     padding: 3px;
-     text-align: left;
-     border-bottom: 1px solid #827f7f;
-     font-size: 12px;
-   }
-   
-   th {
-     background-color: #f2f2f2;
-   }
-   </style>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 3px;
+      text-align: left;
+      border-bottom: 1px solid #827f7f;
+      font-size: 12px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .highlight {
+      background-color: yellow;
+    }
+  </style>
 </head>
 <body>
 
@@ -74,6 +80,16 @@ function fetchJson() {
          }
 
         $('tbody').append(tableRows);
+
+        // 鼠标悬浮到每一行时高亮，移开时消失
+        $('tbody tr').hover(
+          function() {
+            $(this).addClass('highlight');
+          },
+          function() {
+            $(this).removeClass('highlight');
+          }
+        );
      },
      error: function(error) {
         console.log('获取数据失败:', error);

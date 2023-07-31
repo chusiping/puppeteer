@@ -70,10 +70,10 @@ function seleObj(str)
 {
     let _ob ;
     const myArray = [
-        { p1: "采购立项审批流程（环卫项目专用）",   p2: "b.htje 审批金额,b.yyje 预算金额" }, 
-        { p1: "采购立项审批流程(职能部门专用)",     p2: "b.htje 审批金额,b.yyje 预算金额" }, 
-        { p1: "工程项目立项审批流程",               p2: "b.bsje 报送金额" }, 
-        { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额" }
+        { p1: "采购立项审批流程（环卫项目专用）",   p2: "b.htje 合同金额,b.yyje 预算金额",p3:" and (status='归档'  or  status='结束') " }, 
+        { p1: "采购立项审批流程(职能部门专用)",     p2: "b.yyje 预算金额" ,p3:" and (status='归档'  or  status='结束') " }, 
+        { p1: "工程项目立项审批流程",               p2: "b.bsje 报送金额" ,p3:" and (status='归档'  or  status='结束') " }, 
+        { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额", p3:" and (status='归档'  or  status='结束') " }
     ];
     for (let i = 0; i < myArray.length; i++) {
         const obj = myArray[i];
@@ -108,6 +108,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             IF OBJECT_ID('tempdb..#tp2') IS NOT NULL  DROP TABLE #tp2;
 
             select 
+                re.status,
                 re.requestmark flowID,
                 re.createdate rq,
                 re.creater ,
@@ -121,6 +122,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
                 from workflow_requestbase re
                 where requestname like '_seleItem_%' and 
                 LEFT(re.createdate, _len_)='_data_'
+                _status_
               
 
             SELECT a.*,b.billformid bill_id,c.tablename 
@@ -140,7 +142,7 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             
             set @query = '
             SELECT
-                a.flowID 流程编号,
+                a.flowID 流程编号,a.status 节点,
                 a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题,_fd3_
               from 
                 #tp2 a LEFT JOIN '+ @TableID +' b
@@ -182,7 +184,8 @@ function TongJI(_seleItem,_data,res){
     sql = sql.replace("_len_",_data.length);
     sql = sql.replace("_seleItem_",_seleItem);
     let ob = seleObj(_seleItem);
-    sql = sql.replace("_fd3_",ob.p2)
+    sql = sql.replace("_fd3_",ob.p2);
+    sql = sql.replace("_status_",ob.p3); //是否显示状态
     MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
@@ -227,5 +230,5 @@ app.use('', express.static('./')).listen(3000);
     4月	    工程项目结算审核流程-刘宁馨-2023-04-21	广州市荔湾区侨银办公大楼项目临时用电拆除工程结算申请
     4月	    工程项目结算审核流程-刘正刚-2023-04-20	大园环卫车充电车棚工程完工结算
 
-
+8   根据情况判断 p3:"and (status='归档'  or  CHARINDEX('预决算', status)>0)" 
 */
