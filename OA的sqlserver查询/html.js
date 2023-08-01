@@ -71,6 +71,7 @@ function seleObj(str)
     let _ob ;
     const myArray = [
         { p1: "采购立项审批流程（环卫项目专用）",   p2: "b.htje 合同金额,b.yyje 预算金额",p3:" and (status='归档'  or  status='结束') " }, 
+        { p1: "采购立项审批流程（项目专用）",     p2: "b.htje 合同金额,b.yyje 预算金额",p3:" and (status='归档'  or  status='结束') " }, 
         { p1: "采购立项审批流程(职能部门专用)",     p2: "b.yyje 预算金额" ,p3:" and (status='归档'  or  status='结束') " }, 
         { p1: "工程项目立项审批流程",               p2: "b.bsje 报送金额" ,p3:" and (status='归档'  or  status='结束') " }, 
         { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额", p3:" and (status='归档'  or  status='结束') " },
@@ -165,7 +166,7 @@ IF OBJECT_ID('tempdb..#tb_流程模板id') IS NOT NULL  DROP TABLE #tb_流程模
 
 select id into #tb_流程模板id from workflow_base 	where id='1124'
 
-select 	*,	LEFT(re.createdate, 7) as Ndata,re.requestname nd,
+select 	*,	LEFT(re.createdate, 7) as Ndata,re.requestname nd,re.createdate rq,
 SUBSTRING(requestnamenew, CHARINDEX('请示主题', requestnamenew) + LEN('请示主题:'), LEN(requestnamenew)) as newName
 into #tb_流程实例	from workflow_requestbase re	where 1=1 
 and workflowid in(select * from #tb_流程模板id) 
@@ -196,7 +197,7 @@ set @query = 'SELECT
 								where 1=1
 								and b.htlb=14
 								and a.status=''档案管理员确认''
-								order by b.htje
+								order by a.rq desc
               '
 exec(@query) 
 `

@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<input type="text" id="inputParam" value="2023-7"> 
+<input type="text" id="inputParam" value="2023-07"> 
 <input type="text" id="mySelect" value="工程项目结算审核流程"> 
 
 <button onclick="fetchJson()">获取数据</button><br><br>
@@ -32,9 +32,24 @@
 
 <script>
 $(document).ready(function() {
+  setFormattedDateToInput('inputParam');
    // 页面加载完成后立即执行 fetchJson()
    fetchJson();
 });
+
+
+function setFormattedDateToInput(inputId) {
+  var today = new Date();
+  var month = today.getMonth() + 1; 
+  month = month -1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var formattedDate = today.getFullYear() + '-' + month;
+  $('#' + inputId).val(formattedDate);
+}
+
+
 
 function fetchJson() {
    var seleItem = $('#mySelect').val();
