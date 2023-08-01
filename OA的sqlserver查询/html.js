@@ -202,6 +202,9 @@ set @query = 'SELECT
 exec(@query) 
 `
 
+var sql_流程模板 = `select  DISTINCT(workflowname) sname,max(id) id  from workflow_base where isvalid = 1 and workflowname 
+like '%_key_%' GROUP BY workflowname order by id desc `
+
 // 查询某个流程表单内容 
 function  Query_flow(_flowName,res){
     let rs;
@@ -257,6 +260,13 @@ function TongJI2(_seleItem,_data,res){
     })
 }
 
+function flow_所有模板(_seleItem,res){
+    sql_流程模板 = sql_流程模板.replace("_key_",_seleItem);
+    MyQuery(sql_流程模板).then(result => {       
+        res.json(result.recordset);    
+    })
+}
+
 
 app.get("/",(req,res)=>{
 
@@ -264,16 +274,22 @@ app.get("/",(req,res)=>{
     let seleItem = req.query.seleItem
     let data = req.query.data;
 
+    //流程详情
     if (flowName) {
         Query_flow(flowName,res);   
     };
 
+    //统计
     if (data) {
         if(seleItem=='工程付款合同'){
             TongJI_工程付款合同(seleItem,data,res);   
         }else{
             TongJI(seleItem,data,res);   
         }
+    };
+    //所有流程模板
+    if (seleItem) {
+        flow_所有模板(seleItem,res);   
     };
 
 
@@ -294,6 +310,8 @@ app.get("/all",(req,res)=>{
     };
 
 });
+
+
 
 app.use('', express.static('./')).listen(3000);
 
@@ -318,4 +336,8 @@ app.use('', express.static('./')).listen(3000);
     4月	    工程项目结算审核流程-刘正刚-2023-04-20	大园环卫车充电车棚工程完工结算
 
 8   根据情况判断 p3:"and (status='归档'  or  CHARINDEX('预决算', status)>0)" 
+
+9   查询所有的流程模板
+    127.0.0.1:3000/?seleItem=人力资源  
+
 */
