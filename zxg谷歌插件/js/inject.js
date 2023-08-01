@@ -38,7 +38,9 @@ function sendMessageToContentScriptByPostMessage(data) {
     }
     if (location.host == 'news.10jqka.com.cn' || location.host == 'm.10jqka.com.cn' || location.host == 't.10jqka.com.cn') {
         codeto_aaa_m();
-        StopTip();
+        removeSpan();
+        
+        //StopTip();
     }
     if (location.host == 'quote.eastmoney.com') {
         scrollDown();
@@ -115,6 +117,37 @@ function codeto_aaa_m() {
         }
     };
 }
+
+//同花顺-自选股-涨跌幅(删除毛角分)
+function removeSpan(){
+    if(location == 'https://t.10jqka.com.cn/newcircle/user/userPersonal/?from=finance&tab=zx###') {
+        //2023-8-1 11:13
+        console.log("---------------同花顺-自选股-涨跌幅(删除毛角分)-----------------")
+        console.log("执行方法：removeSpan")
+        setTimeout(function () {
+            (function ($) {
+                console.log("点击展开")
+                $('.stockinfo-desplay').click()
+                // console.log(`$('.stockinfo-desplay').click()`)
+            })(jQuery);
+        }, 2000);
+        setInterval(removeFirstSpan, 2000);
+    }
+}
+
+function removeFirstSpan() {
+    //2023-8-1 11:13
+    console.log("执行方法：removeFirstSpan")
+    $('.loadallcode').click();
+    $('table.codename tbody tr').each(function() {
+       var spanCount = $(this).find('td:eq(2) label span').length;
+       if (spanCount > 1) {
+          $(this).find('td:eq(2) label span:first').remove();
+       }
+    });
+}
+
+
 
 function img缩小() {
     setTimeout(function () {
