@@ -198,7 +198,6 @@ function TongJI2(_seleItem,_data,res){
     let ob = seleObj(_seleItem);
     sql = sql.replace(",_fd3_","");
     sql = sql.replace("_status_",""); //是否显示状态
-    console.log(sql)
     MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
@@ -251,7 +250,7 @@ app.use('', express.static('./')).listen(3000);
 5. SwitchName 切换sql里字段的英文label为中文label
 6. 测试
     127.0.0.1:3000/?flowname=采购立项审批流程(职能部门专用)-范秉淇-2023-05-29
-    127.0.0.1:3000/?flowname=GCXMYJS2023040008
+    127.0.0.1:3000/?flowname=CGLXZN2023050308
 
 7. TongJI统计下面格式
     127.0.0.1:3000/?data=2023   127.0.0.1:3000/?data=2023-05
