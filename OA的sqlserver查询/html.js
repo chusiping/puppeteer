@@ -73,7 +73,8 @@ function seleObj(str)
         { p1: "采购立项审批流程（环卫项目专用）",   p2: "b.htje 合同金额,b.yyje 预算金额",p3:" and (status='归档'  or  status='结束') " }, 
         { p1: "采购立项审批流程(职能部门专用)",     p2: "b.yyje 预算金额" ,p3:" and (status='归档'  or  status='结束') " }, 
         { p1: "工程项目立项审批流程",               p2: "b.bsje 报送金额" ,p3:" and (status='归档'  or  status='结束') " }, 
-        { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额", p3:" and (status='归档'  or  status='结束') " }
+        { p1: "工程项目结算审核流程", p2: "b.bsje 报送金额", p3:" and (status='归档'  or  status='结束') " },
+        { p1: "工程付款合同", p2: "", p3:"" }
     ];
     for (let i = 0; i < myArray.length; i++) {
         const obj = myArray[i];
@@ -157,6 +158,49 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
 
 
 
+var sql_4 = `
+IF OBJECT_ID('tempdb..#tb_流程实例') IS NOT NULL  DROP TABLE #tb_流程实例;
+IF OBJECT_ID('tempdb..#tb_流程表单') IS NOT NULL  DROP TABLE #tb_流程表单;
+IF OBJECT_ID('tempdb..#tb_流程模板id') IS NOT NULL  DROP TABLE #tb_流程模板id;
+
+select id into #tb_流程模板id from workflow_base 	where id='1124'
+
+select 	*,	LEFT(re.createdate, 7) as Ndata,re.requestname nd,
+SUBSTRING(requestnamenew, CHARINDEX('请示主题', requestnamenew) + LEN('请示主题:'), LEN(requestnamenew)) as newName
+into #tb_流程实例	from workflow_requestbase re	where 1=1 
+and workflowid in(select * from #tb_流程模板id) 
+and     LEFT(re.createdate, _len_)='_data_'
+
+SELECT b.billformid bill_id,c.tablename,a.* 	
+into #tb_流程表单
+from #tb_流程实例 a 	LEFT JOIN workflow_form b 	on a.requestid=b.requestid	LEFT JOIN workflow_bill c  
+on b.billformid=c.id
+
+DECLARE @TableID VARCHAR(500)
+DECLARE @query nvarchar(500)
+
+SELECT top 1 @TableID = tablename from #tb_流程表单 
+
+set @query = 'SELECT 
+							a.requestmark 流程编号,
+							a.Ndata 月份,
+							''工程类合同'' 合同类型,
+							b.htmc 合同名称,
+							b.htje 合同金额,
+							a.status 状态
+              from 
+                #tb_流程表单 a LEFT JOIN '+ @TableID +' b
+                on a.requestid=b.requestId
+                LEFT JOIN hrmresource c
+                ON a.creater= c.id
+								where 1=1
+								and b.htlb=14
+								and a.status=''档案管理员确认''
+								order by b.htje
+              '
+exec(@query) 
+`
+
 // 查询某个流程表单内容 
 function  Query_flow(_flowName,res){
     let rs;
@@ -191,6 +235,15 @@ function TongJI(_seleItem,_data,res){
     })
 }
 
+function TongJI_工程付款合同(_seleItem,_data,res){
+    let sql = sql_4.replace("_data_",_data);
+    sql = sql.replace("_len_",_data.length);
+    console.log(sql)
+    MyQuery(sql).then(result => {       
+        res.json(result.recordset);    
+    })
+}
+
 function TongJI2(_seleItem,_data,res){
     let sql = sql_3.replace("_data_",_data);
     sql = sql.replace("_len_",_data.length);
@@ -215,8 +268,13 @@ app.get("/",(req,res)=>{
     };
 
     if (data) {
-        TongJI(seleItem,data,res);   
+        if(seleItem=='工程付款合同'){
+            TongJI_工程付款合同(seleItem,data,res);   
+        }else{
+            TongJI(seleItem,data,res);   
+        }
     };
+
 
 });
 
