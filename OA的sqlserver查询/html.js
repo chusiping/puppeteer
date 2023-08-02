@@ -290,23 +290,11 @@ function TongJI(_seleItem,_data,res){
 function TongJI_工程付款合同(_seleItem,_data,res){
     let sql = sql_4.replace("_data_",_data);
     sql = sql.replace("_len_",_data.length);
-    console.log(sql)
     MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
 }
 
-function TongJI2(_seleItem,_data,res){
-    let sql = sql_3.replace("_data_",_data);
-    sql = sql.replace("_len_",_data.length);
-    sql = sql.replace("_seleItem_",_seleItem);
-    let ob = seleObj(_seleItem);
-    sql = sql.replace(",_fd3_","");
-    sql = sql.replace("_status_",""); //是否显示状态
-    MyQuery(sql).then(result => {       
-        res.json(result.recordset);    
-    })
-}
 
 
 function flow_分类查询(_workBaseID_,_seleItem,_data,res){
