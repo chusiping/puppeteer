@@ -99,7 +99,6 @@ var sql_1a=`DECLARE @billID VARCHAR(20)
             where a.requestId=_requestID_'
             exec(@sqlstr) `;
 
-var billID = "0";
 var sql_2=` select b.billid, b.fieldname, b.fieldlabel,l.labelname,fielddbtype
             from workflow_billfield b
             left JOIN HtmlLabelInfo l 
@@ -340,6 +339,7 @@ app.get("/",(req,res)=>{
     //流程详情
     if (flowName) {
         Query_flow(flowName,res);   
+
     };
 
     //统计
@@ -350,10 +350,7 @@ app.get("/",(req,res)=>{
             TongJI(seleItem,data,res);   
         }
     };
-    //所有流程模板
-    if (seleItem) {
-        flow_所有模板(seleItem,res);   
-    };
+
 
 
 });
@@ -368,25 +365,21 @@ app.get("/all",(req,res)=>{
 
     //分类查询
     if (workBaseID || seleItem) {
-        flow_分类查询(workBaseID,seleItem,data,res);  
+        if (workBaseID === null || workBaseID === undefined){
+            flow_所有模板(seleItem,res);  
+        }else{
+            flow_分类查询(workBaseID,seleItem,data,res);  
+        }
     };
     
     //流程详情
     if (flowName) {
         Query_flow(flowName,res);   
     };
-    
-    //流程名模糊查询
-    // if (data) {
-    //     TongJI2(seleItem,data,res);  
-    // };
-
-
-    // if (seleItem) {
-    //     flow_分类查询(seleItem,data,res);  
-    // };
 
 });
+
+
 
 
 app.use('', express.static('./')).listen(3000);
