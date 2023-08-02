@@ -324,8 +324,8 @@ function flow_分类查询(_workBaseID_,_seleItem,_data,res){
 
 
 function flow_所有模板(_seleItem,res){
-    sql_流程模板 = sql_流程模板.replace("_key_",_seleItem.trim());
-    MyQuery(sql_流程模板).then(result => {       
+    var sql = sql_流程模板.replace("_key_",_seleItem.trim());
+    MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
 }
