@@ -106,6 +106,57 @@ var sql_2=` select b.billid, b.fieldname, b.fieldlabel,l.labelname,fielddbtype
             on b.fieldlabel=l.indexid and l.languageid=7
             where billid=_billid_`;
 
+var sql_3all=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
+            IF OBJECT_ID('tempdb..#tp2') IS NOT NULL  DROP TABLE #tp2;
+
+            select 
+                re.status,
+                re.requestmark flowID,
+                re.createdate rq,
+                re.creater ,
+                requestid,
+                LEFT(re.createdate, 7) as Ndata,
+                re.requestname,
+                SUBSTRING(requestnamenew, CHARINDEX('请示主题', requestnamenew) + LEN('请示主题:'), LEN(requestnamenew)) as newName
+                
+                into #tp1
+
+                from workflow_requestbase re
+                where 2=2 and 1=1
+                and LEFT(re.createdate, _len_)='_data_'
+
+              
+
+            SELECT a.*,b.billformid bill_id,c.tablename 
+            into #tp2
+            from #tp1 a 
+            LEFT JOIN workflow_form b 
+            on a.requestid=b.requestid
+            LEFT JOIN workflow_bill c  
+            on b.billformid=c.id
+
+
+            DECLARE @TableID VARCHAR(500)
+            DECLARE @query nvarchar(500)
+            
+            
+            SELECT top 1 @TableID = tablename from #tp2 
+            
+            set @query = '
+            SELECT
+                a.flowID 流程编号,a.status 节点,
+                a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题
+              from 
+                #tp2 a LEFT JOIN '+ @TableID +' b
+                on a.requestid=b.requestId
+                LEFT JOIN hrmresource c
+                ON a.creater= c.id
+            order by a.rq desc '
+            
+            exec(@query) 
+            
+            `
+
 var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             IF OBJECT_ID('tempdb..#tp2') IS NOT NULL  DROP TABLE #tp2;
 
@@ -156,8 +207,6 @@ var sql_3=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             exec(@query) 
             
             `
-
-
 
 var sql_4 = `
 IF OBJECT_ID('tempdb..#tb_流程实例') IS NOT NULL  DROP TABLE #tb_流程实例;
@@ -260,8 +309,22 @@ function TongJI2(_seleItem,_data,res){
     })
 }
 
+
+function flow_分类查询(_workBaseID_,_seleItem,_data,res){
+    let sql = sql_3all;
+    sql = sql.replace("_data_",_data);
+    sql = sql.replace("_len_",_data.length);
+    if(_workBaseID_) sql = sql.replace("2=2"," workflowid=" + _workBaseID_);
+    if(_seleItem) sql = sql.replace("1=1"," requestnamenew like '%"+ _seleItem +"%'");
+    MyQuery(sql).then(result => {       
+        res.json(result.recordset);    
+    })
+}
+
+
+
 function flow_所有模板(_seleItem,res){
-    sql_流程模板 = sql_流程模板.replace("_key_",_seleItem);
+    sql_流程模板 = sql_流程模板.replace("_key_",_seleItem.trim());
     MyQuery(sql_流程模板).then(result => {       
         res.json(result.recordset);    
     })
@@ -295,22 +358,35 @@ app.get("/",(req,res)=>{
 
 });
 
+//show2.html 私有使用
 app.get("/all",(req,res)=>{
 
     let flowName = req.query.flowname;
     let seleItem = req.query.seleItem
     let data = req.query.data;
+    let workBaseID = req.query.workBaseID;
 
+    //分类查询
+    if (workBaseID || seleItem) {
+        flow_分类查询(workBaseID,seleItem,data,res);  
+    };
+    
+    //流程详情
     if (flowName) {
         Query_flow(flowName,res);   
     };
+    
+    //流程名模糊查询
+    // if (data) {
+    //     TongJI2(seleItem,data,res);  
+    // };
 
-    if (data) {
-        TongJI2(seleItem,data,res);   
-    };
+
+    // if (seleItem) {
+    //     flow_分类查询(seleItem,data,res);  
+    // };
 
 });
-
 
 
 app.use('', express.static('./')).listen(3000);
