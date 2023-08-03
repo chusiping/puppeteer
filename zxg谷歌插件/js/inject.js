@@ -66,22 +66,405 @@ function sendMessageToContentScriptByPostMessage(data) {
     }
     if (location.host == 'camcam.cc') {
         quAD();
-     }
-
+    }
+    if (location.host == 'www.google.com') {
+        GooglePureText();
+    }
+    if (location.host == 'twitter.com') {
+        twitterFunc();
+    }
+    if (location.host == 'aflow.dingtalk.com') {
+        ding9();
+    }
+    if (location.host == 'xueqiu.com') {    //雪球网站
+        if(location == 'https://xueqiu.com/S/BK0684') {
+            showAllSotock();
+        }
+    }
 })();
 
+function showAllSotock(){
+    //2023-8-3
+    console.log("---------------中船系板块展开所有列表-----------------")
+    console.log("执行方法：showAllSotock")
+    setTimeout(function () {
+        (function ($) {
+            $("div.widget-option i:first-child").trigger("click");
+            $("div.widget-option").html("");
+        })(jQuery);
+    }, 1500);
+}
+
+
+//所有审批节点数组
+const ding01 = () => {
+    var timesRun = 0;
+    return new Promise((resolve, reject)=>{
+        
+        var inter = setInterval(function () {
+            var nodes = $("body").contents().find("div.node-wrap")
+            if(nodes.length > 1  ){
+                resolve(nodes)
+                timesRun++;
+            }
+            if (timesRun > 0) {
+                clearInterval(inter);
+            }
+        }, 300);
+    })
+
+
+    // return new Promise((resolve, reject)=>{
+    //     setTimeout(()=> {
+    //         var nodes = $("body").contents().find("div.node-wrap")
+    //         resolve(nodes)
+    //     }, ss)
+    // })
+}
+//要添加的节点
+// const ding2 = (_node) => {
+//     var rt = "";
+//     var title = $(_node).contents().find("span.editable-title")
+//     for(const el of title){
+//         var spr = $(el).text()
+//         if(spr == "审批人a"){
+//             rt =  "ok"
+//             break;
+//         }
+//     }
+//     return rt;
+// }
+
+//要的+号节点
+const ding3 = (_node) => {
+
+    // return new Promise((resolve, reject)=>{
+    //     var timesRun = 0;
+    //     var inter = setInterval(function () {
+    //         var title = $(_node).contents().find("span.editable-title")
+    //         for(const el of title){
+    //             var spr = $(el).text()
+    //             if(spr == "审批人a"){
+    //                 var prev_node = $(_node).prev();
+    //                 resolve(prev_node)
+    //                 timesRun++;
+    //                 break;
+    //             }
+    //         }
+    //         if (timesRun > 0) {
+    //             clearInterval(inter);
+    //         }
+    //     }, 3000);
+    // })
+
+    var rt = null;
+    var title = $(_node).contents().find("span.editable-title")
+    for(const el of title){
+        var spr = $(el).text()
+        if(spr == "审批人a"){
+            var prev_node = $(_node).prev();
+            return prev_node
+            break;
+        }
+    }
+    return rt;
+}
+
+//+号按钮
+const ding4 = (_node) => {
+    let timesRun = 0;
+    return new Promise((resolve, reject)=>{
+        var inter = setInterval(function () {
+            var btn = $(_node).contents().find("button.btn")
+            if(btn.length > 0){
+               resolve(btn[0]);
+               timesRun++;
+            }
+            if (timesRun > 0) {
+                clearInterval(inter);
+            }
+        }, 600);
+    })
+
+
+    // return new Promise((resolve, reject)=>{
+    //     setTimeout(()=> {
+    //         var btn = $(_node).contents().find("button.btn")
+    //         resolve(btn[0]);
+    //     }, 1000)
+    // })
+  
+}
+
+//点击加号
+const ding5 = (_node) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            $(_node).trigger('click');
+            resolve("ok");
+        }, 600)
+    })
+}
+
+//检查完成否是
+const ding5_1 = (_node) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            resolve("ok");
+        }, 9000)
+        // let timesRun = 0;
+        // var inter = setInterval(function () {
+        //     var title = $(_node).contents().find("span.editable-title"); // div.node-wrap $("div.node-wrap").contents().find("span.editable-title")
+            
+        //     for(item of title){
+        //         console.log('item▶ '+$(item).text());
+        //         if($(item).text()=="推送A"){
+        //            timesRun++;
+        //            resolve("ok"); 
+        //         }
+        //     }
+        //     if (timesRun > 0) {
+        //         clearInterval(inter);
+        //     }
+        //     console.log('▶等待ahk完成。。。');
+        //     ding5_1();
+        // }, 500);
+    });
+}
+
+//审批人菜单按钮
+const ding6 = (_node) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            var addp = $("div[class='ant-popover add-node-wrapper ant-popover-placement-rightBottom ']");
+            console.log($(addp))
+            var addspr = $(addp).contents().find("span");
+            for(const gg of addspr){
+                resolve(gg);
+                if($(gg).text() ==  "审批人"){
+                    $(gg).trigger("click")
+                    resolve(gg);
+                    break;
+                }
+            }
+        }, 600) // 延时等待菜单隐藏打开
+    })
+}
+
+//选角色
+const ding7 = () => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            var juese = $("div.side-modal-body").contents().find("span:contains(角色)")[0];
+            $(juese).trigger("click");
+            resolve("ok");
+            // var add = $("div.side-modal-body").contents().find("span:contains(添加)").trigger("click");
+           
+            // $(add).parent().trigger("click");
+        }, 1000) // 延时等待菜单隐藏打开
+    })
+}
+
+//选角色
+function ding7_a () {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            // var juese = $("div.side-modal-body").contents().find("span:contains(角色)")[0];
+            // $(juese).trigger("click");
+            console.log('ding7_a▶ ')
+            $("div.side-modal-body").contents().find("span:contains(添加)").eq(0).parent().parent().append(`<div class="dtd-select-selection-overflow-item" style="opacity: 1;">
+    <span><span class="dtd-tag approver-selectField-tagItem"><span class="approver-selectField-tagLabel approver-cursor-pointer">
+       <svg width="1em" height="1em" viewbox="0 0 23 21" fill="currentColor" aria-hidden="true">
+        <path d="M9.5 12.5c5.462 0 9 2.15 9 5.5 0 1.878-1.187 2.95-2.771 2.998l-.111.002H3.382C1.731 21 .5 19.908.5 18c0-3.357 3.533-5.5 9-5.5zm8.434-9.391c1.126 2.66.855 5.421-.365 7.445l-.095.152.157.085c3.238 1.783 4.947 4.998 4.421 8.684l-.028.185a1 1 0 01-1.974-.32c.533-3.29-1.189-6.05-4.506-7.315a1 1 0 01-.358-1.635c1.43-1.455 1.963-4.005.906-6.501a1 1 0 111.842-.78zM9.5 14.5c-4.505 0-7 1.513-7 3.5 0 .714.262.977.806.999l.076.001h12.236c.593 0 .882-.251.882-1 0-1.98-2.5-3.5-7-3.5zm0-14a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm0 2a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" fill-rule="nonzero"></path>
+       </svg>主管理员 <span class="label-member-count">（5）</span></span><span class="dtd-tag-close-icon"><span role="img" class="dd-icon">
+        <svg class="dt__icon" viewbox="0 0 1024 1024" width="1em" height="1em" fill="currentColor" aria-hidden="true">
+         <defs></defs>
+         <path d="M843.861 180.139a42.667 42.667 0 012.176 58.005l-2.176 2.347L572.331 512l271.53 271.53a42.667 42.667 0 01-58.005 62.507l-2.347-2.176L512 572.331 240.47 843.86a42.667 42.667 0 01-62.507-58.005l2.176-2.347L451.627 512 180.139 240.47a42.667 42.667 0 0158.005-62.507l2.347 2.176L512 451.627l271.53-271.488a42.667 42.667 0 0160.331 0z"></path>
+        </svg></span></span></span></span>
+   </div>`);
+           resolve("ok");
+            // $(add).parent().trigger("click");
+        }, 1000) // 延时等待菜单隐藏打开
+    })
+}
+
+
+//选角色2
+const ding8 = () => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            var win = $("div#DingDingSelector").contents().find("iframe");
+            resolve(win);
+            ;
+        }, 4000) 
+    })
+}
+
+//动态添加按钮
+function ding9() {
+   $(document).ready(function () {
+        // setInterval(function () {
+        console.log('add 悬浮按钮')
+        $("body").append(`<div id="myzxg" style="width: 120px;height: 30px;z-index: 9999999999;background-color: aquamarine ;margin: 5px;border: solid 1px ;position: fixed;left: 200px;top: 120px">
+                        <span style="cursor:pointer;">
+                            <span onclick="ss2();">开始自动处理</span>  
+                        </span>
+                    </div>`) 
+        // },2000)
+
+    });
+}
+
+//保存橘色
+const ding10 = () => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            var quxiao = $("#SIDE_MODAL").contents().find("span:contains(保 存)").parent().click();
+            resolve("ok");
+            ;
+        }, 600) 
+    })
+}
+
+
+//修改新增节点
+const ding11 = (_node) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            $("div.node-wrap").contents().find("span.placeholder").text('主管理员会签');
+            resolve("ok");
+            ;
+        }, 600) 
+    })
+}
+
+const ding11a = (_node) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=> {
+            var Inter = setInterval(function () {
+                var news = $(_node).prev();
+                if(news.length>0){
+                    console.log('▶2'+news)
+                    clearInterval(Inter);
+                    resolve(news)
+                }
+            },200);
+            ;
+        }, 1000) 
+    })
+}
+
+//test
+var star = 0
+function ding__111111111  () {
+        console.log(document.domain);    
+     // setInterval(function () {
+          $("head").append(`<script>
+                                document.domain="dingtalk.com";
+        var ifr = document.createElement('iframe');
+        ifr.src = 'https://oa.dingtalk.com/selector.htm';
+        ifr.style.display = 'none';
+        document.body.appendChild(ifr);
+        ifr.onload = function(){
+            var doc = ifr.contentDocument || ifr.contentWindow.document;
+            var oUl = doc.getElementById('dingapp');
+            alert(oUl.innerHTML);
+            ifr.onload = null;
+        };
+
+                            </script>`)   
+                star = 1;  
+        console.log(document.domain);  
+        console.log('ding__331 ▶')
+
+
+        var win3 = $("div#DingDingSelector").contents().find("iframe")[0];//.contents().find("div#dingapp");
+       
+    
+        //console.log(win3.contentWindow.document);
+        var win4 = $(win3).contents().find("div#dingapp");
+        if(win3.length > 0){
+            if(star == 0 ){
+                console.log('https://oa.dingtalk.com/selector.htm ▶')
+                 $("head").append(`<script>
+                let script = document.createElement('script');
+                script.src = 'https://oa.dingtalk.com/selector.htm';
+                document.body.appendChild(script);
+                </script`)   
+                star = 1;              
+            }
+        //var vt = document.getElementsByTagName("iframe").contentWindow.document.getElementById("dingapp");
+        //console.log('vt -'+ vt);
+           //  
+        }
+     // },4000)
+}
+
+
+function ss2() {
+    $(document).ready(async function () {
+        console.log('自动批量处理开始▶')
+        setTimeout(async ()=> {
+            var node = await ding01();
+            
+            for(const el of node){
+                rt = ding3(el);                     //符合要求的上一个节点
+                
+                if(rt!=null){
+                    // ding4(rt).then(rt=>{ return ding5(rt) }).then(rt=>{ return ding6(rt) });
+                    
+                    var add = await ding4(rt);          //+号按钮
+                    var win = await ding5(add);         //点击加号 后面的交给ahk
+                    var over = await ding5_1(rt); 
+
+                    // var addspr = await ding6(win);  //审批人菜单按钮
+
+                    // console.log('▶390')
+                    // var juse = await ding7();
+                    // console.log('▶392')
+                    // var addjuese = await ding7_a();
+                    // console.log('▶394')
+                    // var save = await ding10();
+
+
+                    // newnode = await ding11a(node);                     //新增的节点
+                    // var newnode = await ding11(newnode);    //修改新增的节点
+                    // 
+                    
+                    // var sele = await ding8();
+                    console.log('add ' + $(add)  )
+                    console.log('win ' + $(win)  )
+                }
+            }
+            console.log('end'+node);
+            ;
+        }, 500) 
+    });
+}
+
+
+
+function twitterFunc() {
+    setInterval(function () {
+        let eleList = document.querySelectorAll('time')
+        for (let i = 0; i < eleList.length; i++) {
+            var pageKZ = eleList[i].innerText 
+            eleList[i].style.color="#ff0000"
+        }
+    }, 2000);
+}
 
 function GooglePureText() {
     setTimeout(function () {
-        (function ($) {
-            // $("div.yuRUbf").each(function () {
-            //     $(this).html("<b>Hello world!</b>")
-            // });
-            // $("div.yuRUbf a").html("<b>Hello world!</b>")
-        })(jQuery);
+        let eleList = document.querySelectorAll('span')
+            for (let i = 0; i < eleList.length; i++) {
+                var pageKZ = eleList[i].innerText 
+                if(pageKZ=='网页快照'){
+                    console.log(pageKZ)
+                }
+            }
     }, 800);
 }
-
 
 function quAD() {
     setTimeout(function () {
@@ -120,7 +503,7 @@ function codeto_aaa_m() {
 
 //同花顺-自选股-涨跌幅(删除毛角分)
 function removeSpan(){
-    if(location == 'https://t.10jqka.com.cn/newcircle/user/userPersonal/?from=finance&tab=zx###') {
+    if (window.location.href.includes("https://t.10jqka.com.cn/newcircle/user/userPersonal/?from=finance&tab=zx")){
         //2023-8-1 11:13
         console.log("---------------同花顺-自选股-涨跌幅(删除毛角分)-----------------")
         console.log("执行方法：removeSpan")
@@ -494,8 +877,8 @@ function clickDayK2(host) {
 
 function clickDayK(host) {
     var key = 'q.stock.sohu.com/cn/';
-    console.log("执行：clickDayK(host)");
     if (host.toString().includes(key)) {
+        console.log("执行：clickDayK(host)");
         (function ($) {
             setTimeout(function () {
                 $("iframe").each(function () {
@@ -514,9 +897,8 @@ function clickDayK(host) {
 //sohu日k图添加自选按钮：加入自选 删除自选 相关新闻
 function AddMySeleStock(host) {
     var key = 'q.stock.sohu.com/cn/';
-    console.log("执行: AddMySeleStock(host...)");
     if (host.toString().includes(key)) {
-        console.log("执行: AddMySeleStock(key2..)");
+        console.log("执行: AddMySeleStock()");
         (function ($) {
             $(document).ready(function () {
                 var Code = "";

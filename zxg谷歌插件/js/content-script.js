@@ -1,18 +1,8 @@
 ﻿document.addEventListener('DOMContentLoaded', function()
 {
 	// 注入自定义JS
-	// injectCustomJs('js/jquery-1.8.3.js');
+	injectCustomJs('js/jquery-1.8.3.js');
 	injectCustomJs('js/inject.js');
-	// if(location.host == 'q.stock.sohu.com')
-	// {
-	// 	var objs = document.querySelectorAll('li.name a');
-	// 	for(var i=0; i<objs.length; i++)
-	// 	{
-	// 		objs[i].setAttribute('target', '_blank');
-	// 		objs[i].setAttribute('href', 'http://www.baidu.com');
-	// 	}
-	// 	console.log('已处q.stock.sohu.com！');
-	// }
 });
 
 function initCustomPanel()

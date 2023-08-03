@@ -65,8 +65,8 @@ $(function () {
         console.log("bt")
         if (!e) e = window.event;//火狐中是 window.event
         if ((e.keyCode || e.which) == 13) {
-            forOpen(Site, 'common');
-            forOpen(Site, 'baidu');
+            // forOpen(Site, 'common');
+            // forOpen(Site, 'baidu');
             forOpen(Site, 'google3');
         }
     }
