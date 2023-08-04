@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Form</title>
+  <style>
+    .success-message {
+    padding: 10px;
+    background-color: green;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <form id="myForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age"><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <button type="submit" id="submitBtn">Submit</button>
+  </form>
+
+  <script>
+    $(document).ready(function() {
+        $('#name').val('John Doe');
+        $('#age').val(25);
+        $('#email').val('johndoe@example.com');
+
+      $('#myForm').submit(function(event) {
+        // 阻止表单默认提交行为
+        event.preventDefault();
+
+        // 获取表单数据并序列化为JSON对象
+        const formData = $(this).serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value;
+          return obj;
+        }, {});
+
+        // 发送POST请求到接口
+        $.ajax({
+          type: 'POST',
+          url: 'http://127.0.0.1:3000/insert',
+          data: JSON.stringify(formData),
+          contentType: 'application/json',
+          success: function(res) {
+            var rt = res.success ? "添加成功" : "操作失败"
+            var successMessage = $('<div>').text(rt).addClass('success-message');
+            $('body').prepend(successMessage);
+            setTimeout(function() {
+              successMessage.remove();
+            }, 2000);
+          },
+          error: function(error) {
+            console.error('Failed to submit form:', error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
