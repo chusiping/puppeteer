@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Form</title>
+  <style>
+    .success-message {
+      padding: 10px;
+      background-color: green;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <br><br><br>
+  <form id="myForm">
+    修改<br>
+    <label for="id">id:</label>
+    <input type="text" id="id" name="id"><br><br>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age"><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <button id="editBtn">删除</button>
+  </form>
+
+  <script>
+    $(function () {
+      $('#name').val('John Doe');
+      $('#age').val(25);
+      $('#email').val('johndoe@example.com');
+
+      $('#myForm').on('click', '#editBtn', function (e) {
+        e.preventDefault();
+        const formData = $('#myForm').serializeArray().reduce((obj, item) => {
+          obj[item.name] = item.value.trim();
+          return obj;
+        }, {});
+
+        $.ajax({
+          type: 'POST',
+          url: 'http://127.0.0.1:3000/update',
+          data: JSON.stringify(formData),
+          contentType: 'application/json',
+          success: function (res) {
+            const successMessage = $('<div>').text(res.message).addClass('success-message');
+            $('body').prepend(successMessage);
+            setTimeout(() => successMessage.remove(), 2000);
+          },
+          error: function (error) {
+            console.error('Failed to delete data:', error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

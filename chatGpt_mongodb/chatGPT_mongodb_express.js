@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { deleteDataByID,deleteData,insertData, getClientIp,getCurrentDateTime } = require('./chatGPT_mongodbUtils');
+const { updateDataByID,deleteDataByID,deleteData,insertData, getClientIp,getCurrentDateTime } = require('./chatGPT_mongodbUtils');
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +29,22 @@ app.post('/delete', async function (req, res) {
       result = await deleteData({}, filter);
     } 
     
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// 更新数据
+app.post('/update', async function (req, res) {
+  try {
+    const data = req.body;
+    data.update = getCurrentDateTime();
+    data.ip = getClientIp(req);
+    let id_ =data.id;
+    delete data.id;
+    const result = await updateDataByID({}, id_,data);
     console.log(result);
     res.send(result);
   } catch (error) {

@@ -1,6 +1,28 @@
 const MongoClient = require('mongodb').MongoClient;
 const { ObjectId } = require('mongodb');
 
+async function updateDataByID(dbcoon, id, newData) {
+  if (!dbcoon.url) dbcoon.url = 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase';
+  if (!dbcoon.dbName) dbcoon.dbName = 'mydatabase';
+  if (!dbcoon.collectionName) dbcoon.collectionName = 'mycollection';
+  try {
+    const client = await MongoClient.connect(dbcoon.url, { useUnifiedTopology: true });
+    const db = client.db(dbcoon.dbName);
+    const collection = db.collection(dbcoon.collectionName);
+    const count = await collection.countDocuments({ _id: ObjectId(id) });
+    if (count === 0) {
+      client.close();
+      return { success: false, message: '没有找到需要修改的数据' };
+    }
+    const result = await collection.updateOne({ _id: ObjectId(id) }, { $set: newData });
+    client.close();
+    return { success: true, message: '修改成功', modifiedCount: result.modifiedCount };
+  } catch (error) {
+    return { success: false, message: '修改失败', error: error };
+  }
+}
+
+
 async function deleteDataByID(dbcoon, id) {
   if (!dbcoon.url) dbcoon.url = 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase';
   if (!dbcoon.dbName) dbcoon.dbName = 'mydatabase';
@@ -88,7 +110,7 @@ function getCurrentDateTime() {
 }
 
 
-module.exports = { deleteDataByID,deleteData,insertData, getClientIp, getCurrentDateTime };
+module.exports = {updateDataByID, deleteDataByID,deleteData,insertData, getClientIp, getCurrentDateTime };
 
 
 
