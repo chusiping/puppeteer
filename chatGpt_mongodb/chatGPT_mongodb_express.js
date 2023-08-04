@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { deleteData,insertData, getClientIp,getCurrentDateTime } = require('./chatGPT_mongodbUtils');
+const { deleteDataByID,deleteData,insertData, getClientIp,getCurrentDateTime } = require('./chatGPT_mongodbUtils');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,7 +21,14 @@ app.post('/insert', async function (req, res) {
 app.post('/delete', async function (req, res) {
   try {
     const filter = req.body;
-    const result = await deleteData({}, filter);
+    var result = null;
+    if(filter.id){
+      result = await deleteDataByID({}, filter.id);
+    }else{
+      delete filter.id;
+      result = await deleteData({}, filter);
+    } 
+    
     console.log(result);
     res.send(result);
   } catch (error) {

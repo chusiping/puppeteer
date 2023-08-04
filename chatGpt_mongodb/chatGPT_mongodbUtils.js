@@ -1,4 +1,27 @@
 const MongoClient = require('mongodb').MongoClient;
+const { ObjectId } = require('mongodb');
+
+async function deleteDataByID(dbcoon, id) {
+  if (!dbcoon.url) dbcoon.url = 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase';
+  if (!dbcoon.dbName) dbcoon.dbName = 'mydatabase';
+  if (!dbcoon.collectionName) dbcoon.collectionName = 'mycollection';
+  try {
+    const client = await MongoClient.connect(dbcoon.url, { useUnifiedTopology: true });
+    const db = client.db(dbcoon.dbName);
+    const collection = db.collection(dbcoon.collectionName);
+    const count = await collection.countDocuments({ _id: ObjectId(id) });
+    if (count === 0) {
+      client.close();
+      return { success: false, message: '没有数据需要删除' };
+    }
+    const result = await collection.deleteOne({ _id: ObjectId(id) });
+    client.close();
+    return { success: true, message: '删除成功', deletedCount: result.deletedCount };
+  } catch (error) {
+    return { success: false, message: '删除失败', error: error };
+  }
+}
+
 
 async function deleteData(dbcoon, filter) {
   if (!dbcoon.url) dbcoon.url = 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase';
@@ -65,7 +88,7 @@ function getCurrentDateTime() {
 }
 
 
-module.exports = { deleteData,insertData, getClientIp, getCurrentDateTime };
+module.exports = { deleteDataByID,deleteData,insertData, getClientIp, getCurrentDateTime };
 
 
 
