@@ -109,10 +109,7 @@ module.exports = {Database, getClientIp, getCurrentDateTime };
 
 
 /*
-  
-  dbName和collectionName任意设定自动创建
-  var dbcoon = { url: 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase', dbName: 'mydatabase', collectionName: 'mycollection22' }
-  var dbcoon = { collectionName: 'bbb' }
-  insertData(dbcoon,data)
-  insertData({},data)
+  优化之后改成类方法调用 
+  { url: 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase', dbName: 'mydatabase', collectionName: 'mycollection22' }
+  const db = new Database({collectionName:"aaa"});
 */
