@@ -1,16 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { insertData } = require('./chatGPT_mongodbUtils');
-const url = 'mongodb://myussser:mypassword@redis.qy:27017/mydatabase';
-const dbName = 'mydatabase';
-const collectionName = 'mycollection';
-
+const { insertData, getClientIp,getCurrentDateTime } = require('./chatGPT_mongodbUtils');
 
 const app = express();
 app.use(bodyParser.json());
 app.post('/insert', function (req, res) {
   const data = req.body;
-  insertData(url, dbName, collectionName, data)
+  data.addTime = getCurrentDateTime();
+  data.ip = getClientIp(req);
+  insertData({},data) // 重载方法 insertData(data,url, dbName, collectionName ) 
     .then((result) => {
       console.log(result);
       res.send(result);
@@ -18,6 +16,5 @@ app.post('/insert', function (req, res) {
     .catch((error) => {
       console.error(error);
     });
-
 });
 app.use('', express.static('./')).listen(3000);
