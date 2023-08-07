@@ -32,37 +32,6 @@
     <input type="email" id="email" name="email"><br><br>
     <button id="deleteBtn">删除</button>
   </form>
-
-  <script>
-    $(function () {
-      $('#name').val('John Doe');
-      $('#age').val(25);
-      $('#email').val('johndoe@example.com');
-
-      $('#myForm').on('click', '#deleteBtn', function (e) {
-        e.preventDefault();
-        const formData = $('#myForm').serializeArray().reduce((obj, item) => {
-          obj[item.name] = item.value.trim();
-          return obj;
-        }, {});
-
-        $.ajax({
-          type: 'POST',
-          url: 'http://127.0.0.1:3000/delete',
-          data: JSON.stringify(formData),
-          contentType: 'application/json',
-          success: function (res) {
-            const successMessage = $('<div>').text(res.message).addClass('success-message');
-            $('body').prepend(successMessage);
-            setTimeout(() => successMessage.remove(), 2000);
-          },
-          error: function (error) {
-            console.error('Failed to delete data:', error);
-          }
-        });
-      });
-    });
-  </script>
 </body>
 
 </html>
