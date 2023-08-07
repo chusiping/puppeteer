@@ -54,5 +54,16 @@ app.post('/update', async function (req, res) {
   }
 });
 
+// 查询数据
+app.post('/find', async function (req, res) {
+  try {
+    const data = req.body;
+    const result = await db.getDataByCondition(data); //或 await db.getDataByCondition(data);
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 app.use('', express.static('./')).listen(3000);

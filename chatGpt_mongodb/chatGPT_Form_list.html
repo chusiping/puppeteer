@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Data Table</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      border: 1px solid lightgray;
+    }
+    th, td {
+      border: 1px solid lightgray;
+      padding: 8px;
+      font-size: 12px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#myForm").submit(function(event) {
+        event.preventDefault();
+        const formData = $('#myForm').serializeArray().reduce((obj, item) => {
+          if(item.value) obj[item.name] = item.value.trim();
+          return obj;
+        }, {});
+
+        $.ajax({
+          url: "/find",
+          type: "POST",
+          data: JSON.stringify(formData),
+          contentType: 'application/json',
+          success: function(response) {
+            displayData(response.data);
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      });
+
+      function displayData(data) {
+        var tableBody = $("#dataTable tbody");
+        tableBody.empty();
+        $.each(data, function(index, obj) {
+          var row = $("<tr>");    
+          row.append($("<td>").text(index));      
+          for (var key in obj) {
+            row.append($("<td>").text(key + ": " + obj[key]));
+          }
+          tableBody.append(row);
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <form id="myForm">
+    <label for="field1">name:</label>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="field2">age</label>
+    <input type="text" id="age" name="age"><br>
+
+    <label for="field3">Field 3:</label>
+    <input type="text" id="field3" name="field3"><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <table id="dataTable">
+    <tbody>
+      <!-- Data will be dynamically added here -->
+    </tbody>
+  </table>
+</body>
+</html>

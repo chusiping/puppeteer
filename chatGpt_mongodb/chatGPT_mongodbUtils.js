@@ -8,6 +8,25 @@ class Database {
     this.collectionName = dbcoon.collectionName || 'mycollection';
   }
 
+  async getDataByCondition(condition) {
+    try {
+      const client = await MongoClient.connect(this.url, { useUnifiedTopology: true });
+      const db = client.db(this.dbName);
+      const collection = db.collection(this.collectionName);
+      let result;
+      if (condition) {
+        result = await collection.find(condition).toArray();
+      } else {
+        result = await collection.find().toArray();
+      }
+      client.close();
+      return { success: true, message: '查询成功', data: result };
+    } catch (error) {
+      return { success: false, message: '操作失败', error: error };
+    }
+  }
+
+
   async insertData(data) {
     try {
       const client = await MongoClient.connect(this.url, { useUnifiedTopology: true });
@@ -112,4 +131,10 @@ module.exports = {Database, getClientIp, getCurrentDateTime };
   优化之后改成类方法调用 
   { url: 'mongodb://myuser:mypassword@redis.qy:27017/mydatabase', dbName: 'mydatabase', collectionName: 'mycollection22' }
   const db = new Database({collectionName:"aaa"});
+
+  //查询调用
+  const result = await database.getDataByCondition();
+  const result = await database.getDataByCondition({ age: 25 });
+
+  
 */
