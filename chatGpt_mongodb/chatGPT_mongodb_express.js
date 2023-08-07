@@ -25,7 +25,7 @@ app.post('/delete', async function (req, res) {
     const filter = req.body;
     var result = null;
     if(filter.id){
-      result = await db.dedeleteDataByID(filter.id);
+      result = await db.deleteDataByID(filter.id);
     }else{
       delete filter.id;
       result = await db.deleteData(filter);
