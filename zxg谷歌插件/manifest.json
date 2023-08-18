@@ -10,7 +10,7 @@
 		"128": "img/LOGO.png"
 	},
 	"background": {
-		"scripts": [ "js/stock_code.js","js/youjian.js","js/getCookie.js"]
+		"scripts": [ "js/stock_code.js","js/youjian.js"]
 	 },
 	"browser_action": 
 	{

@@ -79,9 +79,89 @@ function sendMessageToContentScriptByPostMessage(data) {
     if (location.host == 'xueqiu.com') {    //雪球网站
         if(location == 'https://xueqiu.com/S/BK0684') {
             showAllSotock();
+            console.log('5秒刷新 https://xueqiu.com/S/BK0684')
+            setInterval(function() {
+                location.reload();
+            }, 21000); // 5000毫秒 = 5秒
         }
     }
+
+        youtubeHide(location);
+
+
 })();
+
+
+function youtubeHide(host) {
+    var key = 'www.youtube.com/watch';
+    if (host.toString().includes(key)) {
+        console.log('执行:: youtubeHide 函数')
+        setTimeout(function () {
+            (function ($) {
+                //-----------------------------
+                var overlayDiv = $("<div>", {
+                    id: "overlayDiv",
+                });
+
+                var button = $("<button>", {
+                    id: "toggleButton",
+                    text: "进度条",
+                });
+                button.click(function () {
+                    $('.ytp-title-text').toggle();
+                    $('.ytp-chrome-top-buttons').toggle();
+                    $('.ytp-gradient-top').toggle();
+                    $('.ytp-chrome-bottom').toggle();
+                    // $('#movie_player > div:eq(33) > div:eq(0)').toggle(); 
+                });
+
+                overlayDiv.append(button);
+                $("body").append(overlayDiv);
+
+                // Dynamically add CSS
+                var css = $("<style>").prop("type", "text/css").html(`
+                    #overlayDiv {
+                        width: 100px;
+                        height: 50px;
+                        position: fixed;
+                        top: 0;
+                        margin-left: 180px;
+                        bottom: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 99999;
+                    }
+                    #toggleButton {
+                        padding: 2px 10px;
+                        background-color: rgba(255, 255, 255, 0.5);
+                        border: none;
+                        cursor: pointer;
+                    }
+                    #contentDiv {
+                        width: 300px;
+                        height: 100px;
+                        margin-top: 40px;
+                        padding: 20px;
+                        background-color: lightgray;
+                    }
+                `);
+                $("head").append(css);
+//-----------------------------------
+            })(jQuery);
+        }, 2000);
+        setTimeout(function () {
+            (function ($) {
+                $('.ytp-gradient-top').removeClass()
+                // $('.ytp-title-text').hide();
+                // $('.ytp-chrome-top-buttons').hide();
+                // $('.ytp-gradient-top').hide();
+                // $('#movie_player > div:eq(33) > div:eq(0)').hide()  //有效
+            })(jQuery);
+        }, 2000);
+    }
+}
+
 
 function showAllSotock(){
     //2023-8-3
@@ -503,7 +583,7 @@ function codeto_aaa_m() {
 
 //同花顺-自选股-涨跌幅(删除毛角分)
 function removeSpan(){
-    if (window.location.href.includes("https://t.10jqka.com.cn/newcircle/user/userPersonal/?from=finance&tab=zx")){
+    if (window.location.href.includes("https://t.10jqka.com.cn/newcircle/user/userPersonal/?from")){
         //2023-8-1 11:13
         console.log("---------------同花顺-自选股-涨跌幅(删除毛角分)-----------------")
         console.log("执行方法：removeSpan")
@@ -511,7 +591,6 @@ function removeSpan(){
             (function ($) {
                 console.log("点击展开")
                 $('.stockinfo-desplay').click()
-                // console.log(`$('.stockinfo-desplay').click()`)
             })(jQuery);
         }, 2000);
         setInterval(removeFirstSpan, 2000);
