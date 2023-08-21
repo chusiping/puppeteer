@@ -85,80 +85,33 @@ function sendMessageToContentScriptByPostMessage(data) {
             }, 21000); // 5000毫秒 = 5秒
         }
     }
-
-        youtubeHide(location);
-
+    //一下是通用函数，可配置参数使用
+    show商品评价();
+    youtubeHide(); 
 
 })();
 
 
-function youtubeHide(host) {
-    var key = 'www.youtube.com/watch';
-    if (host.toString().includes(key)) {
-        console.log('执行:: youtubeHide 函数')
-        setTimeout(function () {
+function show商品评价(){
+    //2023-8-3
+    setTimeout(function () {
+        (function ($) {
+            appendTextIfConditionMet('id=542811841579', "zxg评价 : 1天后追评这次买的质量非常差，里面基本是空的，偷工减料很多，烧到三分之一就完全灭了，找售后也是一直在敷衍了事，这就是店大欺客么，还吹嘘自己销量好的怎么样。下次买的小伙伴可以多看看");
+        })(jQuery);
+    }, 1500);   
+}
+
+
+
+function youtubeHide() {
+    console.log('执行:: youtubeHide 函数')
+    if (location.href.includes('www.youtube.com/watch')) {
+        var selectors = ['.ytp-title-text','.ytp-chrome-top-buttons','.ytp-gradient-top','.ytp-chrome-bottom'];
+        setInterval(function () {
             (function ($) {
-                //-----------------------------
-                var overlayDiv = $("<div>", {
-                    id: "overlayDiv",
-                });
-
-                var button = $("<button>", {
-                    id: "toggleButton",
-                    text: "进度条",
-                });
-                button.click(function () {
-                    $('.ytp-title-text').toggle();
-                    $('.ytp-chrome-top-buttons').toggle();
-                    $('.ytp-gradient-top').toggle();
-                    $('.ytp-chrome-bottom').toggle();
-                    // $('#movie_player > div:eq(33) > div:eq(0)').toggle(); 
-                });
-
-                overlayDiv.append(button);
-                $("body").append(overlayDiv);
-
-                // Dynamically add CSS
-                var css = $("<style>").prop("type", "text/css").html(`
-                    #overlayDiv {
-                        width: 100px;
-                        height: 50px;
-                        position: fixed;
-                        top: 0;
-                        margin-left: 180px;
-                        bottom: 0;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        z-index: 99999;
-                    }
-                    #toggleButton {
-                        padding: 2px 10px;
-                        background-color: rgba(255, 255, 255, 0.5);
-                        border: none;
-                        cursor: pointer;
-                    }
-                    #contentDiv {
-                        width: 300px;
-                        height: 100px;
-                        margin-top: 40px;
-                        padding: 20px;
-                        background-color: lightgray;
-                    }
-                `);
-                $("head").append(css);
-//-----------------------------------
+                var overlayButton = new OverlayButton("隐藏进度条", selectors, '#333', 'white');
             })(jQuery);
-        }, 2000);
-        setTimeout(function () {
-            (function ($) {
-                $('.ytp-gradient-top').removeClass()
-                // $('.ytp-title-text').hide();
-                // $('.ytp-chrome-top-buttons').hide();
-                // $('.ytp-gradient-top').hide();
-                // $('#movie_player > div:eq(33) > div:eq(0)').hide()  //有效
-            })(jQuery);
-        }, 2000);
+        }, 1500);
     }
 }
 
@@ -192,50 +145,11 @@ const ding01 = () => {
             }
         }, 300);
     })
-
-
-    // return new Promise((resolve, reject)=>{
-    //     setTimeout(()=> {
-    //         var nodes = $("body").contents().find("div.node-wrap")
-    //         resolve(nodes)
-    //     }, ss)
-    // })
 }
-//要添加的节点
-// const ding2 = (_node) => {
-//     var rt = "";
-//     var title = $(_node).contents().find("span.editable-title")
-//     for(const el of title){
-//         var spr = $(el).text()
-//         if(spr == "审批人a"){
-//             rt =  "ok"
-//             break;
-//         }
-//     }
-//     return rt;
-// }
+
 
 //要的+号节点
 const ding3 = (_node) => {
-
-    // return new Promise((resolve, reject)=>{
-    //     var timesRun = 0;
-    //     var inter = setInterval(function () {
-    //         var title = $(_node).contents().find("span.editable-title")
-    //         for(const el of title){
-    //             var spr = $(el).text()
-    //             if(spr == "审批人a"){
-    //                 var prev_node = $(_node).prev();
-    //                 resolve(prev_node)
-    //                 timesRun++;
-    //                 break;
-    //             }
-    //         }
-    //         if (timesRun > 0) {
-    //             clearInterval(inter);
-    //         }
-    //     }, 3000);
-    // })
 
     var rt = null;
     var title = $(_node).contents().find("span.editable-title")
@@ -265,14 +179,6 @@ const ding4 = (_node) => {
             }
         }, 600);
     })
-
-
-    // return new Promise((resolve, reject)=>{
-    //     setTimeout(()=> {
-    //         var btn = $(_node).contents().find("button.btn")
-    //         resolve(btn[0]);
-    //     }, 1000)
-    // })
   
 }
 
@@ -292,23 +198,6 @@ const ding5_1 = (_node) => {
         setTimeout(()=> {
             resolve("ok");
         }, 9000)
-        // let timesRun = 0;
-        // var inter = setInterval(function () {
-        //     var title = $(_node).contents().find("span.editable-title"); // div.node-wrap $("div.node-wrap").contents().find("span.editable-title")
-            
-        //     for(item of title){
-        //         console.log('item▶ '+$(item).text());
-        //         if($(item).text()=="推送A"){
-        //            timesRun++;
-        //            resolve("ok"); 
-        //         }
-        //     }
-        //     if (timesRun > 0) {
-        //         clearInterval(inter);
-        //     }
-        //     console.log('▶等待ahk完成。。。');
-        //     ding5_1();
-        // }, 500);
     });
 }
 
@@ -1038,4 +927,119 @@ function visitApi(act, Code) {
             });  
         }
     })(jQuery)
+}
+
+
+
+
+class OverlayButton {
+    constructor(text, selectors,backgroundColor,fontColor) {
+      this.overlayDiv = $("<div>", {
+        id: "overlayDiv",
+      });
+  
+      this.button = $("<button>", {
+        id: "toggleButton",
+        text: text,
+      });
+      this.button.click(() => {
+        this.executeOperations(selectors);
+      });
+  
+      this.overlayDiv.append(this.button);
+      $("body").append(this.overlayDiv);
+  
+      
+      // Dynamically add CSS
+      var css = $("<style>")
+        .prop("type", "text/css")
+        .html(`
+          #overlayDiv {
+            width: 100px;
+            height: 50px;
+            position: fixed;
+            top: 0;
+            margin-left: 180px;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+          }
+          #toggleButton {
+            padding: 2px 10px;
+            background-color: ${backgroundColor};
+            border: none;
+            cursor: pointer;
+            color:${fontColor};
+          }
+          #contentDiv {
+            width: 300px;
+            height: 100px;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: lightgray;
+          }
+        `);
+      $("head").append(css);
+    };
+    executeOperations = (selectors) => {
+        for (var i = 0; i < selectors.length; i++) {
+            var element = $(selectors[i]);
+            element.toggle();
+        }
+    }
+  }
+
+//淘宝天猫添加商品评价的注释，每次可以看得更清楚
+function appendTextIfConditionMet(includesParam, textContentParam,_top="130px",_left="750px") {
+    if (location.href.includes(includesParam)) {    
+        console.log('--------------- '+location.href+' 添加div评价说明 -----------------')
+        var $customDiv = $("<div>", {
+            id: "customDiv20238211506",
+            text: textContentParam
+          });
+        
+          var isExpanded = false; // 跟踪 <div> 的当前状态
+        
+          $customDiv.css({
+            position: "fixed",
+            top: _top,
+            left: _left,
+            width: "100px",
+            height: "30px",
+            background: "#c6f64a",
+            padding: "3px",
+            "z-index": "99999999",
+            cursor: "pointer",
+            overflow: "hidden",
+            "box-shadow": "0 2px 4px rgba(0, 0, 0, 0.3)"
+          });
+
+          $customDiv.on("dblclick", function() {
+            $(this).hide();
+          });
+
+          $customDiv.click(function() {
+            if (isExpanded) {
+              $(this).animate({
+                width: "100px",
+                height: "30px"
+              }, 200);
+              isExpanded = false;
+            } else {
+                var textLength = $(this).text().length;
+                var newWidth = Math.min(textLength * 10, 300);
+                var newHeight = Math.ceil(textLength / 30) * 20 + 40; // 自动计算高度
+          
+                $(this).animate({
+                  width: newWidth + "px",
+                  height: newHeight + "px"
+                }, 200);
+                isExpanded = true;
+            }
+          });
+        
+          $("body").append($customDiv);
+    }
 }
