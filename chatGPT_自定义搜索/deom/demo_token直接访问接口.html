@@ -12,48 +12,23 @@
 </head>
 
 <body>
-    <input type="text" id="url" placeholder="请输入URL" value="">
-    <br>
-    <textarea id="requestPayload" placeholder="请输入请求体"></textarea>
-    <br>
-    <textarea id="headers" placeholder="请输入请求头"></textarea>
-    <br>
-    <button onclick="submitData()">提交</button>
+    <div id="app"><br><br>
+    <select onchange="myFunction(this.value)">
+        <option value="0" selected>选择</option>
+        <option value="1">携程查看</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+        </select>
+        <button onclick="toggleDiv()">查看token</button>
+        <button onclick="submitData()">提交</button>
+        <div id="myDiv" style="display:none">
+            <input type="text" id="url" placeholder="请输入URL" value="">
+            <br>
+            <textarea id="requestPayload" placeholder="请输入请求体"></textarea>
+            <br>
+            <textarea id="headers" placeholder="请输入请求头"></textarea>
+        </div>
     <div id="data"></div>
-    <script>
-        function conn(){
-            queryDatabase("source/axios_token.db", "SELECT * FROM token;")
-            .then(obj => {
-                console.info(obj[0]);
-                submitData(obj[0])
-            });
-        }
-        conn();
-        function submitData(obj) {
-            if (obj) {
-                $('#url').val(obj.url);
-                $('#requestPayload').val(obj.payload);
-                $('#headers').val(obj.header)
-            } else {
-                var url = $('#url').val();
-                var requestPayload = $('#requestPayload').val();
-                var headers = JSON.parse($('#headers').val());
-                axios.post('/api/search', {
-                    requestPayload: requestPayload,
-                    url: url,
-                    headers: headers
-                })
-                    .then(response => {
-                        // 处理响应数据
-                        console.log(response.data);
-                        $('#data').html(JSON.stringify(response.data))
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
-        }
-    </script>
+    </div>
 </body>
-
 </html>

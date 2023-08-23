@@ -64,3 +64,61 @@ async function queryDatabase(url, sql) {
         throw error; // If you want the error to propagate
     }
 }
+
+function conn(id){
+    let sql =  "SELECT * FROM token where 1=1 and id="+id;
+    queryDatabase("source/axios_token.db",sql)
+    .then(obj => {
+        console.info(obj[0]);
+        $('#url').val(obj[0].url);
+        $('#requestPayload').val(obj[0].payload);
+        $('#headers').val(obj[0].header)
+        showTemporaryMessage('完成',);
+    });
+}
+
+function myFunction(selectedValue) {
+    $('#url').val('');
+    $('#requestPayload').val('');
+    $('#headers').val('')
+    if(selectedValue=="0") return;
+    showTemporaryMessage('加载中',);
+    conn(selectedValue);    
+    console.log("id: " + selectedValue);
+}
+
+function toggleDiv() {
+    var div = document.getElementById("myDiv");
+    div.style.display = div.style.display === "none" ? "block" : "none";
+}
+
+function submitData(obj) {
+    if (obj) {
+        $('#url').val(obj.url);
+        $('#requestPayload').val(obj.payload);
+        $('#headers').val(obj.header)
+    } else {
+        var url = $('#url').val();
+        var requestPayload = $('#requestPayload').val();
+        var headers = JSON.parse($('#headers').val());
+        axios.post('/api/search', {
+            requestPayload: requestPayload,
+            url: url,
+            headers: headers
+        })
+            .then(response => {
+                // 处理响应数据
+                console.log(response.data);
+                $('#data').html(JSON.stringify(response.data))
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+}
+function showTemporaryMessage(message, duration="2000") {
+    const temporaryMessage = $('<div>').text(message).addClass("success-message");
+    $('body').prepend(temporaryMessage);
+    setTimeout(() => temporaryMessage.remove(), duration);
+  }
+  

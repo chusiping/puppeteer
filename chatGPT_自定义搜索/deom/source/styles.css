@@ -13,3 +13,14 @@ textarea {
     width: 1500px;
     height: 100px;
 }
+
+.success-message {
+    padding: 10px;
+    background-color: green;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
