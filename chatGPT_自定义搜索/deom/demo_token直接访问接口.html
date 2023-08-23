@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>使用Cookie提交数据到API</title>
+    <link rel="stylesheet" type="text/css" href="source/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/sql.js/0.5.0/js/sql-optimized.js"></script>
+    <script src="source/sqlite.js"></script>
+</head>
+
+<body>
+    <input type="text" id="url" placeholder="请输入URL" value="">
+    <br>
+    <textarea id="requestPayload" placeholder="请输入请求体"></textarea>
+    <br>
+    <textarea id="headers" placeholder="请输入请求头"></textarea>
+    <br>
+    <button onclick="submitData()">提交</button>
+    <div id="data"></div>
+    <script>
+        function conn(){
+            queryDatabase("source/axios_token.db", "SELECT * FROM token;")
+            .then(obj => {
+                console.info(obj[0]);
+                submitData(obj[0])
+            });
+        }
+        conn();
+        function submitData(obj) {
+            if (obj) {
+                $('#url').val(obj.url);
+                $('#requestPayload').val(obj.payload);
+                $('#headers').val(obj.header)
+            } else {
+                var url = $('#url').val();
+                var requestPayload = $('#requestPayload').val();
+                var headers = JSON.parse($('#headers').val());
+                axios.post('/api/search', {
+                    requestPayload: requestPayload,
+                    url: url,
+                    headers: headers
+                })
+                    .then(response => {
+                        // 处理响应数据
+                        console.log(response.data);
+                        $('#data').html(JSON.stringify(response.data))
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+#data {
+    width: 900px;
+    height: 400px;
+    overflow-y: scroll;
+    border: 1px solid black;
+}
+
+input {
+    width: 1500px;
+}
+
+textarea {
+    width: 1500px;
+    height: 100px;
+}
