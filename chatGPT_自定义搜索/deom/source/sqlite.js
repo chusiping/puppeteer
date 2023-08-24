@@ -95,7 +95,7 @@ function toggleDiv() {
     // data.style.display = data.style.display === "block" ? "none" : "block";
 }
 
-function submitData(obj,api) {
+function submitData(obj,api,direct) {
     if (obj) {
         $('#url').val(obj.url);
         $('#requestPayload').val(obj.payload);
@@ -106,10 +106,14 @@ function submitData(obj,api) {
             showTemporaryMessage('唯一名称必填',2000);
             return;
         }
+        if(direct === "1"){
+            let dp = $('#dp').val();
+            api = api.replace("title",dp);
+        }
         var url = $('#url').val().trim();
         var requestPayload = $('#requestPayload').val().trim();
         var headers = $('#headers').val().trim().replace(/'/g, "\"");
-        showTemporaryMessage('等待接口返回',9000);
+        showTemporaryMessage('等待接口返回',19000);
         axios.post(api, {
             title: encodeURIComponent(title),
             requestPayload: encodeURIComponent(requestPayload),
