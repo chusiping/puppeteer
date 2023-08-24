@@ -73,7 +73,7 @@ function conn(id){
         $('#url').val(obj[0].url);
         $('#requestPayload').val(obj[0].payload);
         $('#headers').val(obj[0].header)
-        showTemporaryMessage('完成',);
+        showTemporaryMessage('完成',1000);
     });
 }
 
@@ -82,14 +82,16 @@ function myFunction(selectedValue) {
     $('#requestPayload').val('');
     $('#headers').val('')
     if(selectedValue=="0") return;
-    showTemporaryMessage('加载中',);
+    showTemporaryMessage('加载中',9000);
     conn(selectedValue);    
     console.log("id: " + selectedValue);
 }
 
 function toggleDiv() {
     var div = document.getElementById("myDiv");
+    var data = document.getElementById("data");
     div.style.display = div.style.display === "none" ? "block" : "none";
+    // data.style.display = data.style.display === "block" ? "none" : "block";
 }
 
 function submitData(obj) {
@@ -98,27 +100,34 @@ function submitData(obj) {
         $('#requestPayload').val(obj.payload);
         $('#headers').val(obj.header)
     } else {
-        var url = $('#url').val();
-        var requestPayload = $('#requestPayload').val();
-        var headers = JSON.parse($('#headers').val());
+        var url = $('#url').val().trim();
+        var requestPayload = $('#requestPayload').val().trim();
+        var headers = $('#headers').val().trim().replace(/'/g, "\"");
+        showTemporaryMessage('等待接口返回',9000);
         axios.post('/api/search', {
-            requestPayload: requestPayload,
-            url: url,
-            headers: headers
-        })
+            requestPayload: encodeURIComponent(requestPayload),
+            url: encodeURIComponent(url),
+            headers: encodeURIComponent(headers)
+        },{ maxContentLength: Infinity })
             .then(response => {
                 // 处理响应数据
                 console.log(response.data);
                 $('#data').html(JSON.stringify(response.data))
+                showTemporaryMessage('完成');
             })
             .catch(error => {
+                showTemporaryMessage('返回错误');
                 console.error(error);
             });
     }
 }
-function showTemporaryMessage(message, duration="2000") {
-    const temporaryMessage = $('<div>').text(message).addClass("success-message");
-    $('body').prepend(temporaryMessage);
-    setTimeout(() => temporaryMessage.remove(), duration);
-  }
+let temporaryMessage; 
+function showTemporaryMessage(message, duration = "2000") {
+  if (temporaryMessage) { temporaryMessage.remove();}
+  temporaryMessage = $('<div>').text(message).addClass("success-message");
+  $('body').prepend(temporaryMessage);
+  setTimeout(() => { temporaryMessage.remove(); temporaryMessage = null; }, duration);
+}
+
   
+//1去空格，2转码

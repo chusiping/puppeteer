@@ -9,6 +9,11 @@ app.post('/api/search', (req, res) => {
     let url = req.body.url;
     let requestPayload = req.body.requestPayload
     let headers =  req.body.headers
+
+    url = decodeURIComponent(url)
+    requestPayload = JSON.parse(decodeURIComponent(requestPayload))
+    headers = JSON.parse(decodeURIComponent(headers));
+
     axios.post(url, requestPayload, { headers })
         .then(response => {
             let rt = response.data;
