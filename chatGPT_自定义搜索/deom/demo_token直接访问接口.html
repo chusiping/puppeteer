@@ -12,16 +12,18 @@
 </head>
 
 <body>
-    <div id="app"><br><br>
+    <div id="app"><br>
     <select onchange="myFunction(this.value)">
         <option value="0" selected>选择</option>
-        <option value="1">携程查看</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
+        <option value="携程api">携程api</option>
+        <option value="同花顺api">同花顺api</option>
         </select>
         <button onclick="toggleDiv()">查看token</button>
-        <button onclick="submitData()">提交API</button>
+        <button onclick="submitData(null,'/api/search')">提交API</button>
+        <button onclick="submitData(null,'/api/db/add')">添加token</button>
+        <button onclick="submitData(null,'/api/db/del')">删除</button>
         <div id="myDiv" style="display:none">
+            <input type="text" id="title" placeholder="唯一名称" value="">
             <input type="text" id="url" placeholder="请输入URL" value="">
             <br>
             <textarea id="requestPayload" placeholder="payload"></textarea>

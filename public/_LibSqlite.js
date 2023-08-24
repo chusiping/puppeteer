@@ -29,20 +29,35 @@ DB.SqliteDB.prototype.createTable = function(sql){
 };
  
 /// tilesData format; [[level, column, row, content], [level, column, row, content]]
-DB.SqliteDB.prototype.insertData = function(sql, objects){
-    DB.db.serialize(function(){
+//可以是单数组，可以是多数组
+DB.SqliteDB.prototype.insertData = function (sql, objects) {
+    DB.db.serialize(function () {
         var stmt = DB.db.prepare(sql);
-        for(var i = 0; i < objects.length; ++i){
+        var rt =  {"success":"ok"};
+        if (Array.isArray(objects[0])) {
+            for (var i = 0; i < objects.length; ++i) {
+                try {
+                    stmt.run(objects[i]);
+                } catch (error) {
+                    rt = error;
+                    console.log(error);
+                }
+            }
+        } else {
+            // 如果 objects 是单个对象，则直接处理该对象
             try {
-                stmt.run(objects[i]);
+                stmt.run(objects);
             } catch (error) {
-                console.log(error)
+                rt = error;
+                console.log(error);
             }
         }
         stmt.finalize();
+        return rt;
     });
 };
- 
+
+
 DB.SqliteDB.prototype.queryData = function(sql, callback){
     DB.db.all(sql, function(err, rows){
         if(null != err){

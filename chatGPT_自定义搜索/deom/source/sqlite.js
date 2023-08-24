@@ -65,11 +65,12 @@ async function queryDatabase(url, sql) {
     }
 }
 
-function conn(id){
-    let sql =  "SELECT * FROM token where 1=1 and id="+id;
+function conn(title){
+    let sql =  "SELECT * FROM token where 1=1 and title='"+ title +"'";
     queryDatabase("source/axios_token.db",sql)
     .then(obj => {
         console.info(obj[0]);
+        $('#title').val(obj[0].title);
         $('#url').val(obj[0].url);
         $('#requestPayload').val(obj[0].payload);
         $('#headers').val(obj[0].header)
@@ -94,17 +95,23 @@ function toggleDiv() {
     // data.style.display = data.style.display === "block" ? "none" : "block";
 }
 
-function submitData(obj) {
+function submitData(obj,api) {
     if (obj) {
         $('#url').val(obj.url);
         $('#requestPayload').val(obj.payload);
         $('#headers').val(obj.header)
     } else {
+        var title = $('#title').val().trim();
+        if(!title){
+            showTemporaryMessage('唯一名称必填',2000);
+            return;
+        }
         var url = $('#url').val().trim();
         var requestPayload = $('#requestPayload').val().trim();
         var headers = $('#headers').val().trim().replace(/'/g, "\"");
         showTemporaryMessage('等待接口返回',9000);
-        axios.post('/api/search', {
+        axios.post(api, {
+            title: encodeURIComponent(title),
             requestPayload: encodeURIComponent(requestPayload),
             url: encodeURIComponent(url),
             headers: encodeURIComponent(headers)
