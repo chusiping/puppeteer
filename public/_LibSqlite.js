@@ -1,8 +1,8 @@
 var fs = require('fs');
 var sqlite3 = require('sqlite3').verbose();
- 
 var DB = DB || {};
  
+
 DB.SqliteDB = function(file){
     DB.db = new sqlite3.Database(file);
  
@@ -95,5 +95,20 @@ DB.SqliteDB.prototype.close = function(){
     DB.db.close();
 };
  
+//2023-8-24 16:22 新增的来自AI
+DB.SqliteDB.prototype.queryDatabase = async function queryDatabase(dbPath, sql) {
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database(dbPath);
+        db.all(sql, (err, rows) => {
+            db.close();
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 /// export SqliteDB.
 exports.SqliteDB = DB.SqliteDB;
