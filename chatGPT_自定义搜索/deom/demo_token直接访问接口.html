@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>使用Cookie提交数据到API</title>
@@ -9,29 +8,64 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.bootcss.com/sql.js/0.5.0/js/sql-optimized.js"></script>
     <script src="source/sqlite.js"></script>
+    <script>
+            $(document).ready(function () {
+                $('#openBtn').click(function () {
+                    $('.overlay').fadeIn();
+                });
+                $('.close').click(function () {
+                    $('.overlay').fadeOut();
+                });
+                $('.popup').click(function (event) {
+                    event.stopPropagation();
+                    // $('.overlay').fadeOut();
+                });
+                $('.overlay').click(function () {
+                    $('.overlay').fadeOut();
+                });
+            });
+    </script>
 </head>
-
 <body>
-    <div id="app"><br>
-    <select id="dp" onchange="myFunction(this.value)">
-        <option value="0" selected>选择</option>
-        <option value="携程api">携程api</option>
-        <option value="同花顺api">同花顺api</option>
-        </select>
-        <button onclick="toggleDiv()">查看token</button>
-        <button onclick="submitData(null,'/api/search')">提交API</button>
-        <button onclick="submitData(null,'/api/db/add')">添加token</button>
-        <button onclick="submitData(null,'/api/db/del')">删除</button>
-        <button onclick="submitData(null,'/api/db/json/title','1')">---测试</button>
-        <div id="myDiv" style="display:none">
-            <input type="text" id="title" placeholder="唯一名称" value="">
-            <input type="text" id="url" placeholder="请输入URL" value="">
-            <br>
-            <textarea id="requestPayload" placeholder="payload"></textarea>
-            <br>
-            <textarea id="headers" placeholder="header"></textarea>
+    <div class="divFST">
+        <div>
+            <select id="dp" onchange="myFunction(this.value)" class="btn">
+                <option value="0" selected>选择</option>
+                <option value="携程api">携程api</option>
+                <option value="同花顺api">同花顺api</option>
+            </select>
+            <button onclick="submitData(null,'/api/db/json/title','1')" class="btn">获取数据</button>
+            <button id="openBtn" class="btn">查看token</button>  
         </div>
-    <div id="data"></div>
+        <div class="divData">
+            <div class="divFST">
+                <button class="btn" onclick="handleClick();">提取6位数字</button>
+                <button class="btn" onclick="removeDuplicates();">去重</button>
+                <button class="btn">删除</button>               
+            </div>
+
+            <textarea id="data"></textarea>            
+        </div>
+        
+
+    </div>
+    
+    <div class="overlay">
+        <div class="popup">
+            <span class="close">×</span>
+            <button onclick="submitData(null,'/api/search')">提交API</button>
+            <button onclick="submitData(null,'/api/db/add')">添加token</button>
+            <button onclick="submitData(null,'/api/db/del')">删除</button>
+            <div id="myDiv" onclick="handleMyDivClick()">
+                <input type="text" id="title" placeholder="唯一名称" value="">
+                <input type="text" id="url" placeholder="接口URL" value="">
+                <br>
+                <textarea id="requestPayload" placeholder="payload"></textarea>
+                <br>
+                <textarea id="headers" placeholder="header"></textarea>
+            </div>
+    
+        </div>
     </div>
 </body>
 </html>

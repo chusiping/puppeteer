@@ -65,26 +65,27 @@ async function queryDatabase(url, sql) {
     }
 }
 
-function conn(title){
-    let sql =  "SELECT * FROM token where 1=1 and title='"+ title +"'";
-    queryDatabase("source/axios_token.db",sql)
-    .then(obj => {
-        console.info(obj[0]);
-        $('#title').val(obj[0].title);
-        $('#url').val(obj[0].url);
-        $('#requestPayload').val(obj[0].payload);
-        $('#headers').val(obj[0].header)
-        showTemporaryMessage('完成',1000);
-    });
+function conn(title) {
+    let sql = "SELECT * FROM token where 1=1 and title='" + title + "'";
+    queryDatabase("source/axios_token.db", sql)
+        .then(obj => {
+            console.info(obj[0]);
+            $('#title').val(obj[0].title);
+            $('#url').val(obj[0].url);
+            $('#requestPayload').val(obj[0].payload);
+            $('#headers').val(obj[0].header)
+            showTemporaryMessage('完成', 1000);
+        });
 }
 
 function myFunction(selectedValue) {
+    $('#title').val('');
     $('#url').val('');
     $('#requestPayload').val('');
     $('#headers').val('')
-    if(selectedValue=="0") return;
-    showTemporaryMessage('加载中',9000);
-    conn(selectedValue);    
+    if (selectedValue == "0") return;
+    showTemporaryMessage('加载中', 9000);
+    conn(selectedValue);
     console.log("id: " + selectedValue);
 }
 
@@ -92,38 +93,38 @@ function toggleDiv() {
     var div = document.getElementById("myDiv");
     var data = document.getElementById("data");
     div.style.display = div.style.display === "none" ? "block" : "none";
-    // data.style.display = data.style.display === "block" ? "none" : "block";
 }
 
-function submitData(obj,api,direct) {
+function submitData(obj, api, direct) {
     if (obj) {
+        $('#title').val(obj.title);
         $('#url').val(obj.url);
         $('#requestPayload').val(obj.payload);
         $('#headers').val(obj.header)
     } else {
         var title = $('#title').val().trim();
-        if(!title){
-            showTemporaryMessage('唯一名称必填',2000);
+        if (!title) {
+            showTemporaryMessage('唯一名称必填', 2000);
             return;
         }
-        if(direct === "1"){
+        if (direct === "1") {
             let dp = $('#dp').val();
-            api = api.replace("title",dp);
+            api = api.replace("title", dp);
         }
         var url = $('#url').val().trim();
         var requestPayload = $('#requestPayload').val().trim();
         var headers = $('#headers').val().trim().replace(/'/g, "\"");
-        showTemporaryMessage('等待接口返回',19000);
+        showTemporaryMessage('等待接口返回', 19000);
         axios.post(api, {
             title: encodeURIComponent(title),
             requestPayload: encodeURIComponent(requestPayload),
             url: encodeURIComponent(url),
             headers: encodeURIComponent(headers)
-        },{ maxContentLength: Infinity })
+        }, { maxContentLength: Infinity })
             .then(response => {
                 // 处理响应数据
                 console.log(response.data);
-                $('#data').html(JSON.stringify(response.data))
+                $('#data').val(JSON.stringify(response.data))
                 showTemporaryMessage('完成');
             })
             .catch(error => {
@@ -132,13 +133,59 @@ function submitData(obj,api,direct) {
             });
     }
 }
-let temporaryMessage; 
+let temporaryMessage;
 function showTemporaryMessage(message, duration = "2000") {
-  if (temporaryMessage) { temporaryMessage.remove();}
-  temporaryMessage = $('<div>').text(message).addClass("success-message");
-  $('body').prepend(temporaryMessage);
-  setTimeout(() => { temporaryMessage.remove(); temporaryMessage = null; }, duration);
+    if (temporaryMessage) { temporaryMessage.remove(); }
+    temporaryMessage = $('<div>').text(message).addClass("success-message");
+    $('body').prepend(temporaryMessage);
+    setTimeout(() => { temporaryMessage.remove(); temporaryMessage = null; }, duration);
 }
 
+
+function extract6Digits(str) {
+    var regex = /\d{6}/g;
+    var matches = str.match(regex);
+    if (!matches) {
+      return "";
+    }
+    var result = matches.join(",");
+    return result;
+  }
   
+
+
+var _data;
+var count = 0;
+function handleClick() {
+    if (count % 2 === 0) {
+        toStr();
+    } else {
+        backup();
+    }
+    count++;
+}
+function toStr() {
+    _data = $('#data').val();
+    $('#data').val(extract6Digits(_data))
+}
+function backup() {
+    $('#data').val(_data)
+}
+
+//搜索关键字：去重函数
+function removeDupStr(str) {
+    var arr = str.split(/[\s,]+/);
+    var uniqueArr = [...new Set(arr)];
+    var result = uniqueArr.join(",");
+    return result;
+}
+
+function removeDuplicates() {
+    var rt = removeDupStr($('#data').val())
+    $('#data').val(rt)
+}
+
+
+
+
 //1去空格，2转码
