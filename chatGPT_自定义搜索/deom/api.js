@@ -46,35 +46,46 @@ app.post('/api/db/:param', (req, res) => {
     sqliteDB.executeSql("delete from token where title='"+ title +"'");
     if(paramValue == "add"){
         var add_sql = "insert into token(title, url, payload,header) values(?, ?, ?, ?)";
-        sqliteDB.insertData(add_sql, data);    
-        sqliteDB.close();   
+        sqliteDB.insertData(add_sql, data);     
     }
     res.send({"success":"ok"});
 });
 
 app.all('/api/db/json/:title', (req, res) => {
     const title = req.params.title;
-    var sql = "select * from token where title='"+ title +"'";
-    sqliteDB.queryDatabase(file, sql)
-        .then(result => {
-            // res.send(result);console.log(result);
-            url = (result[0].url)
-            requestPayload = JSON.parse((result[0].payload))
-            headers = JSON.parse((result[0].header));
-        
-            axios.post(url, requestPayload, { headers })
-                .then(response => {
-                    let rt = response.data;
-                    console.log(rt);
-                    res.send(rt);
-                })
-                .catch(error => {
-                    res.send(error);
-                });
-        })
-        .catch(error => {
-            res.send(result); console.error(error);
-        });
+    var sql = "select * from token where title='" + title + "'";
+    if (title == "all") {
+        sql = "select title from token ";
+        sqliteDB.queryDatabase(file, sql)
+            .then(result => {
+                res.send(result);console.log(JSON.stringify(result));
+            })
+            .catch(error => {
+                res.send(result); console.error(error);
+            });
+    } else {
+        sqliteDB.queryDatabase(file, sql)
+            .then(result => {
+                // res.send(result);console.log(result);
+                url = (result[0].url)
+                requestPayload = JSON.parse((result[0].payload))
+                headers = JSON.parse((result[0].header));
+
+                axios.post(url, requestPayload, { headers })
+                    .then(response => {
+                        let rt = response.data;
+                        console.log(rt);
+                        res.send(rt);
+                    })
+                    .catch(error => {
+                        res.send(error);
+                    });
+            })
+            .catch(error => {
+                res.send(error); console.error(error);
+            });
+    }
+
 });
 
 

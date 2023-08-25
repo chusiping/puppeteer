@@ -95,44 +95,58 @@ function toggleDiv() {
     div.style.display = div.style.display === "none" ? "block" : "none";
 }
 
-function submitData(obj, api, direct) {
-    if (obj) {
-        $('#title').val(obj.title);
-        $('#url').val(obj.url);
-        $('#requestPayload').val(obj.payload);
-        $('#headers').val(obj.header)
+function submitData(api, direct) {
+    if (direct === "初始化select") {
+        PostAPI(api, "all");
+    } else if (direct === "直接查询单个接口") {
+        let dp = $('#dp').val();
+        api = api.replace("title", dp);
+        showTemporaryMessage('等待接口返回', 19000);
+        PostAPI(api, title);
     } else {
         var title = $('#title').val().trim();
-        if (!title) {
-            showTemporaryMessage('唯一名称必填', 2000);
-            return;
-        }
-        if (direct === "1") {
-            let dp = $('#dp').val();
-            api = api.replace("title", dp);
-        }
-        var url = $('#url').val().trim();
-        var requestPayload = $('#requestPayload').val().trim();
-        var headers = $('#headers').val().trim().replace(/'/g, "\"");
+        if (!title) { showTemporaryMessage('唯一名称必填', 2000); return;}
+        PostAPI(api, title);
         showTemporaryMessage('等待接口返回', 19000);
-        axios.post(api, {
-            title: encodeURIComponent(title),
-            requestPayload: encodeURIComponent(requestPayload),
-            url: encodeURIComponent(url),
-            headers: encodeURIComponent(headers)
-        }, { maxContentLength: Infinity })
-            .then(response => {
-                // 处理响应数据
-                console.log(response.data);
-                $('#data').val(JSON.stringify(response.data))
-                showTemporaryMessage('完成');
-            })
-            .catch(error => {
-                showTemporaryMessage('返回错误');
-                console.error(error);
-            });
+        submitData('/api/db/json/all','初始化select');
     }
 }
+function PostAPI(api,title){
+    var url = $('#url').val().trim();
+    var requestPayload = $('#requestPayload').val().trim();
+    var headers = $('#headers').val().trim().replace(/'/g, "\"");
+    axios.post(api, {
+        title: encodeURIComponent(title),
+        requestPayload: encodeURIComponent(requestPayload),
+        url: encodeURIComponent(url),
+        headers: encodeURIComponent(headers)
+    }, { maxContentLength: Infinity })
+        .then(response => {
+            // 处理响应数据
+            console.log(response.data);
+            if(title == "all"){
+                $('#dp').empty();
+                $('#dp').append($('<option>', {value: "0", text: "选择API"}));
+                response.data.forEach(item => {
+                    var option = $('<option>', {
+                      value: item.title,
+                      text: item.title
+                    });
+                    $('#dp').append(option);
+                  });
+            }else{
+                $('#data').val(JSON.stringify(response.data))
+                showTemporaryMessage('完成');
+            }
+        })
+        .catch(error => {
+            showTemporaryMessage('返回错误');
+            console.error(error);
+        });
+}
+
+
+
 let temporaryMessage;
 function showTemporaryMessage(message, duration = "2000") {
     if (temporaryMessage) { temporaryMessage.remove(); }

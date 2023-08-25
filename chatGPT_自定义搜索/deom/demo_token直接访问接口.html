@@ -9,21 +9,22 @@
     <script src="https://cdn.bootcss.com/sql.js/0.5.0/js/sql-optimized.js"></script>
     <script src="source/sqlite.js"></script>
     <script>
-            $(document).ready(function () {
-                $('#openBtn').click(function () {
-                    $('.overlay').fadeIn();
-                });
-                $('.close').click(function () {
-                    $('.overlay').fadeOut();
-                });
-                $('.popup').click(function (event) {
-                    event.stopPropagation();
-                    // $('.overlay').fadeOut();
-                });
-                $('.overlay').click(function () {
-                    $('.overlay').fadeOut();
-                });
+        $(document).ready(function () {
+            $('#openBtn').click(function () {
+                $('.overlay').fadeIn();
             });
+            $('.close').click(function () {
+                $('.overlay').fadeOut();
+            });
+            $('.popup').click(function (event) {
+                event.stopPropagation();
+                // $('.overlay').fadeOut();
+            });
+            $('.overlay').click(function () {
+                $('.overlay').fadeOut();
+            });
+            submitData('/api/db/json/all','初始化select'); //获取全部title
+        });
     </script>
 </head>
 <body>
@@ -31,10 +32,8 @@
         <div>
             <select id="dp" onchange="myFunction(this.value)" class="btn">
                 <option value="0" selected>选择</option>
-                <option value="携程api">携程api</option>
-                <option value="同花顺api">同花顺api</option>
             </select>
-            <button onclick="submitData(null,'/api/db/json/title','1')" class="btn">获取数据</button>
+            <button onclick="submitData('/api/db/json/title','直接查询单个接口')" class="btn">获取数据</button>
             <button id="openBtn" class="btn">查看token</button>  
         </div>
         <div class="divData">
@@ -43,19 +42,16 @@
                 <button class="btn" onclick="removeDuplicates();">去重</button>
                 <button class="btn">删除</button>               
             </div>
-
             <textarea id="data"></textarea>            
         </div>
-        
-
     </div>
     
     <div class="overlay">
         <div class="popup">
             <span class="close">×</span>
-            <button onclick="submitData(null,'/api/search')">提交API</button>
-            <button onclick="submitData(null,'/api/db/add')">添加token</button>
-            <button onclick="submitData(null,'/api/db/del')">删除</button>
+            <button onclick="submitData('/api/search')">提交API</button>
+            <button onclick="submitData('/api/db/add')">添加token</button>
+            <button onclick="submitData('/api/db/del')">删除</button>
             <div id="myDiv" onclick="handleMyDivClick()">
                 <input type="text" id="title" placeholder="唯一名称" value="">
                 <input type="text" id="url" placeholder="接口URL" value="">
