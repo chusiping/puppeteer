@@ -21,7 +21,7 @@ app.post('/api/search', (req, res) => {
     axios.post(url, requestPayload, { headers })
         .then(response => {
             let rt = response.data;
-            console.log(rt);
+            //console.log(rt);
             res.send(rt);
         })
         .catch(error => {
@@ -58,7 +58,7 @@ app.all('/api/db/json/:title', (req, res) => {
         sql = "select title from token ";
         sqliteDB.queryDatabase(file, sql)
             .then(result => {
-                res.send(result);console.log(JSON.stringify(result));
+                res.send(result);//console.log(JSON.stringify(result));
             })
             .catch(error => {
                 res.send(result); console.error(error);
@@ -66,7 +66,7 @@ app.all('/api/db/json/:title', (req, res) => {
     } else {
         sqliteDB.queryDatabase(file, sql)
             .then(result => {
-                // res.send(result);console.log(result);
+                // res.send(result);//console.log(result);
                 url = (result[0].url)
                 requestPayload = JSON.parse((result[0].payload))
                 headers = JSON.parse((result[0].header));
@@ -74,7 +74,7 @@ app.all('/api/db/json/:title', (req, res) => {
                 axios.post(url, requestPayload, { headers })
                     .then(response => {
                         let rt = response.data;
-                        console.log(rt);
+                        //console.log(rt);
                         res.send(rt);
                     })
                     .catch(error => {
@@ -88,7 +88,7 @@ app.all('/api/db/json/:title', (req, res) => {
 
 });
 
-
-app.use('', express.static('./')).listen(3000);
+console.log("应用程序:token查看api的接口数据，端口 3005");
+app.use('', express.static('./')).listen(3005);
 
 // 待改进  1 sql返回的结果没有  3  前端取消使用JavaScript获取sqlite
