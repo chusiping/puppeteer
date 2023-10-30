@@ -106,7 +106,7 @@ table.tableMSA td {
     var cache = {};         //拼音转证券代码变量
 	var link_sele = '';
     $(document).ready(function(){        
-        $(".na_popup").propup();                      
+        // $(".na_popup").propup();                      
         setHoverDelay();                    //tab菜单悬停延迟
         get_bk_one();
         get_bk2();        
@@ -151,7 +151,7 @@ table.tableMSA td {
     }
     function verifyCodeFormat(){
         var tp = $("#custcodes_bk").val();
-        if(/^\d{6}(,\d{6})*$/.test(tp)){
+        if(/^(3|6|0|5)\d{5}(,(3|6|0|5)\d{5})*$/.test(tp)){  // 2023-10-30:只允许3和6开头的股票代码
             return true;
         }
         else
@@ -174,9 +174,14 @@ table.tableMSA td {
         );
     }
     var gb_bkcode,gb_bkworth = []; 
+
+    //保存选股
     function setbk()
     {
-        if(!verifyCodeFormat()) return false;
+        if(!verifyCodeFormat()){
+            $('#msg_save_bk').html(" <font color='red'>自选股代码非法!</font>") ;$('#msg_save_bk').show().delay(500).hide(0);
+            return false;
+        } 
         var mydata = $("#custcodes_bk").val(); mydata = mydata.replace(/:/g,"-");
         var bkname = $("#sele_bk2").val(), newbk = $("#ipt_bk").val(); 
         bkname = newbk == "" ? bkname : newbk; 
