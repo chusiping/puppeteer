@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>zxg</title>
-    <script type="text/javascript" src="https://js.jrjimg.cn/lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
     <base target="_blank"/>
 </head>
 <body>
@@ -269,78 +269,75 @@ table.tableMSA td {
             get_bk_price();
         });        
     }
-    //202-8-21 把回调函数独立出来,动态绘制table表格显示报价
+    
+    //2023-11-01 把回调函数独立出来,动态绘制table表格显示报价
     function setTables(data)
     {   
-        var html = "" , checkLine = "" ,rept = 0;
-        var bk_NO = 5;
-        result=[];result = data;
-
-        $.each(result, function(i, item) {                
-            var code = result[i][0];   
-            var cname = result[i][1];   
-            var cprice = result[i][2];   
-            var _cprice = accurateDecimal(cprice,2,true); //补零函数
-            var cpercent = result[i][3];  
-            
-            var cbk = result[i][bk_NO]; 
-            var arr_cbk = cbk.split(""),  cbk_str = "";
-
-            showKuiSun(code,_cprice)
-
-            for ( index = 0; index < arr_cbk.length; index++) {
-                //bak cbk_str = cbk_str + arr_cbk[index] + "<br>";
-                cbk_str = cbk_str + arr_cbk[index] ;
+        let twArr = OnaArrtoTwoArr(data); // 转化为二维数组
+        for (let index = 0; index < twArr.length; index++) {
+            var div = $("<div class=\"item\">"); //每个板块独立的div
+            const el = twArr[index];
+            var table = $("<table class=\"tableMSA nowidth2\" id=\"tableMSA\"><thead id=\"id_bk\"><th colspan=5 style=\"font-size:18px;font-weight:bold;\">"+ el[0][5]  +"</th></thead>");
+            for (let idx2 = 0; idx2 < el.length; idx2++) {
+                const eell = el[idx2];
+                var dataRow1 = formeTR(eell); //把tr添加到table里
+                table.append(dataRow1);
             }
-            /******************************* table ************************************/
-            if(checkLine!=cbk)
-            {
-                rept = 1;
-                html = html + '<div class="item">\
-                                <table class="tableMSA nowidth2" id="tableMSA">\
-                                    <thead id="id_bk">\
-                                        <th colspan=5 style="font-size:18px;font-weight:bold;">'+ cbk_str +'</th> \
-                                    </thead>';
-            }
-            if(cbk_str=='ETF') _cprice = cprice;
-            // var ys3 = cpercent.replace('%','') >=  0 ? "red" : "green";
-            // var ys_float = cpercent.replace('%','') >=  0 ? "float:right;" : "float:left;";
-            var ys3,ys_float,ys_wd,chart_str;
-            if( cpercent.replace('%','') >= 0 ) { 
-                ys3 = "#cad2e1";      ys_wd = cpercent.replace('%','').replace('-','') * 10; 
-                if(code.substring(0, 1)=="3"){ ys_wd = ys_wd / 2;  }
-                // chart_str = '<div style="width:50%;float:left;align-text:left;">'+ cpercent +'%</div><div style="float:left;background-color:red;width:'+ ys_wd +'px;height:12px;"></div>'
-            }  
-            else{
-                ys3 = "#d0d493";    ys_wd = cpercent.replace('%','').replace('-','') * 10;  
-                if(code.substring(0, 1)=="3"){ ys_wd = ys_wd / 2;  }                  
-                // chart_str = '<div style="width:50%;float:right;">'+ cpercent +'%</div><div style="float:right;background-color:green;width:'+ ys_wd +'px;height:12px;"></div>'
-            }  
-            if(cpercent > 0) cpercent = "+" + cpercent;
-            var wh = (gb_bkworth[i] * _cprice /10000).toFixed(2);
-            var colspan = rept == 1 ? '<td class="e1" rowspan=tt_'+ cbk_str +' ><div style="font-size:15px;font-weight:900;color:#1854bf">'+ cbk_str +'<div/></td>' : "";
-            html = html + '<tr>';       
-            // html = html + colspan;   
-            //html = html + '<td><a href="http://quote.eastmoney.com/'+ code.replace('cn_','') +'.html?'+ code.replace('cn_','')  +'" target=_blank >'+ cname +'</a></td>'; 
-            html = html + '<td>'+ seleHref(link_sele,code,cname) + ' <a onclick="op3(\''+ cname +'\')"><img src="wenhao2.jpg" /> </a><a onclick="delcode(\''+ code +'\',\''+ cbk_str +'\',this,\''+ cname + '\')"><img src="del.png" width="12" height="12" /> </td>'
-            
-            // html = html + '<td style="padding:0px;margin:0px"><a href="https://www.google.com/search?ei=pM7HXL-yHovfz7sPsaa-SA&q='+ cname +'+site:caifuhao.eastmoney.com&oq='+ cname +'+site:caifuhao.eastmoney.com&as_qdr=d" target="_blank"><img src="wenhao2.jpg" /></a></td>'
-            html = html + '<td> '+ _cprice +' </td>'; 
-            html = html + '<td style="padding:2px;width:70px;"><div style="padding:0px;margin:0px;float:left;background-color:'+ ys3 +';width:'+ ys_wd +'%;height:12px;"></div></td>';   
-            html = html + '<td class="'+ ys3 +'">'+ cpercent +'%</td>';   
-            html = html + '</tr>';
-            checkLine = cbk;
-            if( (i+1 == result.length ) || (checkLine != result[i+1][bk_NO])    )
-            {
-                html = html + '</table></div>';
-                html = html.replace('tt_' + cbk_str,rept);
-            }
-            /******************************* end ************************************/     
-           
-            rept ++;
-        });  
-        $("#dv_bk2").html(html);
+            div.append(table);
+            $("#dv_bk2").append(div);
+        }
     }
+
+    //每一数组就是一行tr
+    function formeTR(arrBBK)
+    {
+        let code = arrBBK[0], cname = arrBBK[1] , cprice = arrBBK[2]  ,cbk_str = arrBBK[5],cpercent =  arrBBK[3];
+        let dataRow1 = $("<tr>");
+
+        //1 td股票名称带链接
+        dataRow1.append('<td>'+ seleHref(link_sele,code,cname) + ' <a onclick="op3(\''+ cname +'\')"><img src="wenhao2.jpg" /> </a><a onclick="delcode(\''+ code +'\',\''+ cbk_str +'\',this,\''+ cname + '\')"><img src="del.png" width="12" height="12" /> </td>');
+
+        //2 td当前价
+        var _cprice = accurateDecimal(cprice,2,true); //补零函数
+        if(cbk_str!="ETF") dataRow1.append($("<td>").text(_cprice));
+            
+        //3 图形宽度
+        var DivColor, DivWidth;
+        DivColor = cpercent >= 0 ? "#cad2e1" : "#d0d493"; 
+        DivWidth = Math.abs(cpercent) * 10; 
+        if(code.substring(0, 1) == "3" ){  DivWidth = DivWidth / 2;  }
+
+        var wd = '<td style="padding:2px;width:70px;"><div style="padding:0px;margin:0px;float:left;background-color:'+ DivColor +';width:'+ DivWidth +'%;height:12px;"></div></td>';
+        dataRow1.append(wd);
+
+        //4 td涨幅百分比
+        cpercent = cpercent > 0 ? "+" + cpercent + "%" : cpercent + "%" ;
+        dataRow1.append($("<td>").text(cpercent));
+        return dataRow1;
+    }
+
+    // 通用方法一维数组那类别转二维数组
+    function OnaArrtoTwoArr(_data){
+        var oneDimArray = _data;
+        var twoDimArray = [];
+        let init = "";
+        let tempArr = [];
+        for (var i = 0; i < oneDimArray.length; i ++) {
+            let item = oneDimArray[i];
+            if(init != item[5]) 
+            {
+                if(tempArr.length > 0 ) twoDimArray.push(tempArr); //重新开始小循环之前+有数据，就添加到大数组
+                tempArr = []; // 初始化小数组
+                init = item[5];  // 重置标志，代表开始添加元素到小数组
+            }
+            if(init == item[5]){  // 如果新的小数组初始完成，开始添加元素
+                tempArr.push(item);
+            }
+        }
+        return twoDimArray;
+    }
+
+    //202-8-21 把回调函数独立出来,动态绘制table表格显示报价
     //景天里后面的图形链接
     function GetHrefs(u)
     {
@@ -417,7 +414,9 @@ table.tableMSA td {
         //***** 方法一 *************
         var url_ = "/exec_getSinaPrice";  
         $.post(url_, {"P_code":gb_bkcode} , function(result){
+               
             setTables(sortArr(result)); 
+           
             // setNOtifiy(result);
         });
        
