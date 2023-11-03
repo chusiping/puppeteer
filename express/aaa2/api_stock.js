@@ -126,7 +126,7 @@ var get_bk2 = function(req, res, next) {
     let getDATA = function (){
         let bk = "";
         if(req.query.code != null ) bk = `and opt='${req.query.code}' `; 
-        var sql = 'select opt,content from t_option where 1=1 ' + bk;
+        var sql = 'select opt,content from t_option where opt <> "gaoliang" and 1=1 ' + bk;
         DB.queryData(sql, dataDeal);
         // DB.close();
     };  
@@ -180,6 +180,48 @@ console.log(sql);
             }
         }
     };  
+    getDATA();
+}
+
+//高亮某个代码aaa
+var gaoliang = function(req, res, next) {
+    let getDATA = function (){
+        if(req.query.code != null ) {
+            var reg =  /^(\d{6})$/g;    //正则必须是 600123
+            if(reg.test(req.query.code)){
+                sql = `SELECT 1 FROM t_option  WHERE content LIKE '%${req.query.code}%'  and opt='gaoliang';`
+                DB.queryData(sql, dataDeal2);
+            }else{
+                res.send('字符串格式6位数字错误');
+            }
+        }
+    };
+    //aaa 
+    function dataDeal2(objects){
+        if(objects.length > 0 ){   //如果标记高亮的代码存在，则删除
+            sql = `update t_option set content = replace(content, '${req.query.code},','') where opt='gaoliang'`;DB.executeSql(sql);
+            sql = `update t_option set content = replace(content,',${req.query.code}','') where opt='gaoliang'`; DB.executeSql(sql);
+            res.send("ok");
+        }else{
+            sql = `update t_option set content = content || ${req.query.code} || ',' where opt='gaoliang'`; DB.executeSql(sql);
+            res.send("ok");
+        }
+    }
+    getDATA();
+}
+var getGaoLinagCode = function(req, res, next) {
+    let getDATA = function (){
+        var sql = 'select opt,content from t_option where opt = "gaoliang"  ' ;
+        DB.queryData(sql, dataDeal);
+        // DB.close();
+    };  
+    function dataDeal(objects){
+        if(req.query.showtype!=null){
+            res.send(objects[0].content)
+        }else{
+            res.send(JSON.stringify(objects))
+        }
+    }
     getDATA();
 }
 
@@ -300,6 +342,8 @@ app.all("/getMinite_KLine", getMinite_KLine); //获取分时图sina的数据
 app.all("/closePrice", closePrice);                 //获取收盘价的数据 http://127.0.0.1:3004/closePrice?code=601066
 app.all("/code2Name", code2Name);       //获取分时图sina的数据 http://127.0.0.1:3004/code2Name?code=601066
 app.all("/HistoryPrice", HistoryPrice);  //获取历史数据  http://127.0.0.1:3004/HistoryPrice?code=601066$daylen=10
+app.all("/gaoliang", gaoliang);            //高亮某个股票代码
+app.all("/getGaoLinagCode", getGaoLinagCode);            //获取高亮的股票代码
 app.use(express.static(".")).listen(3004);
 
 

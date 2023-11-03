@@ -11,7 +11,7 @@
 <style type="text/css">    
 .masonry { column-count: 5; column-gap: 0; margin-left: 200px;margin-right: 200px; margin-top: 5px;}
 .item { break-inside: avoid; box-sizing: border-box; padding: 3px; border:solid 0px rgb(180, 177, 179);margin: 1px;}
-.item a{ color: rgb(58, 23, 166); font-size: 15px; }
+.item a{ color:gray; font-size: 15px; }
 #dv_bk2 {  text-align: center;  margin-left: 20px; margin-right: 20px;   /* display: flex;*/ flex-wrap: wrap; }
 .nowidth2 {  width: 290px !important;}
 input.text-l {   padding: 10px;    font-size: 1.14286em;}
@@ -62,6 +62,12 @@ table.tableMSA td {
     padding-right: 3px;
     border-top: 0;
     border-bottom: 1px #E6E6E6 solid;
+}
+img {
+  filter: grayscale(100%);
+}
+a:hover {
+  cursor: pointer;
 }
 </style>
 <div class="boxbfb MostOne" id="tab_sw">
@@ -137,10 +143,11 @@ table.tableMSA td {
             }
         });  
     }
-    function seleHref(link_sele,code,cname)
+    function seleHref(link_sele,code,cname,isHight)
     {
         var link = '';
         if(link_sele == '')  link_sele = 'sina';
+        if(isHight) cname = `<font  color='red'>${cname}</font>`;
 
         if(link_sele == '东方财富') link = '<a href=http://quote.eastmoney.com/'+ code.replace('cn_','') +'.html?'+ code.replace('cn_','')  +'" target=_blank >'+ cname +'</a>';
         if(link_sele == '中财网')   link = '<a href=http://quote.cfi.cn/quote_'+ code.replace('cn_','') +'.html target=_blank >'+ cname +'</a>';
@@ -270,9 +277,10 @@ table.tableMSA td {
         });        
     }
     
-    //2023-11-01 把回调函数独立出来,动态绘制table表格显示报价
+    //2023-11-01 把回调函数独立出来,动态绘制table表格显示报价 
     function setTables(data)
     {   
+        $("#dv_bk2").html('');
         let twArr = OnaArrtoTwoArr(data); // 转化为二维数组
         for (let index = 0; index < twArr.length; index++) {
             var div = $("<div class=\"item\">"); //每个板块独立的div
@@ -289,13 +297,28 @@ table.tableMSA td {
     }
 
     //每一数组就是一行tr
+    var code_gl = [] ;
     function formeTR(arrBBK)
     {
+        let isHight = false;
+        let font = "";
+
         let code = arrBBK[0], cname = arrBBK[1] , cprice = arrBBK[2]  ,cbk_str = arrBBK[5],cpercent =  arrBBK[3];
         let dataRow1 = $("<tr>");
 
+        for (let idx = 0; idx < code_gl.length; idx++) {
+            const em = code_gl[idx];
+            if(em.length < 6) continue;
+            if(code == em ) isHight = true;
+        }   
         //1 td股票名称带链接
-        dataRow1.append('<td>'+ seleHref(link_sele,code,cname) + ' <a onclick="op3(\''+ cname +'\')"><img src="wenhao2.jpg" /> </a><a onclick="delcode(\''+ code +'\',\''+ cbk_str +'\',this,\''+ cname + '\')"><img src="del.png" width="12" height="12" /> </td>');
+        tdstr = `<td> ${seleHref(link_sele,code,cname,isHight)}
+            <a onclick="op3('${cname}')"> <img src="wenhao2.jpg" /> </a>
+            <a onclick="delcode('${code}','${cbk_str},this,'${cname}')"> <img src="del.png" width="12" height="12" /></a> 
+            <a onclick="gaoliang('${code}')"> <img src="gaoliang.jpg" width="12" height="12" /></a> 
+            </td>`
+
+        dataRow1.append(tdstr);  
 
         //2 td当前价
         var _cprice = accurateDecimal(cprice,2,true); //补零函数
@@ -363,6 +386,27 @@ table.tableMSA td {
             $(obj).closest('tr').remove();
         });  
     }
+    //点击按钮设置高亮aaa
+    function gaoliang(code) {
+        $.get("/gaoliang?code="+ code, function(result){  
+            if(result.length == 0) {  console.log("gaoliang:gaoliang操作失败!"); return; }               
+            if(result == "ok") { $('#msg_save_bk').html(" <font size='5' color='red'>"+ code +"高亮成功!</font>") ;$('#msg_save_bk').show().delay(1000).hide(0);}
+            get_bk_price();
+        });  
+    }
+    //获取高亮的股票码并加高亮 aaa
+    function getGaoLinagCode(){
+        $.getJSON("/getGaoLinagCode", function(result){ 
+            var fd = result[0]["content"]; 
+            if(fd < 7 ) return;
+            let array = fd.split(',');
+            let rt = [...new Set(array)]
+            for (let idx = 0; idx < rt.length; idx++) {
+                const em = rt[idx];
+                if(em.length<6) continue;
+            }
+        });  
+    }
     //格式化逗号：,,=>,
     function FormatDouHao(params) {
         var _pms = params.replace(',,',',');  
@@ -409,18 +453,23 @@ table.tableMSA td {
     
     
     //2020-8-21 改用post方法提交，防止url过程报错
+    
     function get_bk_price()
     {       
         //***** 方法一 *************
         var url_ = "/exec_getSinaPrice";  
         $.post(url_, {"P_code":gb_bkcode} , function(result){
-               
-            setTables(sortArr(result)); 
-           
+            //增加高亮代码的获取
+            $.getJSON("/getGaoLinagCode", function(rest){ 
+                var fd = rest[0]["content"]; 
+                if(fd.length > 6 ) {
+                    let array = fd.split(',');
+                    code_gl = [...new Set(array)]
+                }
+                setTables(sortArr(result)); 
+            });  
             // setNOtifiy(result);
         });
-       
-
         //***** 方法二 *************
         // var url_ = "api_stock.js?exec_getSinaPrice";  
         // $.ajax({ 
