@@ -203,7 +203,7 @@ var gaoliang = function(req, res, next) {
             sql = `update t_option set content = replace(content,',${req.query.code}','') where opt='gaoliang'`; DB.executeSql(sql);
             res.send("ok");
         }else{
-            sql = `update t_option set content = content || ${req.query.code} || ',' where opt='gaoliang'`; DB.executeSql(sql);
+            sql = `update t_option set content = content || '${req.query.code}' || ',' where opt='gaoliang'`; DB.executeSql(sql);
             res.send("ok");
         }
     }
