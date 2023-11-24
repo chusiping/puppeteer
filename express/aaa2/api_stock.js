@@ -126,7 +126,7 @@ var get_bk2 = function(req, res, next) {
     let getDATA = function (){
         let bk = "";
         if(req.query.code != null ) bk = `and opt='${req.query.code}' `; 
-        var sql = 'select opt,content from t_option where opt <> "gaoliang" and 1=1 ' + bk;
+        var sql = 'select opt,content from t_option where opt <> "gaoliang" and 1=1 ' + bk + ' order by md5';
         DB.queryData(sql, dataDeal);
         // DB.close();
     };  
