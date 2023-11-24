@@ -30,8 +30,8 @@ function sendMessageToContentScriptByPostMessage(data) {
     var mytime = myDate.toLocaleTimeString(); //获取当前时间	
     console.log('我是 : E:\\____dropbox__Sync\\Dropbox\\阅读\\zxq\\js\\inject.js ' + mytime);
     if (location.host == 'q.stock.sohu.com') {
-        clickDayK(location);
-        AddMySeleStock(location);
+        // clickDayK(location);
+        // AddMySeleStock(location);
     }
     if (location.host == 'gu.qq.com') {
         eableQQclick(); //QQ自选股查看k线的按钮点击
@@ -97,6 +97,8 @@ function show商品评价(){
     setTimeout(function () {
         (function ($) {
             appendTextIfConditionMet('id=542811841579', "zxg评价 : 1天后追评这次买的质量非常差，里面基本是空的，偷工减料很多，烧到三分之一就完全灭了，找售后也是一直在敷衍了事，这就是店大欺客么，还吹嘘自己销量好的怎么样。下次买的小伙伴可以多看看");
+            // https://www.52pojie.cn/thread-1554877-1-1.html
+            appendTextIfConditionMet('thread-1554877-1-1.html', "摘要 : 其实不用隐藏，我直接用钉钉助手自带屏蔽检测就好，钉钉最好使用6.10以下的版本。对钉钉需要隐藏是各种虚拟定位APP，钉钉会检测这个玩意。XP模块  对话框取消   这个也可以隐藏的哦","130px","450px");
         })(jQuery);
     }, 1500);   
 }
@@ -104,8 +106,8 @@ function show商品评价(){
 
 
 function youtubeHide() {
-    console.log('执行:: youtubeHide 函数')
     if (location.href.includes('www.youtube.com/watch')) {
+        console.log('执行:: youtubeHide 函数')
         var selectors = ['.ytp-title-text','.ytp-chrome-top-buttons','.ytp-gradient-top','.ytp-chrome-bottom'];
         setInterval(function () {
             (function ($) {
@@ -446,16 +448,10 @@ function quAD() {
 
 //2020-10-23 EditJarry 因为不能在插件中使用jquery的包，所以被迫使用httpRequest对象
 function codeto_aaa_m() {
-    //第一步：建立所需的对象
     var httpRequest = new XMLHttpRequest();
-    //第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
-    httpRequest.open('GET', 'http://news.10jqka.com.cn/siteapi/ucenter/selfstock/?track=wap_self&callback=getSelfStock1596770176000', true);
-    http: //news.10jqka.com.cn/siteapi/ucenter/selfstock/?track=wap_self&callback=getSelfStock1596781232000
-        //第三步：发送请求  将请求参数写在URL中
-        httpRequest.send();
-    /**
-     * 获取数据后的处理程序
-     */
+    let url = "https://t.10jqka.com.cn/newcircle/group/getSelfStockWithMarket/?callback=selfStock&_=1700793151590"
+    httpRequest.open('GET', url, true);
+    httpRequest.send();
     httpRequest.onreadystatechange = function () {
         if (httpRequest.readyState == 4 && httpRequest.status == 200) {
             var json = httpRequest.responseText; //获取到json字符串，还需解析
@@ -464,8 +460,23 @@ function codeto_aaa_m() {
             var reg = /([063]\d{5})/g;
             var rs = json.match(reg);
             //保存自选股
-            SaveZxgcodeArr(rs.toString());
-            console.log(rs.toString());
+            //SaveZxgcodeArr(rs.toString());
+            console.log("显示同花顺的自选股(codeto_aaa_m),总数：" + rs.length + " / " + rs.toString());
+            if (window.location.href.includes("https://t.10jqka.com.cn/newcircle/user/userPersonal/?from")){
+                (function ($) {
+                    //范例代码：添加元素和内容
+                    var divElement = document.querySelector('div.data_panel.ta-parent-box'); 
+                    var newContent = document.createElement('p'); 
+                    newContent.textContent = `总数:${rs.length}个，${rs.toString()}`; 
+                    newContent.style.width = '600px;';
+                    newContent.style.overflowWrap = 'break-word';
+                    if (divElement.firstChild) {
+                        divElement.insertBefore(newContent, divElement.firstChild);
+                    } else {
+                        divElement.appendChild(newContent);
+                    }
+                })(jQuery);
+            }
         }
     };
 }
