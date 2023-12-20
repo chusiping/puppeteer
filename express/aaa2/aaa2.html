@@ -108,6 +108,7 @@ a:hover {
                         <input id="ipt_bk" type="text" class="text-l">
     	                <button id="btn_savebk" class="primary btn" type="button" onclick="setbk();">保存自选股</button>
                         <button id="btn_freshbk" class="btn" type="button" onclick="get_bk2();">刷新</button>
+                        <button id="toggleButton" class="btn" type="button">隐藏自选</button>
                         <!--<input id="ipt_target_name" class="text-l" type="text" size=8> 代码 <input id="ipt_target1" type="text" class="text-l" size=8>  -->
                         <div id="show_kuisun" class="btn"></div>
                         <div id="show_kuisun2" class="btn"></div>
@@ -125,6 +126,20 @@ a:hover {
 <script type="text/javascript" src="lib.js"></script>
 <!-- <script type="text/javascript" src="../skin1/jscss/browser.js"></script> -->
 <script language="JavaScript"> 
+
+
+    var dv_bk1 = document.getElementById("dv_bk1");
+    var toggleButton = document.getElementById("toggleButton");
+
+    toggleButton.addEventListener("click", function() {
+    if (dv_bk1.style.display === "none") {
+        dv_bk1.style.display = "block";
+        toggleButton.textContent = "隐藏";
+    } else {
+        dv_bk1.style.display = "none";
+        toggleButton.textContent = "显示";
+    }
+    });
     /******************************* 函数树状图 ************************************/
     //页面载入
     //      +get_bk2();
