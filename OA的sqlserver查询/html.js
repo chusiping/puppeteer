@@ -257,8 +257,10 @@ like '%_key_%' GROUP BY workflowname order by id desc `
 function  Query_flow(_flowName,res){
     let rs;
     var str = CombinSql(_flowName);
+    console.log(str);
 
     MyQuery(str).then(result => {       //解释：返回result = requestID
+        if(result.recordset == null) return null;
         let requestID = result.recordset[0]["requestid"];
         let sql = sql_1a.replace(/_requestID_/g,requestID)
         return MyQuery(sql);            //解释：返回审批表单的fieldlabe      

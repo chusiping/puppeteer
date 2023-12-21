@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ip及端口查询</title>
+  <link rel="stylesheet" href="static/test.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style> 
+  div#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  table { border-collapse: collapse;
+   /* width: 100%;  */
+  }
+   th, td {
+     padding: 3px;
+     text-align: left;
+     border-bottom: 1px solid #827f7f;
+     font-size: 12px;
+   }
+   
+   th {
+     background-color: #f2f2f2;
+   }
+   </style>
+</head>
+<body>
+
+关键字(ip或端口或名称):<input type="text" id="inputParam" value=""> 
+<!-- ip：<input type="text" id="input-id" onkeyup="handleInput(this.value)">
+<div id="dropdown-list"></div>
+端口：<input type="text" id="mySelect" value="">  -->
+
+<button onclick="fetchJson()">获取数据</button><br><br>
+<div id="app">
+  <table id="myTable" border="1">
+    <thead>
+      <tr></tr> <!-- 表头将在 JavaScript 中生成 -->
+    </thead>
+    <tbody></tbody> <!-- 表格内容将在 JavaScript 中生成 -->
+  </table>
+</div>
+
+
+<script>
+$(document).ready(function() {
+  // setFormattedDateToInput('inputParam');
+   // 页面加载完成后立即执行 fetchJson()
+   fetchJson();
+});
+
+</script>
+<script src="static/test.js"></script>
+</body>
+</html>

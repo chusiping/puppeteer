@@ -1,0 +1,54 @@
+1.
+    Python自然语言处理：NLTK库详解
+    https://blog.csdn.net/m0_62153576/article/details/133744044?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-133744044-blog-76724117.235%5Ev39%5Epc_relevant_anti_t3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-2-133744044-blog-76724117.235%5Ev39%5Epc_relevant_anti_t3&utm_relevant_index=5
+
+
+2.  《手动下载并安装nltk_data》    https://juejin.cn/post/6983027479627694110
+    import nltk
+    nltk.download()
+    但网络原因，笔者从未成功下载过。
+    发现一种离线安装方式（参考1，2），折腾配置成功了，步骤如下。
+    下载nltk_data
+    下载链接： github.com/nltk/nltk_d…
+    注意下载branch为gh-pages，下载后得到：nltk_data-gh-pages.zip
+
+    （1）创建E:\____temp\py\env2\nltk_data
+
+    （2）解压 nltk_data-gh-pages.zip
+
+    （3）cp -rf nltk_data-gh-pages/packages/* E:\____temp\py\env2\nltk_data
+
+    （4）
+        解压"E:\____temp\py\env2\nltk_data\tokenizers\punkt.zip"  E:\____temp\py\env2\nltk_data\tokenizers\punkt
+    （5）
+        成功
+
+3.
+    《如何用Python实现智能客服问答系统》 https://blog.51cto.com/u_14448891/8630166
+
+    Python "E:\git_15home\puppeteer\ntlp自动回复智能客服\test2.py"
+    ModuleNotFoundError: No module named 'sklearn'
+	pip install scikit-learn
+
+
+4. 
+    《python-sklearn实现一个简易的智能问答机器人》https://blog.csdn.net/qq_26535271/article/details/100748210
+    工程源码：https://github.com/liangjunAI/chatting_robot
+    源码下载 https://gitcode.com/mirrors/liangjunai/chatting_robot/overview?utm_source=csdn_github_accelerator&isLogin=1
+
+    执行python znwd_new.py 报错
+    AttributeError: 'CountVectorizer' object has no attribute 'get_feature_names'. Did you mean: 'get_feature_names_out'?
+    
+    网友解答https://stackoverflow.com/questions/70640923/countvectorizer-object-has-no-attribute-get-feature-names-out
+    You are using an old version of scikit-learn. If I'm not mistaken, get_feature_names_out() was only introduced in version 1.0.
+    Upgrade to a newer version, or, to get similar functionality in an earlier version, you can use get_feature_names().
+    改成提示中的out函数
+
+    错误
+    fuzz.py:11: UserWarning: Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning
+    pip install python-Levenshtein --- 失败 ！ 不影响调用。。算了
+
+    python run_main.py
+    可以了。结束
+
+
