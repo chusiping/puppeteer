@@ -4,6 +4,7 @@ var request = require('request');
 const express = require('express');
 const app = express();
 const db = require('./lib_sqlserver.js'); 
+var sd = require('silly-datetime');
 
 
 function MyQuery(sql) {
@@ -257,23 +258,30 @@ like '%_key_%' GROUP BY workflowname order by id desc `
 function  Query_flow(_flowName,res){
     let rs;
     var str = CombinSql(_flowName);
-    console.log(str);
+    var _date = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+    console.log(_date + " - "  + str);
 
     MyQuery(str).then(result => {       //解释：返回result = requestID
-        if(result.recordset == null) return null;
-        let requestID = result.recordset[0]["requestid"];
-        let sql = sql_1a.replace(/_requestID_/g,requestID)
-        return MyQuery(sql);            //解释：返回审批表单的fieldlabe      
+        if(result.recordset && result.recordset[0] && result.recordset[0]["requestid"]){
+            let requestID = result.recordset[0]["requestid"];
+            let sql = sql_1a.replace(/_requestID_/g,requestID)
+            return MyQuery(sql);            //解释：返回审批表单的fieldlabe    
+        }
     })
     .then(result => { 
+        if(!result)return null;
         rs=result;
         let id=result.recordset[0]["billformid"];
         let sql = sql_2.replace("_billid_",id)  //解释：返回fieldlabel对应的中文
         return MyQuery(sql);
     })
     .then(result => { 
-        let rt = SwitchName(rs,result)          //解释：替换成中文
-        res.json(rt);  
+        if(result){
+            let rt = SwitchName(rs,result)          //解释：替换成中文
+            res.json(rt);  
+        }else{
+            res.json([{"exception!" : "数据无" + str}]); ;
+        } 
     })
 }      
 
