@@ -15,6 +15,8 @@ function CombinSql(str) {
         return "select * from server_all where ip = '"+ str +"'";     
     } else if(portRegex.test(str)){
         return "select * from server_all where port like  '%"+ str +"%'";
+    } else if(str == "去重的所有系统") {
+        return "select DISTINCT(a.remark) from server_list a order by remark"
     } else {
         return "select * from server_all where remark like  '%"+ str +"%'";
     }
