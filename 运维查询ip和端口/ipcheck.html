@@ -7,7 +7,12 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-关键字(ip或端口或名称):<input type="text" id="inputParam" value="去重的所有系统"> 
+  <select id="selectParam">
+    <option value="">自定义</option>
+    <option value="去重的所有系统">去重的所有系统</option>
+    <option value="查看停用的端口">查看停用的端口</option>
+  </select>
+<input type="text" id="inputParam" placeholder="关键字,ip或端口)" value=""> 
 <button onclick="fetchJson()">获取数据</button><br><br>
 
 <div id="app">
@@ -23,6 +28,9 @@ $(document).ready(function() {
   // setFormattedDateToInput('inputParam');
    // 页面加载完成后立即执行 fetchJson()
    fetchJson();
+   $('#selectParam').change(function() {
+    $('#inputParam').val($(this).val());
+  });
 });
 </script>
 <script src="static/autoTable.js"></script>
