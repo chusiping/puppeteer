@@ -62,7 +62,7 @@ function fetchJson() {
   $('thead tr').empty();
 
   // 获取输入框的值作为参数
-  var inputParam = $('#inputParam').val();
+  var inputParam = $('#inputParam').val().trim();
 
   $.ajax({
      url: '/all?seleItem='+ seleItem +'&data=' + inputParam + '&workBaseID='+workBaseID,

@@ -38,6 +38,13 @@ app.get("/all",async (req,res)=>{
     }
 });
 
+app.get("/txt",async (req,res)=>{
+    executeQueryAndWriteToFile(`/root/work/test/data4.txt`) 
+    res.end("/root/work/test/data4.txt 生成OK！")
+});
+
+
+
 // 定义一个函数，执行SQL查询并将结果写入到一个.txt文件中
 async function executeQueryAndWriteToFile(filename) {
     const sql = "select ip,port from port_list where stop =0"; // 替换为你的SQL语句
@@ -56,7 +63,7 @@ async function executeQueryAndWriteToFile(filename) {
 }
 
 // 每5小时执行一次函数
-executeQueryAndWriteToFile(`/root/work/test/data4.txt`) 
+// executeQueryAndWriteToFile(`/root/work/test/data4.txt`) 
 setInterval(() => executeQueryAndWriteToFile(`/root/work/test/data4.txt`), 6 * 60 * 60 * 1000);  // 5 * 60 * 60 * 1000
 
 
