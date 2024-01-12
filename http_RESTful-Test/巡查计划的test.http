@@ -1,0 +1,15 @@
+### 测试成功
+POST https://testqyhw.gzqiaoyin.com/api/project/patrolPlan?n=1705039338
+Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIwMGIwZDM0ZC1hNWQ2LTQzZjctYTdkNC1jOGQ1ZmJjdjNmN28iLCJyblN0ciI6IkZFOFVIRkdETFlPTXpZYklqVWh3dndLVWVURjRxYnF0IiwidXNlcl9pZCI6IjAwYjBkMzRkLWE1ZDYtNDNmNy1hN2Q0LWM4ZDVmYmN2M2Y3byIsInVzZXJfbmFtZSI6ImFkbWluIiwic2luZ2xlTG9naW4iOjIsImV4cCI6MTcwNTA5MzI1MjQ5MiwidG9rZW4iOiJsb2dpbl90b2tlbl81MTU0OTE5MTc0MzAwNDkyMjEifQ.0SteWmNW0K7e2d6561CMLZIbtTCQRyunwmpphw_maJY
+Content-Type: application/json
+
+
+{"id":"1737376223345315890","projectId":"12967","projectName":"从化街口街环卫一体化","patrolAreaId":"510091489544595333","area":"测试区域2023-12-28","organizeId":"1001A110000000003HD7","enable":1,"enableDesc":"启用","patrolUserId":"474156575972847621","patrolUserName":"潘国涛","endTime":"14:20:04","type":1}
+
+
+
+#### 获取列表
+GET https://testqyhw.gzqiaoyin.com/api/project/project/map/rail/getList?n=1704188666
+Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiI0NzQyMTIyMjg4MjUyODA1MTciLCJyblN0ciI6IklweFg0S1BqUVBNUGRjTGVxaThWVzdzaWxnY20xR0wxIiwidXNlcl9pZCI6IjQ3NDIxMjIyODgyNTI4MDUxNyIsInVzZXJfbmFtZSI6IjE4Njg4MzY2NDk2Iiwic2luZ2xlTG9naW4iOjIsImV4cCI6MTcwNDIzNDgwNzgwNywidG9rZW4iOiJsb2dpbl90b2tlbl81MTE4OTEzMzk3MjI0MTA0MzcifQ.hrTT2czg9TNaRlYhl5V2Mo7ygs5s6Exrv0AsAlJLzTg
+Content-Type: application/json
+
