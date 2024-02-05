@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="no-siteapp" http-equiv="Cache-Control">
+    <script>
+        var __START_DATE = +new Date
+    </script>
+    <title>企业微信</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_16h$faede2cd.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_32h$a41a4426.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_48h$c976bd14.png">
+    <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/tagEventHandler$7db5c159.js"></script>
+    <link onerror="tagEventHandler.handleTagError(this)" onload="tagEventHandler.handleTagLoad(this)" rel="stylesheet" type="text/css" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/css/main.merge$7bfc52ec.css">
+    <link rel="stylesheet" type="text/css" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/css/wwvue/desktop$5146d38f.css">
+    <link rel="stylesheet" type="text/css" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/css/wework-design/index.min$6a22507b.css">
+    <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/vue_dev_webpack/darkmode/darkmode.style$af1126ed.js"></script>
+    <link rel="preload" href="/wework_admin/frame/settings_whiteList?_t=1707099635503" as="script">
+    <link rel="preload" href="/wework_admin/frame/settings_other?_t=1707099635503" as="script">
+    <script>
+        var RES_CDN = '//wwcdn.weixin.qq.com'
+    </script>
+    <script src="//js.aq.qq.com/js/aq_common.js"></script>
+    <!--[if lte IE 8]> <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/3rd/supportHtml5$6f7a22f4.js"></script> <![endif]-->
+    <script>
+        var __HEAD_END_DATE = +new Date
+    </script>
+</head>
+
+<body class="frame_wrap lang_zh">
+    <script>
+        var isWin = (function() {
+            var ua = navigator.userAgent.toLowerCase();
+            var isWin = (ua.indexOf('windows') != -1 || ua.indexOf('win32') != -1) && true;
+            if (isWin) document.body.className += ' isWin';
+            return isWin;
+        })();
+
+        function weLANG(msg, tpldata) {
+            msg += '';
+            if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
+            var replace_index = 0;
+            return msg.replace(/%s|%\{.+?\}/g, function() {
+                var newVal = tpldata[replace_index++];
+                return newVal === undefined ? '' : newVal;
+            });
+        }
+    </script>
+    <div id="wework_admin.normal_layout_$" rendered="true">
+        <div id="wework_admin.normal_layout$layout$">
+            <div id="wework_admin.frame_$" rendered="true">
+                <header class="frame_head">
+                    <div class="frame_head_top">
+                        <div class="frame_head_top_stage qui_clear">
+                            <a class="frame_logo" href="https://work.weixin.qq.com" target="_blank">
+                                <h1 class="ww_commonImg js_frame_leftTopLogo ww_commonImg_LogoSmall ">企业微信</h1>
+                            </a>
+                            <aside class="frame_operation"><span class="js_developer_jump js_sgkvuin_report_click" sgkvreport-kv="79505761" sgkvreport-key="work_pc_toopen_click" style="display: none"><a class="frame_operation_link" id="" href="//open.work.weixin.qq.com/wwopen/developer" target="_blank">服务商后台</a><span class="frame_operation_separator">|</span>                                </span> <a class="frame_operation_link" id="js_openapiDocHref" href="//work.weixin.qq.com/api/doc" target="_blank">API文档</a><span class="frame_operation_separator">|</span> <span class="frame_operation_separator" style="display: none">|</span>                                <span class="frame_operation_link frame_operation_qRCodeLink js_contactUs" href="javascript:;" target="_blank"> 联系客服 <div class="js_contactUs_panel" style="display: none"><div class="importDlg"><div class="importDlg_item"><div class="frame_operation_implement_title">手机企业微信扫码联系客服</div><div class="frame_operation_implement_pic"><img class="frame_operation_implement_pic_img" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/index/WeWorkTeamQRcode$c2333c0c.png" alt="二维码显示失败"></div><div class="frame_operation_qRCodeLink_callDesktop">若已登录电脑端， <a href="wxwork://message?uin=1688850522843493&source=2">点击联系客服</a></div></div>  <div class="importDlg_item"><div class="frame_operation_implement_title">服务码</div><div class="frame_operation_qRCodeLink_subTitle">请将以下服务码提供给为你提供专属服务的企业微信服务商</div><div class="frame_operation_implement_serviceCode js_implement_serviceCode"></div><div class="frame_operation_implement_footerTxt">服务码将用于企业微信授权服务商的服务评估，服务商可通过服务码了解贵组织的企业名称、认证状态、行业类型、人员规模、所在区域等组织信息，以便为贵组织提供更好的服务。</div></div>  </div></div></span>                                <span class="frame_operation_separator">|</span><a id="logout" class="frame_operation_link" href="javascript:;">退出</a></aside>
+                        </div>
+                    </div>
+                    <div class="frame_head_bottom">
+                        <div class="frame_head_bottom_stage">
+                            <nav class="frame_nav"><a id="menu_index" href="#index" class="frame_nav_item"><span class="frame_nav_item_title">首页</span></a> <a id="menu_contacts" href="#contacts" class="frame_nav_item"><span class="frame_nav_item_title">通讯录</span></a> <a id="menu_cooperation"
+                                    href="#cooperation" class="frame_nav_item"><span class="frame_nav_item_title">协作</span></a> <a id="menu_apps" href="#apps" class="frame_nav_item"><span class="frame_nav_item_title">应用管理</span></a> <a id="menu_customer"
+                                    href="#customer/analysis" class="frame_nav_item" data-sign="abcd">  <span class="frame_nav_item_title">客户与上下游</span>  </a> <a id="menu_businessMallindex" href="#business/mall/index" class="frame_nav_item"><span class="frame_nav_item_title"> 高级功能 </span></a>
+                                <a
+                                    id="menu_manageTools" class="frame_nav_item js_sgkvuin_report_click" href="#/securityManage/general" sgkvreport-kv="79506103" sgkvreport-key="click_safeandmng_tab"><span class="frame_nav_item_title"> 安全与管理 </span></a><a id="menu_profile" href="#profile" class="frame_nav_item"><span class="frame_nav_item_title">我的企业</span></a></nav>
+                            <div id="topNavLine" class="frame_head_bottom_stage_line"></div>
+                        </div>
+                    </div>
+                </header>
+                <main id="main" class="frame_cnt frame_cnt_SuperAdmin "></main>
+                <footer class="frame_foot">
+                    <nav class="frame_foot_nav"><a class="frame_foot_nav_item" href="http://www.tencent.com/" target="_blank">关于腾讯</a><span class="frame_foot_nav_itemDep">|</span> <a class="frame_foot_nav_item" href="/eula" target="_blank">用户协议</a><span class="frame_foot_nav_itemDep">|</span>                        <a class="frame_foot_nav_item" href="/norm" target="_blank">使用规范</a><span class="frame_foot_nav_itemDep">|</span> <a class="frame_foot_nav_item" href="/privacy" target="_blank">隐私政策</a><span class="frame_foot_nav_itemDep">|</span>                        <a class="frame_foot_nav_item" href="/wework_admin/app_intro_list?type=mng&from=frame_footer" target="_blank">更新日志</a><span class="frame_foot_nav_itemDep">|</span> <a class="frame_foot_nav_item" href="https://work.weixin.qq.com/help"
+                            target="_blank">帮助中心</a>
+                        <div id="i18nDropdown"></div>
+                    </nav>
+                    <p class="frame_foot_copyright">© 1998&nbsp;-&nbsp;2024&nbsp;Tencent Inc. All Rights Reserved</p>
+                </footer>
+                <script eslint-disable>
+                    window.settings = {
+                        "b_is_corp_chain_gray": true,
+                        "b2b_app_member_hide": false,
+                        "showCooperation": true,
+                        "showManageApps": false,
+                        "b_is_new_doc_gray": true,
+                        "b_is_qymail_gray": true,
+                        "disabled_qymail": false,
+                        "docmeeting_combined_gray": true,
+                        "paybill_version": 1,
+                        "b_c2b_pay_gray": true,
+                        "corp_alias": "广东侨银艾特科技有限公司",
+                        "b_modified_corpname": true,
+                        "explore_step": "",
+                        "corp_type": "CorpFromNewVerify",
+                        "corp_body_type": "NORMAL",
+                        "cert_customer_type": 1,
+                        "corp_full_name": "",
+                        "usercnt": 27,
+                        "partycnt": 11,
+                        "logo_path": "https://wework.qpic.cn/wwpic/661402_JeIVIXkSR8u8owg_1685944458/0",
+                        "info": "",
+                        "pstn_info": {},
+                        "pstn_main_number_announce": {},
+                        "save_time": "15",
+                        "is_migrate_ready": false,
+                        "is_subadmin": false,
+                        "is_supadmin": true,
+                        "is_creator": false,
+                        "superadmin_info": {
+                            "vid": "1688857620554864",
+                            "name": "范秉淇",
+                            "english_name": "",
+                            "corpid": "1970325845989256",
+                            "alias": "",
+                            "is_creator": false,
+                            "is_external": false,
+                            "is_bind_servicecorp": false
+                        },
+                        "role": {
+                            "role_id": 2,
+                            "role_name": "超级管理组",
+                            "corp_id": "1970325845989256",
+                            "flags": 2,
+                            "create_time": 1685944182,
+                            "update_time": 1707039326
+                        },
+                        "is_tag_created": false,
+                        "circleList": [],
+                        "isGrayCircle": true,
+                        "isGrayXcxBind": true,
+                        "is_corp_readonly": false,
+                        "web_regist_from": "",
+                        "sync_status": "WWMANAGE_CORPSTATUS_OPENAPISYNC",
+                        "bind_type": "BindCorpBizmail",
+                        "has_bind": false,
+                        "bind_corpid": "3697285901",
+                        "membercnt_limit": 20,
+                        "adminbroadcast": 0,
+                        "addthirdapp": 0,
+                        "adminmember": 0,
+                        "vid": "1688857620554864",
+                        "corp_id": "1970325845989256",
+                        "gid": "2251803947734669",
+                        "root_depart_id": "1688858142454662",
+                        "root_depart_name": "广东侨银艾特科技有限公司",
+                        "encode_corp_id": "ww3401f69b60f65b1e",
+                        "name": "范秉淇",
+                        "english_name": "",
+                        "register_wxqy": false,
+                        "isaccepted": true,
+                        "b_join_by_corp_name": true,
+                        "lang_type": "1",
+                        "mobile": "15202038232",
+                        "country_code": "86",
+                        "cont_mobile": "15626169339",
+                        "cont_country_code": "86",
+                        "population": 1000,
+                        "is_workbench_tab": false,
+                        "b_show_appstore_to_everyone": true,
+                        "b_show_reserveservice_to_everyone": true,
+                        "create_time": "1685944180",
+                        "features": {
+                            "default_app_disable_btn": false,
+                            "webClound": false,
+                            "hongbao": false,
+                            "myCustomer": false,
+                            "shuiying": false
+                        },
+                        "max_quotaupdate": 10000000,
+                        "verifyStatus": "QVERIFY_FALSE",
+                        "certfrom": 0,
+                        "eduVerifyCount": 0,
+                        "govVerifyCount": 0,
+                        "verifyLastOrderDetail": {},
+                        "offlinemsg_open": true,
+                        "room_open": true,
+                        "start_up_type": 0,
+                        "custom_home_url": "",
+                        "custom_home_jump_url": "",
+                        "join_need_verify": false,
+                        "b_show_old_app_menu_type": false,
+                        "self_attr": [],
+                        "open_sendmail": 2,
+                        "open_sendmail_inited": true,
+                        "is_workbench_squared": true,
+                        "is_open_out_contact": true,
+                        "is_open_room_watermark": false,
+                        "is_contact_watermark": false,
+                        "custom_check_url": "",
+                        "custom_check_config": 0,
+                        "is_contact_could_manage": true,
+                        "is_contact_read_only": false,
+                        "is_contact_enabled": true,
+                        "is_contact_disabled": false,
+                        "canAppCreateSelected": true,
+                        "canManageCRM": true,
+                        "canManageHardware": true,
+                        "is_edu_group": false,
+                        "fileCloudWhite": false,
+                        "tencentMovePartyWhite": false,
+                        "bbs_anonymous_open": true,
+                        "open_bbs_anonymous_reply": false,
+                        "industry_info": {
+                            "secondlevel_id": 1001001,
+                            "scale_id": 2004,
+                            "is_industry_updated": false,
+                            "scale_update_time": 1698275444,
+                            "firstlevel_id": 1001,
+                            "firstlevel": "IT服务",
+                            "secondlevel": "互联网和相关服务",
+                            "scale": "201-500人",
+                            "can_update_scale": true
+                        },
+                        "openmsg_show_flag": 0,
+                        "read_receipt_flag": "ReadReceiptOpen",
+                        "b_is_personal_read_receipt_gray": true,
+                        "forbid_personal_read_receipt": false,
+                        "ww_bind_owneruin": "3697285901",
+                        "corp_use_wxplguin_mode": false,
+                        "wxplugin_mode_open_state": false,
+                        "sem_bar_show": false,
+                        "sem_keyword": "",
+                        "license_status": "CORP_LICENSE_UNCOMMIT",
+                        "wxpay_bar_show": false,
+                        "user_vcode": "vc21df5a4e699a76ac",
+                        "SHOW_HOMEPAGE_QYY_READ": true,
+                        "SHOW_HOMEPAGE_PSTN_READ": true,
+                        "AUXFLAG_PSTN_REDDOT": true,
+                        "SHOW_MEMBERJOIN_READ": false,
+                        "AUXFLAG_APP_SEND_MSG_NOTIFY": false,
+                        "role_admin_aux_flags": 0,
+                        "memberSortRule": "eSortRule_Auto",
+                        "use_member_cache": true,
+                        "is_in_hongbao_invite_active": true,
+                        "is_hongbao_invite_active_get": true,
+                        "is_hongbao_invite_active_isexpired": false,
+                        "is_hongbao_invite_active_init": true,
+                        "apply_remark_open": false,
+                        "contactDispFields": ["eDispField_Name", "eDispField_Position", "eDispField_Party", "eDispField_Mobile", "eDispField_Bizmail"],
+                        "customerDispFields": ["eCrmField_Customername", "eCrmField_Lable", "eCrmField_Followname", "eCrmField_Creattime"],
+                        "b_open_sync_edit": true,
+                        "wxContactsGroupChatWhite": false,
+                        "wxContactsGroupChatWhiteNew": false,
+                        "wxContactsManageWhite": false,
+                        "newApprovalWhite": true,
+                        "newJournalWhite": true,
+                        "big_corp_level_400w": false,
+                        "feature_class_room": true,
+                        "momentUrlPositionWhite": true,
+                        "momentCoverWhite": false,
+                        "newApprovalFlow": true,
+                        "noOverseasCorpHideThirdApp": false,
+                        "external_attr": [],
+                        "invisible_external_field": ["eDispField_Email"],
+                        "todolength": 21,
+                        "pstngift_actived_cnt": 10,
+                        "has_free_pstn": true,
+                        "hasShareInfo": false,
+                        "is_newbizmail_bind": true,
+                        "is_newbizmail_bind_from_wxwork": false,
+                        "is_newbizmail_bind_from_new": false,
+                        "is_newbizmail_can_close": false,
+                        "is_newbizmail_emptyDomain": false,
+                        "corpInQymailBlackList": false,
+                        "groupCorpWhite": false,
+                        "i18nWhite": true,
+                        "i18n_admin_language": "zh",
+                        "showCustomer": true,
+                        "enable_languages": false,
+                        "b_open_corp_suite": true,
+                        "b_is_corpverify": false,
+                        "b_is_corpcertificate": false,
+                        "corpverify_deadline": 0,
+                        "dealine_from_createtime": 0,
+                        "reserved0_0": 4096,
+                        "b_customer_workbench": true,
+                        "NODE_ENV": "production",
+                        "is_overseas_corp": false,
+                        "is_create_interconnect_room_first": true,
+                        "bizmail_domains": [{
+                            "domain": "gdqyat.wecom.work"
+                        }],
+                        "is_finance_white_corp": false,
+                        "show_corp_encrypt_data_red_dot": true,
+                        "corpmailWhiteTypeA": false,
+                        "corpmailWhiteTypeB": false,
+                        "corpmailWhiteTypeC": false,
+                        "modPhoneEnable": false,
+                        "is_edu_live_white_corp": false,
+                        "showPcMsiDownload": false,
+                        "server_time": 1707099635503,
+                        "group_send_file_size_kb": 204800,
+                        "b_open_chat_archive": true,
+                        "b_enable_wwwx_hongbao": true,
+                        "enable_wwwx_hongbao": true,
+                        "has_xhb": true,
+                        "xhb_not_expired": true,
+                        "xhb_active_time": 1548000000,
+                        "xhb_actived": true
+                    };
+                    var __JS_LOAD_START_DATE = +new Date;
+                    window.seajs_use_no_combo = true
+                </script>
+                <script type="text/javascript" src="/wework_admin/frame/settings_whiteList?_t=1707099635503"></script>
+                <script type="text/javascript" src="/wework_admin/frame/settings_other?_t=1707099635503"></script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/3rd/soundmanager2-official$c7b0e7e7.js"></script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/vue_dev/standalone/mng/chunks/chunk0_globalDeps__18d91e9b___2a6f3181b1$e2c8aeb9.js"></script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/vue_dev/standalone/mng/chunks/chunk1_globalDeps__37b5a1db___e416196bf9$30fd7846.js"></script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/vue_dev/standalone/mng/chunks/chunk2_globalDeps__9a1b16e7___fe11e6f8c4$d97b0922.js"></script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/vue_dev/standalone/mng/chunks/chunk3_globalDeps__efac633f___e647f93b22$6f9ea94c.js"></script>
+                <script>
+                    window.__LQ_REPORT_URL__ = '/wework_admin/report';
+                    window.__DB_COMBO_FILE__ = '//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/var/global$b250087c.js';
+                    window.process = {
+                        env: {
+                            NODE_ENV: 'production'
+                        }
+                    };
+                    window.XSS_FW_CONFIG = {
+                        reportOnly: false,
+                        reportUrl: '/wework_admin/customReport/xssMonitor'
+                    }
+                </script>
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/var/global$b250087c.js"></script>
+                <script src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/_$$_js/3rd/badjs/bj-report-tryjs.min$17db1e6f.js,js/3rd/babel-polyfill$e06c5517.js,js/3rd/xss-firewall$ad2404a6.js,js/modules/jquery/jquery/3.6.3/jquery.min$5faea604.js,js/modules/jquery/jquery-migrate/jquery-migrate-1.4.1.min$d9f3cc30.js,comm/3rd/mail.seajs/sea$624e1a4f.js,js/id_check$09938851.js,js/lib/aegisFactory$9c13144e.js"
+                    type="text/javascript"></script>
+                <script src="https://wwcdn.weixin.qq.com/node/wework/js/sentry.5.5.0.min.js" crossorigin="anonymous"></script>
+                <script src="https://cdn-go.cn/aegis/aegis-sdk/1.34.45/aegis.min.js" crossorigin="anonymous"></script>
+                <script>
+                    window._ENABLE_SEAJS_CROSS_ORIGIN = true
+                </script>
+                <script>
+                    var curDate = +new Date();
+                    // 开发期间可能为空
+                    window.aegis = window.createAegisClient({
+                        id: 'YHnanbDrKutQfbpXXN',
+                        uin: window.settings && window.settings.vid,
+                        isDebug: window.settings && window.settings.NODE_ENV === 'development',
+                        curDate: curDate,
+                    })
+                </script>
+                <script>
+                    var __JS_END_DATE = +new Date;
+                    // 灰度去除combo
+                    // 开发模式下禁用 sentry, 避免劫持 console
+                    if (window.Sentry && !(window.settings && window.settings.NODE_ENV === 'development')) {
+                        window.initSentry({
+                            curDate: curDate,
+                            dsn: 'https://4c1657c75ee44841a16d893cf15c29b4@report.url.cn/sentry/1683',
+                            vid: window.settings && window.settings.vid,
+                            corp_id: window.settings.corp_id,
+                        });
+                    }
+                </script>
+                <script>
+                    seajs.use("js/weworkapp.js");
+                    seajs.use("js/index/indexView.js")
+                </script>
+                <link rel="stylesheet" type="text/css" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/css/jstree-style$b97c70fc.css">
+                <script type="text/javascript" src="//wwcdn.weixin.qq.com/node/wwmng/wwmng/js/layout/ww.cookie_banner/cookie_banner$0cd7daea.js"></script>
+            </div>
+        </div>
+    </div>
+    <script>
+        var langCookie = document.cookie.match(/(?:^|;) *wwrtx\.i18n_lan=([^;]+)/);
+        var langNameArr = null;
+        if (!langCookie) {
+            (new Image()).src = '/wework_admin/report?q=' + encodeURIComponent('st:logkvauto_report=' + JSON.stringify({
+                "kv": "44589",
+                "key": navigator && navigator.userAgent
+            })) + "&_t=" + (new Date - 0);
+        }
+        if (langCookie) {
+            langNameArr = langCookie[1].split('%2C');
+        }
+        if (langNameArr && langNameArr[0].indexOf('en') > -1) {
+            document.body.className = 'frame_wrap lang_en';
+        }
+        (function() {
+            var random = +(new Date());
+            var settings = window.settings;
+            if (settings && settings.vid && settings.corp_id) {
+                new Image(1, 1).src = '/wework_admin/report?type=img&r=' + random + '&q=' + encodeURIComponent('st:pv_report=' + JSON.stringify({
+                    vid: +settings.vid || undefined,
+                    corpid: +settings.corp_id || undefined,
+                    refer: document.referrer || undefined,
+                    url: window.location.href
+                }));
+            }
+        })()
+    </script>
+<script>
+    //-----------------Edit jarry  方法 一 ----------------------------
+    function postData(submitType,url, requestData, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(submitType, url);
+            xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        callback(null, xhr.responseText); 
+
+                    } else {
+                        callback(new Error(xhr.statusText), null); 
+                    }
+            };
+            xhr.onerror = function() {
+                    console.log("Request failed");
+                    callback(new Error("程序error"), null); // Pass error and null for the data
+            };
+            xhr.send(requestData);
+    }
+    //-----------------Edit jarry  查询用户----------------------------
+    var companyInfo = {
+        partyid: "1688858142454662",
+        limit : "2000"
+    };
+    var apiConfig = {
+        url: "https://work.weixin.qq.com/wework_admin/contacts/getDepartmentMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random() + "&action=getpartycontacts&partyid="+ companyInfo.partyid +"&page=0&limit="+ companyInfo.limit +"&joinstatus=0&fetchchild=1&preFetch=true&use_corp_cache=0",
+    };
+
+    postData("get",apiConfig.url, null, function(error, responseJSON) {
+        if (error) {
+            console.error("程序error:", error);
+        } else {
+            var responseJSON = JSON.parse(responseJSON);
+            var CountData = responseJSON.data.contact_list.list;
+            console.log("企业微信总人数 - " + CountData.length  )
+            CountData.forEach(function(item,index) {
+                var staff = {   
+                    number: index + 1,
+                    name : item.name,
+                    mobile :item.mobile,
+                    id : item.vid
+                };
+                console.log("企业微信 - " + JSON.stringify(staff)  )
+            });
+        }
+    });
+    //-------------------------------------------------------
+
+
+
+
+
+
+    
+
+    //-----------------Edit jarry  方法 二 ----------------------------
+    function postData_查询删除(submitType,url, requestData, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(submitType, url);
+            xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        callback(null, xhr.responseText); 
+
+                    } else {
+                        callback(new Error(xhr.statusText), null); 
+                    }
+            };
+            var boundary = "----WebKitFormBoundaryvzCnAwoyFE7out1J";
+            xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+            xhr.onerror = function() {
+                    console.log("Request failed");
+                    callback(new Error("程序error"), null); // Pass error and null for the data
+            };
+
+            var multipartRequestBody = "";
+            requestData.forEach(function(value, key) {
+            multipartRequestBody += "--" + boundary + "\r\n";
+            multipartRequestBody += 'Content-Disposition: form-data; name="' + key + '"\r\n\r\n';
+            multipartRequestBody += value + "\r\n";
+            });
+
+            multipartRequestBody += "--" + boundary + "--";
+
+            xhr.send(multipartRequestBody);
+    }
+
+
+
+    //-----------------Edit jarry  删除用户----------------------------
+    var del删除用户 = {
+        url: "https://work.weixin.qq.com/wework_admin/NewDelMemberBatch?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random(),
+        requestData: function() {
+            var formData = new FormData();
+            let myArray = [];
+            myArray.push("1688854278504332");
+            formData.append("vids", myArray);
+            return formData;
+        }()
+    };
+    
+    postData("post",del删除用户.url, del删除用户.requestData, function(error, responseJSON) {
+        if (error) {
+            console.error("企业微信程序error:", error);
+        } else {
+            console.log("企业微信删除人员结果 - " + responseJSON  )
+        }
+    });
+
+    //-----------------Edit jarry  查询用户----------------------------
+    var find用户 = {
+        url: "https://work.weixin.qq.com/wework_admin/contacts/getExternContactPermit?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random(),
+        requestData: function() {
+            var formData = new FormData();
+            formData.append("vids", "1688854278504332");
+            return formData;
+        }()
+    };
+    postData_查询删除("POST",find用户.url, find用户.requestData, function(error, responseJSON) {
+        if (error) {
+            console.error("企业微信程序error:", error);
+        } else {
+            console.log("企业微信查询人员结果 - " + responseJSON  )
+        }
+    });
+
+
+    //删除成功则返回   {"data":{"pairs":[{"vid":"1688858088536483","ret":0,"type":"DelAccount","depart_ids":[]}]}}
+    //-------------------------------------------------------
+
+</script>
+</body>
+
+</html>
