@@ -416,11 +416,11 @@
         });
     }
 
-    //-----------------删除的参数  ----------------------------
+    //-----------------批量删除用户 ----------------------------
     var url删除用户api = `https://work.weixin.qq.com/wework_admin/NewDelMemberBatch?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`;
 
     //-----------------  测试成功  ------------------------------
-    vids = "vids[]=1688857787565386"
+    vids = "vids[]=1688857787565272"
     Data删除用户 = vids + "&depart_id=1688858142454662";
 
     ToApi(url删除用户api,"POST",Data删除用户)
@@ -434,7 +434,7 @@
     //-----------------------------------------------------------
 
 
-    //-----------------单个用户----------------------------
+    //-----------------查询单个用户----------------------------
     var vid = '1688856690496388';
     var url = `https://work.weixin.qq.com/wework_admin/contacts/getExtraUserInfo?lang=zh_CN&f=json&ajax=1&timeZoneInfo[zone_offset]=-8&random=${Math.random()}&vid=${vid}`;
 
@@ -456,24 +456,26 @@
     var apiConfig = {
         url: "https://work.weixin.qq.com/wework_admin/contacts/getDepartmentMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random() + "&action=getpartycontacts&partyid="+ companyInfo.partyid +"&page=0&limit="+ companyInfo.limit +"&joinstatus=0&fetchchild=1&preFetch=true&use_corp_cache=0",
     };
-    ToApi(apiConfig.url,"get")
-    .then(function(response) {
-        var CountData = response.data.contact_list.list;
-        console.log("企业微信- 总人数 - " + CountData.length  )
-        CountData.forEach(function(item,index) {
-            var staff = {   
-                number: index + 1,
-                name : item.name,
-                mobile :item.mobile,
-                id : item.vid
-            };
-            // console.log("企业微信 - " + JSON.stringify(staff)  )
-        });
-    })
-    .catch(function(error) {
-        console.error("企业微信请求失败", error);
-    });
 
+    (async () => {
+        try {
+            var rt = await ToApi(apiConfig.url, "get");
+            var CountData = rt.data.contact_list.list; //拆解json的格式不同接口不同
+            var staffArray = CountData.map((item, index) => ({
+                number: index + 1,
+                name: item.name,
+                mobile: item.mobile,
+                id: item.vid
+            }));
+            console.log("企业微信- 总人数 - " + staffArray.length);
+            staffArray.forEach(function(item) {
+                console.log("企业微信 - 序号列 " + JSON.stringify(item));
+            });
+            // console.log("企业微信 - " + JSON.stringify(staffArray));
+        } catch (error) {
+            console.error("企业微信请求失败", error);
+        }
+    })();
 
 </script>
 </body>
