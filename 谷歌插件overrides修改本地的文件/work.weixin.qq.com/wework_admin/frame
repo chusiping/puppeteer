@@ -395,25 +395,60 @@
         })()
     </script>
 <script>
-    //-----------------Edit jarry  方法 一 ----------------------------
-    function postData(submitType,url, requestData, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open(submitType, url);
-            xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        callback(null, xhr.responseText); 
-
-                    } else {
-                        callback(new Error(xhr.statusText), null); 
-                    }
-            };
-            xhr.onerror = function() {
-                    console.log("Request failed");
-                    callback(new Error("程序error"), null); // Pass error and null for the data
-            };
-            xhr.send(requestData);
+    //----------------- 通用方法  ----------------------------
+    // 使用说明：企业微信批量删除用户不能使用 formData对象，否则就出现参数错误变成webkitFormboundary
+    // 使用 const formData = "vids[]=1688857787565260&vids[]=1688857787565283&depart_id=1688858142454662"; 就可以成功，这还是poe给的代码死活都想不到
+    function ToApi(_url,getPost,data) {
+        return new Promise(function(resolve, reject) {
+            var url = _url
+            $.ajax({
+                url: _url,
+                processData: false,
+                type: getPost,
+                data : data ,
+                success: function(response) {
+                    resolve(response);
+                },
+                error: function(xhr, status, error) {
+                    reject(error);
+                }
+            });
+        });
     }
-    //-----------------Edit jarry  查询用户----------------------------
+
+    //-----------------删除的参数  ----------------------------
+    var url删除用户api = `https://work.weixin.qq.com/wework_admin/NewDelMemberBatch?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`;
+
+    //-----------------  测试成功  ------------------------------
+    vids = "vids[]=1688857787565386"
+    Data删除用户 = vids + "&depart_id=1688858142454662";
+
+    ToApi(url删除用户api,"POST",Data删除用户)
+    .then(function(response) {
+        console.log("企业微信 - 删除用户 :", JSON.stringify(response));
+    })
+    .catch(function(error) {
+        console.error("企企业微信 - 删除用户请求失败 :", error);
+    });
+
+    //-----------------------------------------------------------
+
+
+    //-----------------单个用户----------------------------
+    var vid = '1688856690496388';
+    var url = `https://work.weixin.qq.com/wework_admin/contacts/getExtraUserInfo?lang=zh_CN&f=json&ajax=1&timeZoneInfo[zone_offset]=-8&random=${Math.random()}&vid=${vid}`;
+
+    ToApi(url,"get")
+    .then(function(response) {
+        console.log("企业微信 - 单个用户", JSON.stringify(response));
+    })
+    .catch(function(error) {
+        console.error("企业微信请求失败", error);
+    });
+
+   
+
+    //-----------------所有用户----------------------------
     var companyInfo = {
         partyid: "1688858142454662",
         limit : "2000"
@@ -421,107 +456,24 @@
     var apiConfig = {
         url: "https://work.weixin.qq.com/wework_admin/contacts/getDepartmentMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random() + "&action=getpartycontacts&partyid="+ companyInfo.partyid +"&page=0&limit="+ companyInfo.limit +"&joinstatus=0&fetchchild=1&preFetch=true&use_corp_cache=0",
     };
-
-    postData("get",apiConfig.url, null, function(error, responseJSON) {
-        if (error) {
-            console.error("程序error:", error);
-        } else {
-            var responseJSON = JSON.parse(responseJSON);
-            var CountData = responseJSON.data.contact_list.list;
-            console.log("企业微信总人数 - " + CountData.length  )
-            CountData.forEach(function(item,index) {
-                var staff = {   
-                    number: index + 1,
-                    name : item.name,
-                    mobile :item.mobile,
-                    id : item.vid
-                };
-                console.log("企业微信 - " + JSON.stringify(staff)  )
-            });
-        }
-    });
-    //-------------------------------------------------------
-
-
-
-
-
-
-    
-
-    //-----------------Edit jarry  方法 二 ----------------------------
-    function postData_查询删除(submitType,url, requestData, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open(submitType, url);
-            xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        callback(null, xhr.responseText); 
-
-                    } else {
-                        callback(new Error(xhr.statusText), null); 
-                    }
+    ToApi(apiConfig.url,"get")
+    .then(function(response) {
+        var CountData = response.data.contact_list.list;
+        console.log("企业微信- 总人数 - " + CountData.length  )
+        CountData.forEach(function(item,index) {
+            var staff = {   
+                number: index + 1,
+                name : item.name,
+                mobile :item.mobile,
+                id : item.vid
             };
-            var boundary = "----WebKitFormBoundaryvzCnAwoyFE7out1J";
-            xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
-            xhr.onerror = function() {
-                    console.log("Request failed");
-                    callback(new Error("程序error"), null); // Pass error and null for the data
-            };
-
-            var multipartRequestBody = "";
-            requestData.forEach(function(value, key) {
-            multipartRequestBody += "--" + boundary + "\r\n";
-            multipartRequestBody += 'Content-Disposition: form-data; name="' + key + '"\r\n\r\n';
-            multipartRequestBody += value + "\r\n";
-            });
-
-            multipartRequestBody += "--" + boundary + "--";
-
-            xhr.send(multipartRequestBody);
-    }
-
-
-
-    //-----------------Edit jarry  删除用户----------------------------
-    var del删除用户 = {
-        url: "https://work.weixin.qq.com/wework_admin/NewDelMemberBatch?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random(),
-        requestData: function() {
-            var formData = new FormData();
-            let myArray = [];
-            myArray.push("1688854278504332");
-            formData.append("vids", myArray);
-            return formData;
-        }()
-    };
-    
-    postData("post",del删除用户.url, del删除用户.requestData, function(error, responseJSON) {
-        if (error) {
-            console.error("企业微信程序error:", error);
-        } else {
-            console.log("企业微信删除人员结果 - " + responseJSON  )
-        }
+            // console.log("企业微信 - " + JSON.stringify(staff)  )
+        });
+    })
+    .catch(function(error) {
+        console.error("企业微信请求失败", error);
     });
 
-    //-----------------Edit jarry  查询用户----------------------------
-    var find用户 = {
-        url: "https://work.weixin.qq.com/wework_admin/contacts/getExternContactPermit?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random(),
-        requestData: function() {
-            var formData = new FormData();
-            formData.append("vids", "1688854278504332");
-            return formData;
-        }()
-    };
-    postData_查询删除("POST",find用户.url, find用户.requestData, function(error, responseJSON) {
-        if (error) {
-            console.error("企业微信程序error:", error);
-        } else {
-            console.log("企业微信查询人员结果 - " + responseJSON  )
-        }
-    });
-
-
-    //删除成功则返回   {"data":{"pairs":[{"vid":"1688858088536483","ret":0,"type":"DelAccount","depart_ids":[]}]}}
-    //-------------------------------------------------------
 
 </script>
 </body>
