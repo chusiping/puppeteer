@@ -10,7 +10,7 @@
     <script>
         var __START_DATE = +new Date
     </script>
-    <title>企业微信</title>
+    <title>企业微信 -> override editing </title>
     <link rel="icon" type="image/png" sizes="16x16" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_16h$faede2cd.png">
     <link rel="icon" type="image/png" sizes="32x32" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_32h$a41a4426.png">
     <link rel="icon" type="image/png" sizes="48x48" href="//wwcdn.weixin.qq.com/node/wwmng/wwmng/style/images/independent/favicon/favicon_48h$c976bd14.png">
@@ -416,37 +416,42 @@
         });
     }
 
-    //-----------------批量删除用户 ----------------------------
+    //-----------------定义接口：删除用户 ----------------------------
     var url删除用户api = `https://work.weixin.qq.com/wework_admin/NewDelMemberBatch?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`;
 
-    //-----------------  测试成功  ------------------------------
-    vids = "vids[]=1688857787565272"
-    Data删除用户 = vids + "&depart_id=1688858142454662";
+    //-----------------定义接口：禁止用户 ----------------------------
+    var url禁用用户api = `https://work.weixin.qq.com/wework_admin/disableMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`;
 
-    ToApi(url删除用户api,"POST",Data删除用户)
-    .then(function(response) {
-        console.log("企业微信 - 删除用户 :", JSON.stringify(response));
-    })
-    .catch(function(error) {
-        console.error("企企业微信 - 删除用户请求失败 :", error);
-    });
+    //-----------------  单独测试删除  ------------------------------
+    // vids = "vids[]=1688857787565272"
+    // Data删除用户 = vids + "&depart_id=1688858142454662";
 
+    // ToApi(url删除用户api,"POST",Data删除用户)
+    // .then(function(response) {
+    //     console.log("企业微信 - 删除用户 :", JSON.stringify(response));
+    // })
+    // .catch(function(error) {
+    //     console.error("企企业微信 - 删除用户请求失败 :", error);
+    // });
     //-----------------------------------------------------------
 
 
     //-----------------查询单个用户----------------------------
-    var vid = '1688856690496388';
-    var url = `https://work.weixin.qq.com/wework_admin/contacts/getExtraUserInfo?lang=zh_CN&f=json&ajax=1&timeZoneInfo[zone_offset]=-8&random=${Math.random()}&vid=${vid}`;
+    // var vid = '1688856690496388';
+    // var url = `https://work.weixin.qq.com/wework_admin/contacts/getExtraUserInfo?lang=zh_CN&f=json&ajax=1&timeZoneInfo[zone_offset]=-8&random=${Math.random()}&vid=${vid}`;
 
-    ToApi(url,"get")
-    .then(function(response) {
-        console.log("企业微信 - 单个用户", JSON.stringify(response));
-    })
-    .catch(function(error) {
-        console.error("企业微信请求失败", error);
-    });
-
+    // ToApi(url,"get")
+    // .then(function(response) {
+    //     console.log("企业微信 - 单个用户", JSON.stringify(response));
+    // })
+    // .catch(function(error) {
+    //     console.error("企业微信请求失败", error);
+    // });
+    //-----------------------------------------------------------
    
+
+
+    
 
     //-----------------所有用户----------------------------
     var companyInfo = {
@@ -456,6 +461,11 @@
     var apiConfig = {
         url: "https://work.weixin.qq.com/wework_admin/contacts/getDepartmentMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random=" + Math.random() + "&action=getpartycontacts&partyid="+ companyInfo.partyid +"&page=0&limit="+ companyInfo.limit +"&joinstatus=0&fetchchild=1&preFetch=true&use_corp_cache=0",
     };
+
+
+    //设定手机号集合，匹配则进行动作处理
+    let mobile用户手机号集合=['15812401937','18011778280'];
+
 
     (async () => {
         try {
@@ -469,9 +479,29 @@
             }));
             console.log("企业微信- 总人数 - " + staffArray.length);
             staffArray.forEach(function(item) {
-                console.log("企业微信 - 序号列 " + JSON.stringify(item));
+                mobile用户手机号集合.forEach(elt => {
+
+                    //=============符合选择的手机，才做删除和禁用的动作==============
+                    if(elt == item.mobile)          
+                    {
+                        console.log("企业微信 - 匹配数组的： " + JSON.stringify(item));
+
+                        vids = "vids[]="+item.vid;
+                        Data禁用用户 = vids + "&depart_id=1688858142454662";
+
+                        ToApi(url禁用用户api,"POST",Data禁用用户)
+                        .then(function(response) {
+                            console.log("企业微信 - 禁用用户 :", JSON.stringify(response));
+                        })
+                        .catch(function(error) {
+                            console.error("企企业微信 - 删除用户请求失败 :", error);
+                        });
+
+
+                    }
+                    //=====================================================================
+                });
             });
-            // console.log("企业微信 - " + JSON.stringify(staffArray));
         } catch (error) {
             console.error("企业微信请求失败", error);
         }
