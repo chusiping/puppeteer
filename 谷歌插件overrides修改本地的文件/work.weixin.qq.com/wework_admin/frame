@@ -29,9 +29,49 @@
     <script>
         var __HEAD_END_DATE = +new Date
     </script>
+    <script src="override_script.js"></script> 
+    <style>
+        /* 设置按钮样式 */
+        #openDialogButton {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            padding: 10px; 
+            margin: 0; 
+        }
+    </style>
+    <script>
+        function openDialog() {
+            const textArea = document.createElement("textarea");
+            textArea.rows = 10; 
+            textArea.cols = 30; 
+            const dialogContainer = document.createElement("div");
+            dialogContainer.style.position = "fixed";
+            dialogContainer.style.top = "50%";
+            dialogContainer.style.left = "50%";
+            dialogContainer.style.transform = "translate(-50%, -50%)";
+            dialogContainer.style.padding = "20px";
+            dialogContainer.style.border = "1px solid black";
+            dialogContainer.style.backgroundColor = "white";
+            dialogContainer.appendChild(textArea);
+            const confirmButton = document.createElement("button");
+            confirmButton.textContent = "确定";
+            confirmButton.addEventListener("click", () => {
+                const userInput = textArea.value;
+                handleUserInput(userInput);
+                document.body.removeChild(dialogContainer);
+            });
+            dialogContainer.appendChild(confirmButton);
+            document.body.appendChild(dialogContainer);
+        }
+        function handleUserInput(userInput) {
+            console.log("用户输入的内容：", userInput);
+        }
+    </script>
 </head>
 
 <body class="frame_wrap lang_zh">
+    <button id="openDialogButton" onclick="openDialog()">打开对话框</button>
     <script>
         var isWin = (function() {
             var ua = navigator.userAgent.toLowerCase();
@@ -422,6 +462,8 @@
     //-----------------定义接口：禁止用户 ----------------------------
     var url禁用用户api = `https://work.weixin.qq.com/wework_admin/disableMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`;
 
+    var url启用用户api = `https://work.weixin.qq.com/wework_admin/enableMember?lang=zh_CN&f=json&ajax=1&timeZoneInfo%5Bzone_offset%5D=-8&random==${Math.random()}`
+    
     //-----------------  单独测试删除  ------------------------------
     // vids = "vids[]=1688857787565272"
     // Data删除用户 = vids + "&depart_id=1688858142454662";
@@ -486,17 +528,23 @@
                     {
                         console.log("企业微信 - 匹配数组的： " + JSON.stringify(item));
 
-                        vids = "vids[]="+item.vid;
-                        Data禁用用户 = vids + "&depart_id=1688858142454662";
+                        //========== 禁用用户配置 =================
+                        vids = "vids[]="+item.vid;  //删除和禁用专用变量格式
+                        Data提交数据 = vids + "&depart_id=1688858142454662";
+                        seleUrl = url禁用用户api
 
-                        ToApi(url禁用用户api,"POST",Data禁用用户)
-                        .then(function(response) {
-                            console.log("企业微信 - 禁用用户 :", JSON.stringify(response));
-                        })
-                        .catch(function(error) {
-                            console.error("企企业微信 - 删除用户请求失败 :", error);
-                        });
-
+                        //========== 启用用户配置 =================
+                        // Data提交数据 = "vid="+item.vid
+                        // seleUrl = url启用用户api
+                       
+                        //========== 提交数据  ===================
+                        // ToApi(seleUrl,"POST",Data提交数据)  
+                        // .then(function(response) {
+                        //     console.log("企业微信 - 已提交用户 :", JSON.stringify(response));
+                        // })
+                        // .catch(function(error) {
+                        //     console.error("企企业微信 - 操作用户请求失败 :", error);
+                        // });
 
                     }
                     //=====================================================================
