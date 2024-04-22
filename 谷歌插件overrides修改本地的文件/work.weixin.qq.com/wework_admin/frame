@@ -29,7 +29,6 @@
     <script>
         var __HEAD_END_DATE = +new Date
     </script>
-    <script src="override_script.js"></script> 
     <style>
         /* 设置按钮样式 */
         #openDialogButton {
@@ -493,7 +492,6 @@
    
 
 
-    
 
     //-----------------所有用户----------------------------
     var companyInfo = {
@@ -554,7 +552,7 @@
             console.error("企业微信请求失败", error);
         }
     })();
-
+    
 </script>
 </body>
 
