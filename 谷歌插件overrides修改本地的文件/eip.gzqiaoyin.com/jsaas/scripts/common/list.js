@@ -827,19 +827,24 @@ function ajaxRequest_通用(url, data) {
         });
     });
 }
-async function fetchData_循环获取用户信息() {
-    for (let i = 1; i < 3; i++) { 
+async function fetchData_循环获取用户信息(page_多少页,perPage_每页多少条) {
+    var No_用户输出序号 = 1;
+    for (let i = 1; i < page_多少页; i++) { 
         try {
-            var formData = { pageIndex: 0, pageSize: 20 }; // 不用此方式不行，数据有但排列不对2024-4-23
+            var formData = { pageIndex: i, pageSize: perPage_每页多少条 }; //保留 不用此方式不行，数据有但排列不对2024-4-23
             const response = await ajaxRequest_通用("https://eip.gzqiaoyin.com/jsaas/sys/org/osUser/listByGroupIdRelTypeId.do?relTypeId=1&tenantId=", formData);
-            // console.log(`中台接口 - 第 ${i + 0} 次数据获取成功:`,response); //保留测试用 response 返回=> {total: 136520, data: Array(20), success: null, message: null}
+            //保留 console.log(`中台接口 - 第 ${i + 0} 次数据获取成功:`,response); //保留测试用 response 返回=> {total: 136520, data: Array(20), success: null, message: null}
             response.data.forEach(els => {
-                console.log(`姓名：${els.fullname}      手机：${els.mobile}    状态：${els.status}     身份：${els.identifyLabel}` );
+                var con_设定条件 = 'OUT_JOB'           //保留 OUT_JOB(离职) 
+                if(con_设定条件 == els.status){
+                    console.log(`${No_用户输出序号}.    姓名：${els.fullname}      手机：${els.mobile}    状态：${els.status}     身份：${els.identifyLabel}` );
+                    No_用户输出序号++;
+                }
             });
         } catch (error) {
             console.error(`中台接口 - 第 ${i + 0} 次数据获取失败:`, error);
         }
     }
 }
-fetchData_循环获取用户信息();
+fetchData_循环获取用户信息(2,200);
 
