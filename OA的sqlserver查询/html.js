@@ -348,10 +348,11 @@ app.get("/",(req,res)=>{
             TongJI(seleItem,data,res);   
         }
     };
-
-
-
 });
+
+
+
+
 
 //show2.html 私有使用
 app.get("/all",(req,res)=>{
@@ -378,6 +379,42 @@ app.get("/all",(req,res)=>{
 });
 
 
+//数据中心统计(邱宏育)
+// 接口：http://127.0.0.1:3000/sjzx
+// 前台：http://127.0.0.1:3000/shujuzhongxin.html
+function sql_数据中心统计(){
+   
+    const Datas = [
+        { dpt: '运管中心',  taskName:"一线员工血压监测",    tableName: "edc_uf_table432" },
+        { dpt: '资产部',    taskName:"责任制数据测试",      tableName: "edc_uf_table616" }
+    ];
+
+    var allsql = ''
+    Datas.forEach((Item, index) => {
+        var sql = `SELECT top 10 '${Item.taskName}' 任务名称 , modedatacreatedate 时间,taskid 任务ID, COUNT(*) AS 总数
+                FROM ${Item.tableName}
+                GROUP BY modedatacreatedate,taskid
+                `
+        allsql += sql
+        if(index != Datas.length - 1)       
+        {
+            allsql += `
+            UNION
+
+            `  
+        }else{
+            allsql += "order by 任务名称, modedatacreatedate  desc" 
+        }
+    });
+    return allsql;
+}
+app.get("/sjzx",(req,res)=>{
+    var sql = sql_数据中心统计();
+    console.log(sql);
+    MyQuery(sql).then(result => {       
+        res.json(result.recordset);    
+    })
+});
 
 
 app.use('', express.static('./')).listen(3000);
