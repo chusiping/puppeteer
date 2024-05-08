@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const db = require('./lib_sqlserver.js'); 
 var sd = require('silly-datetime');
+const fs = require('fs');
 
 
 function MyQuery(sql) {
@@ -384,16 +385,37 @@ app.get("/all",(req,res)=>{
 // 前台：http://127.0.0.1:3000/shujuzhongxin.html
 function sql_数据中心统计(){
    
+    // const Datas = [
+    //     { dpt: '人力资源部',taskName:"残疾人证件统计表",						tableName: "edc_uf_table487"},		
+    //     { dpt: '人力资源部',taskName:"部门月绩效考核比例表",					tableName: "edc_uf_table482"}, 		
+    //     { dpt: '综合办公室',taskName:"优秀管理部门投票",						tableName: "edc_uf_table488"},	
+    //     { dpt: '证券部',	taskName:"行政处罚统计表",							tableName: "edc_uf_table488"},	
+    //     { dpt: '品牌中心',	taskName:"公司业务布局统计表",						tableName: "edc_uf_table519"}		
+    // ];
+
     const Datas = [
-        { dpt: '运管中心',  taskName:"一线员工血压监测",    tableName: "edc_uf_table432" },
-        { dpt: '资产部',    taskName:"责任制数据测试",      tableName: "edc_uf_table616" }
+        { dpt: '人力资源部',taskName:"残疾人证件统计表",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table487"},		
+        { dpt: '人力资源部',taskName:"部门月绩效考核比例表",				dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table482"}, 		
+        { dpt: '综合办公室',taskName:"公司年报填报数据填写",				dateFiled:"xfrq",               taskFName:"requestid",	tableName: "formtable_main_594"},
+        { dpt: '综合办公室',taskName:"优秀管理部门投票",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table488"},	
+        { dpt: '采购部',	taskName:"物资类供应商问卷调查",				dateFiled:"tbrq",               taskFName:"requestid",  tableName: "formtable_main_513"},
+        { dpt: '采购部',	taskName:"物资类新合作供应商首次合作回访调研表", dateFiled:"tbrq",                taskFName:"requestid",  tableName: "formtable_main_514"},
+        { dpt: '采购部',	taskName:"物资质量异常反馈",					dateFiled:"fkrq",               taskFName:"requestid",	tableName: "formtable_main_597"},
+        { dpt: '证券部',	taskName:"行政处罚统计表",						dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table488"},	
+        { dpt: '品牌中心',	taskName:"公司业务布局统计表",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table519"},		
+        { dpt: '法务部',	taskName:"案件登记台账",						dateFiled:"modedatamodifydatetime", taskFName:"requestid", tableName: "uf_ajdjtz"},	
+        { dpt: '商务中心',	taskName:"中标项目信息统计的台账",				dateFiled:"modedatamodifydatetime", taskFName:"requestid",	    tableName: "uf_zbxmxxtj"},	
+        { dpt: '预决算部',	taskName:"工程项目月度进度统计台账",			dateFiled:"tbrq",                   taskFName:"requestid",	    tableName: "formtable_main_515"} 
     ];
 
     var allsql = ''
     Datas.forEach((Item, index) => {
-        var sql = `SELECT top 10 '${Item.taskName}' 任务名称 , modedatacreatedate 时间,taskid 任务ID, COUNT(*) AS 总数
+        var sql = `SELECT top 10 '${Item.dpt} - ${Item.taskName}' 任务名称 ,  CONVERT(varchar(10), ${Item.dateFiled}, 120) AS 时间,${Item.taskFName} 任务ID, COUNT(*) AS 总数
                 FROM ${Item.tableName}
-                GROUP BY modedatacreatedate,taskid
+                GROUP BY CONVERT(varchar(10), ${Item.dateFiled}, 120),${Item.taskFName}
+                UNION ALL
+                SELECT '${Item.dpt} - ${Item.taskName}' AS 任务名称,  null AS 时间, null AS 任务ID, 0 AS 总数  WHERE NOT EXISTS ( SELECT 1 FROM ${Item.tableName})
+
                 `
         allsql += sql
         if(index != Datas.length - 1)       
@@ -403,14 +425,21 @@ function sql_数据中心统计(){
 
             `  
         }else{
-            allsql += "order by 任务名称, modedatacreatedate  desc" 
+            allsql += "order by 任务名称, 时间  desc" 
         }
     });
     return allsql;
 }
 app.get("/sjzx",(req,res)=>{
     var sql = sql_数据中心统计();
-    console.log(sql);
+    // fs.writeFile('output.txt', sql, (err) => {
+    //     if (err) {
+    //         console.error('写入文件时出错：', err);
+    //         return;
+    //     }
+    //     console.log('sql语句写入到 output.txt 文件中！');
+    // });
+
     MyQuery(sql).then(result => {       
         res.json(result.recordset);    
     })
@@ -442,6 +471,10 @@ app.use('', express.static('./')).listen(3000);
 8   根据情况判断 p3:"and (status='归档'  or  CHARINDEX('预决算', status)>0)" 
 
 9   查询所有的流程模板
-    127.0.0.1:3000/?seleItem=人力资源  
+    127.0.0.1:3000/?seleItem=人力资源 
+    
+10  异常处理 Error: listen EACCES: permission denied 0.0.0.0:3000
+    net stop winnat
+    net start winnat
 
 */

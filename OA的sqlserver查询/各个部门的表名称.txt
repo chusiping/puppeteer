@@ -1,0 +1,37 @@
+1	人力资源部	残疾人证件统计表						edc_uf table487		edc_uf table487_dt2
+2	人力资源部	部门月绩效考核比例表					edc_uf table482		edc_uf table482_dt1
+3	综合办公室	公司年报填报数据填写					formtable_main_594	formtable_main_594_dt1
+4	综合办公室	优秀管理部门投票						edc_uf_table488	
+5	采购部		物资类供应商问卷调查					formtable_main_513	formtable_main_513_dt1
+6	采购部		物资类新合作供应商首次合作回访调研表	formtable_main_514	formtable_main_514_dt1
+7	采购部		物资质量异常反馈						formtable_main_597	formtable_main_597_dt1
+8	证券部		行政处罚统计表							edc_uf_table488	/
+9	品牌中心	公司业务布局统计表						edc_uf_table519		edc_uf_table519_dt1
+10	信息化部	GPS下单台账								uf_GPSXDTZ	/
+11	法务部		案件登记台账							uf_ajdjtz	/
+12	商务中心	中标项目信息统计的台账					uf_zbxmxxtj	/
+13	预决算部	工程项目月度进度统计台账				formtable_main_515	formtable_main_515_dt1
+14	运管中心	水电数据收集							edc_uf_table585	
+15	运管中心	项目耗水登记							edc_uf_table586	
+16	运管中心	项目耗电登记							edc_uf_table587	
+17	运管中心	项目统计								edc_uf_table589	
+18	运管中心	作业车辆用水用电登记					edc_uf_table590		edc_uf_table590_dt1
+19	运管中心	项目扣款预警							edc_uf_table439		edc_uf_table439_dt1
+20	运管中心	超限违章查询							edc_uf_table438		edc_uf_table438_dt1
+21	运管中心	交通违章查询							edc_uf_table437		edc_uf_table437_dt1
+22	运管中心	商业保险购买							edc_uf_table436		edc_uf_table436_dt1
+23	运管中心	一线员工绩效考核						edc_uf_table435		edc_uf_table435_dt1
+24	运管中心	业务招待费								edc_uf_table431		edc_uf_table431_dt1
+25	运管中心	项目一线员工血压监测					edc_uf_table432		edc_uf_table432_dt1
+26	运管中心	项目入离职人员报备表					edc_uf_table433		edc_uf_table433_dt1
+27	运管中心	项目主数据								uf_project_group	
+28	运管中心	项目通讯录								uf_xmtongxunlu	
+29	运管中心	主管绩效责任制优化人数目标				uf_youhuarenshumb	
+30	运管中心	主管绩效责任制优化人数完成情况周汇报	edc_uf_table427		edc_uf_table427_dt1
+31	运管中心	主管绩效责任制优化人数台账				uf_zgjxzrzyhrstz	
+32	运管中心	项目运营信息台账						uf_xmyunyingxinxi	
+33	运管中心	回款督办台账							edc_uf_table426	
+34	运管中心	确认单督办表							uf_querendan	
+35	运管中心	项目零星、增标信息统计					uf_xmlxzbxxtjbs	
+36	运管中心	车辆违章核查及处理登记表				uf_vehicle_violatio	
+37	运管中心	非机动车险事故-逾期						uf_vehicle_accident	
