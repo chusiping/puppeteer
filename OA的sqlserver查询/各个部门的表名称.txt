@@ -1,7 +1,7 @@
 1	人力资源部	残疾人证件统计表						edc_uf table487		edc_uf table487_dt2
 2	人力资源部	部门月绩效考核比例表					edc_uf table482		edc_uf table482_dt1
 3	综合办公室	公司年报填报数据填写					formtable_main_594	formtable_main_594_dt1
-4	综合办公室	优秀管理部门投票						edc_uf_table488	
+4	综合办公室	优秀管理部门投票						edc_uf_table581	
 5	采购部		物资类供应商问卷调查					formtable_main_513	formtable_main_513_dt1
 6	采购部		物资类新合作供应商首次合作回访调研表	formtable_main_514	formtable_main_514_dt1
 7	采购部		物资质量异常反馈						formtable_main_597	formtable_main_597_dt1

@@ -385,19 +385,12 @@ app.get("/all",(req,res)=>{
 // 前台：http://127.0.0.1:3000/shujuzhongxin.html
 function sql_数据中心统计(){
    
-    // const Datas = [
-    //     { dpt: '人力资源部',taskName:"残疾人证件统计表",						tableName: "edc_uf_table487"},		
-    //     { dpt: '人力资源部',taskName:"部门月绩效考核比例表",					tableName: "edc_uf_table482"}, 		
-    //     { dpt: '综合办公室',taskName:"优秀管理部门投票",						tableName: "edc_uf_table488"},	
-    //     { dpt: '证券部',	taskName:"行政处罚统计表",							tableName: "edc_uf_table488"},	
-    //     { dpt: '品牌中心',	taskName:"公司业务布局统计表",						tableName: "edc_uf_table519"}		
-    // ];
 
-    const Datas = [
+    const Datas1 = [
         { dpt: '人力资源部',taskName:"残疾人证件统计表",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table487"},		
         { dpt: '人力资源部',taskName:"部门月绩效考核比例表",				dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table482"}, 		
         { dpt: '综合办公室',taskName:"公司年报填报数据填写",				dateFiled:"xfrq",               taskFName:"requestid",	tableName: "formtable_main_594"},
-        { dpt: '综合办公室',taskName:"优秀管理部门投票",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table488"},	
+        { dpt: '综合办公室',taskName:"优秀管理部门投票",					dateFiled:"modedatacreatedate", taskFName:"taskID",	    tableName: "edc_uf_table581"},	
         { dpt: '采购部',	taskName:"物资类供应商问卷调查",				dateFiled:"tbrq",               taskFName:"requestid",  tableName: "formtable_main_513"},
         { dpt: '采购部',	taskName:"物资类新合作供应商首次合作回访调研表", dateFiled:"tbrq",                taskFName:"requestid",  tableName: "formtable_main_514"},
         { dpt: '采购部',	taskName:"物资质量异常反馈",					dateFiled:"fkrq",               taskFName:"requestid",	tableName: "formtable_main_597"},
@@ -408,6 +401,34 @@ function sql_数据中心统计(){
         { dpt: '预决算部',	taskName:"工程项目月度进度统计台账",			dateFiled:"tbrq",                   taskFName:"requestid",	    tableName: "formtable_main_515"} 
     ];
 
+    const Datas2 = [
+        { dpt: '运管中心' ,taskName:"项目耗水登记",							dateFiled:"modedatacreatedate",                    taskFName:"taskID",	tableName: "edc_uf_table586" },	
+        { dpt: '运管中心' ,taskName:"项目耗电登记",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table587" },	
+        { dpt: '运管中心' ,taskName:"项目统计",								dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table589" },	
+        { dpt: '运管中心' ,taskName:"作业车辆用水用电登记",					dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table590" },		
+        { dpt: '运管中心' ,taskName:"项目扣款预警",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table439" },		
+        { dpt: '运管中心' ,taskName:"超限违章查询",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table438" },		
+        { dpt: '运管中心' ,taskName:"交通违章查询",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table437" },		
+        { dpt: '运管中心' ,taskName:"商业保险购买",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table436" },		
+        { dpt: '运管中心' ,taskName:"一线员工绩效考核",						dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table435" },		
+        { dpt: '运管中心' ,taskName:"业务招待费",							dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table431" },		
+        { dpt: '运管中心' ,taskName:"项目一线员工血压监测",					dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table432" },		
+        { dpt: '运管中心' ,taskName:"项目入离职人员报备表",					dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table433" },		
+        { dpt: '运管中心' ,taskName:"项目主数据",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_project_group" },	
+        { dpt: '运管中心' ,taskName:"项目通讯录",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_xmtongxunlu" },	
+        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数目标",			dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_youhuarenshumb" },	
+        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数完成情况周汇报",	dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "edc_uf_table427" },		
+        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数台账",			dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_zgjxzrzyhrstz" },
+        { dpt: '运管中心' ,taskName:"项目运营信息台账",						dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_xmyunyingxinxi" },	
+        { dpt: '运管中心' ,taskName:"回款督办台账",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "edc_uf_table426" },	
+        { dpt: '运管中心' ,taskName:"确认单督办表",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_querendan" },	
+        { dpt: '运管中心' ,taskName:"项目零星、增标信息统计",				dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_xmlxzbxxtjbs" },	
+        { dpt: '运管中心' ,taskName:"车辆违章核查及处理登记表",				dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_vehicle_violatio" },	
+        { dpt: '运管中心' ,taskName:"非机动车险事故-逾期",					dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_vehicle_accident" }
+    ];
+
+
+    const Datas = Datas1.concat(Datas2);
     var allsql = ''
     Datas.forEach((Item, index) => {
         var sql = `SELECT top 10 '${Item.dpt} - ${Item.taskName}' 任务名称 ,  CONVERT(varchar(10), ${Item.dateFiled}, 120) AS 时间,${Item.taskFName} 任务ID, COUNT(*) AS 总数
