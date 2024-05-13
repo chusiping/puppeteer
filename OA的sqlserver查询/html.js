@@ -416,9 +416,9 @@ function sql_数据中心统计(){
         { dpt: '运管中心' ,taskName:"项目入离职人员报备表",					dateFiled:"modedatacreatedate",                   taskFName:"taskID",	tableName: "edc_uf_table433" },		
         { dpt: '运管中心' ,taskName:"项目主数据",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_project_group" },	
         { dpt: '运管中心' ,taskName:"项目通讯录",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_xmtongxunlu" },	
-        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数目标",			dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_youhuarenshumb" },	
+        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数目标",			dateFiled:"modedatamodifydatetime",                   taskFName:"requestid",	tableName: "uf_youhuarenshumb" },	
         { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数完成情况周汇报",	dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "edc_uf_table427" },		
-        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数台账",			dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_zgjxzrzyhrstz" },
+        { dpt: '运管中心' ,taskName:"主管绩效责任制优化人数台账",			dateFiled:"modedatamodifydatetime",                   taskFName:"requestid",	tableName: "uf_zgjxzrzyhrstz" },
         { dpt: '运管中心' ,taskName:"项目运营信息台账",						dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_xmyunyingxinxi" },	
         { dpt: '运管中心' ,taskName:"回款督办台账",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "edc_uf_table426" },	
         { dpt: '运管中心' ,taskName:"确认单督办表",							dateFiled:"modedatacreatedate",                   taskFName:"requestid",	tableName: "uf_querendan" },	
@@ -446,7 +446,7 @@ function sql_数据中心统计(){
 
             `  
         }else{
-            allsql += "order by 任务名称, 时间  desc" 
+            allsql += "order by 任务名称,时间 desc  " 
         }
     });
     return allsql;
