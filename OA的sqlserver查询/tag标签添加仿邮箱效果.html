@@ -31,45 +31,76 @@
 <div class="input-container">
   <input type="text" id="input-box" placeholder="输入字符串...">
 </div>
-<button id="show-all-button">显示所有字符串</button> 
+<button id="show-all-button">显示所有字符串</button>
+<button id="switch-button">切换显示方式</button>
 
 <script>
 const inputBox = document.getElementById('input-box');
 const inputContainer = document.querySelector('.input-container');
 const showAllButton = document.getElementById('show-all-button');
+const switchButton = document.getElementById('switch-button');
+
+let isSwitched = false; // 初始状态为 false，表示未切换
 
 inputBox.addEventListener('keyup', (event) => {
-  if (event.key === 'Enter') {
-    addTag(inputBox.value.trim());
-    inputBox.value = ''; // 清空输入框
-  }
+    if (event.key === 'Enter') {
+      addTag(inputBox.value.trim());
+      inputBox.value = ''; // 清空输入框
+    }
 });
 
 function addTag(text) {
-  if (text === '') return;
+    if (text === '') return;
 
-  const tag = document.createElement('span');
-  tag.classList.add('tag');
-  tag.textContent = text;
+    const tag = document.createElement('span');
+    tag.classList.add('tag');
+    tag.textContent = text;
 
-  const closeBtn = document.createElement('span');
-  closeBtn.classList.add('close-btn');
-  closeBtn.textContent = '×';
-  closeBtn.addEventListener('click', () => {
-    tag.remove();
-  });
+    const closeBtn = document.createElement('span');
+    closeBtn.classList.add('close-btn');
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', () => {
+      tag.remove();
+    });
 
-  tag.appendChild(closeBtn);
-  inputContainer.insertBefore(tag, inputBox); // 将标签插入到输入框前面
+    tag.appendChild(closeBtn);
+    inputContainer.insertBefore(tag, inputBox); // 将标签插入到输入框前面
 }
 
 showAllButton.addEventListener('click', () => {
-  const tags = document.querySelectorAll('.tag');
-  const strings = Array.from(tags).map(tag => tag.textContent.replace('×', '').trim());
-  alert(strings.join(', '));
+    const tags = document.querySelectorAll('.tag');
+    const strings = Array.from(tags).map(tag => tag.textContent.replace('×', '').trim());
+    alert(strings.join(', '));
 });
 
-</script>
 
+switchButton.addEventListener('click', () => {
+  const tags = document.querySelectorAll('span');
+  if (isSwitched) {
+      const items = tags[0].innerText.split(',').map(item => item.trim());
+      items.forEach(item => {
+        if(item !== ""){
+          addTag(item);
+          console.log(item);
+        }
+      });
+      tags[0].remove();
+
+      switchButton.textContent = '切换显示方式';
+      isSwitched = false;
+  } 
+  else 
+  {
+      tags.forEach(tag => { tag.remove(); });              //移除标签显示方式 // 切换为纯字符串显示
+      const strings = Array.from(tags).map(tag => tag.textContent.replace('×', '').trim()).filter(text => text !== '');
+      const stringDisplay = document.createElement('span');
+      // stringDisplay.classList.add('tag');
+      stringDisplay.textContent = strings.join(',');
+      inputContainer.insertBefore(stringDisplay, inputBox); 
+      switchButton.textContent = '切换回原样';
+      isSwitched = true;
+  }
+});
+</script>
 </body>
 </html>
