@@ -490,7 +490,7 @@ app.get("/table",(req,res)=>{
             })
         }
         else {
-            let sql = `select top 10  *  from  ${tableType}  order by id desc;`
+            let sql = `select top 10  *  from  ${tableType};`
             MyQuery(sql).then(result => {       
                 res.json(result.recordset);    
             })
