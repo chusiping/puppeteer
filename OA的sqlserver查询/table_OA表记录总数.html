@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OA表记录总数</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style> table { border-collapse: collapse; width: 50%; }
+    th, td {
+      padding: 3px;
+      text-align: left;
+      border-bottom: 1px solid #827f7f;
+      font-size: 12px;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    </style>
+</head>
+<body>
+  <span id="dt">OA表记录总数（记录数大于0的所有表）</span> <br><br>
+  <table id="myTable">
+    <thead>
+      <tr>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    // 获取 URL 中的参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableType = urlParams.get('tableType');
+
+    // 构造 API 地址
+    const apiUrl = `/table?tableType=${tableType}`;
+    $(document).ready(function() {
+        if(tableType != 'all') {
+          $('#dt').text('表名：' + tableType);
+        }
+    });
+    
+    $.ajax({
+      url: apiUrl,
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+          var tableHeaders = Object.keys(data[0]);
+          var tableRows = '';
+          for (var i = 0; i < tableHeaders.length; i++) {
+            $('thead tr').append('<th>' + tableHeaders[i] + '</th>');
+          }
+          for (var j = 0; j < data.length; j++) {
+            var rowData = Object.values(data[j]);
+            tableRows += '<tr>';
+            for (var k = 0; k < rowData.length; k++) {
+                if(k==0){
+                  tableRows += '<td><a href="/table_OA表记录总数.html?tableType='+ rowData[k] +'" target="_blank">' + rowData[k] + '</a></td>';
+                }else{
+                  tableRows += '<td>' + rowData[k] + '</td>';
+                }
+            }
+            tableRows += '</tr>';
+          }
+        $('tbody').append(tableRows);
+      },
+      error: function(error) {
+        console.log('获取数据失败:', error);
+      }
+    });
+
+
+
+  </script>
+</body>
+</html>

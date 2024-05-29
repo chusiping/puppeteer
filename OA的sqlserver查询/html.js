@@ -467,6 +467,36 @@ app.get("/sjzx",(req,res)=>{
 });
 
 
+
+// 功能3 ：查询OA的数据表内容
+// 接口：http://127.0.0.1:3000/table?tableType=all
+// 前台：http://127.0.0.1:3000/table_OA表记录总数.html?tableType=all
+
+app.get("/table",(req,res)=>{
+    let tableType = req.query.tableType; // all:显示所有表的记录总数   else:显示某个表的记录内容全字段
+    //分类查询
+    if (tableType) {
+        if (tableType == "all"){
+            let sql = `SELECT  a.name 数据表,
+                                b.rows 数据总条数
+                        FROM    sysobjects AS a
+                                INNER JOIN sysindexes AS b ON a.id = b.id
+                        WHERE   ( a.type = 'u' )
+                                AND ( b.indid IN ( 0, 1 ) ) and b.rows > 0 
+                        ORDER BY b.rows DESC;
+                        `
+            MyQuery(sql).then(result => {       
+                res.json(result.recordset);    
+            })
+        }
+        else {
+            let sql = `select top 10  *  from  ${tableType}  order by id desc;`
+            MyQuery(sql).then(result => {       
+                res.json(result.recordset);    
+            })
+        }
+    };
+});
 app.use('', express.static('./')).listen(3000);
 
 
