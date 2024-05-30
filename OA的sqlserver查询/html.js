@@ -145,8 +145,11 @@ var sql_3all=` IF OBJECT_ID('tempdb..#tp1') IS NOT NULL  DROP TABLE #tp1;
             
             set @query = '
             SELECT
-                a.flowID 流程编号,a.status 节点,
-                a.Ndata 月份,a.requestname 请求标题,a.newName 请求主题
+                a.flowID 流程编号,
+                a.requestname 请求标题,
+                a.newName 请求主题,
+                a.status 节点,
+                a.Ndata 月份
               from 
                 #tp2 a LEFT JOIN '+ @TableID +' b
                 on a.requestid=b.requestId
@@ -254,6 +257,23 @@ exec(@query)
 
 var sql_流程模板 = `select  DISTINCT(workflowname) sname,max(id) id  from workflow_base where isvalid = 1 and workflowname 
 like '%_key_%' GROUP BY workflowname order by id desc `
+
+
+var sql_默认最近200 = `select top 2000
+                        a.requestmark 流程单号,
+                        (select workflowname from workflow_base where id= a.workflowid) as 流程名称,
+                        a.requestnamenew 流程名称2,	
+                        a.createdate  创建日期,
+                        b.billid 表单id,
+                        a.lastnodeid 最后节点id,
+                        (select lastname from hrmresource where id = a.creater )  as '创建人'
+                        from workflow_requestbase a LEFT JOIN workflow_form b
+                        on a. requestid = b.requestid
+                        where 1=1 
+                        -- 	and requestname like '采购立项审批流程(职能部门专用)-范秉淇-2023-05-29%'
+                        -- 		and a.requestId = 777939
+                        -- 		and a.requestmark = 'HTSP2024050261'
+                        order by createdate desc `
 
 // 查询某个流程表单内容 
 function  Query_flow(_flowName,res){
@@ -370,6 +390,10 @@ app.get("/all",(req,res)=>{
         }else{
             flow_分类查询(workBaseID,seleItem,data,res);  
         }
+    }else{
+        MyQuery(sql_默认最近200).then(result => {       
+            res.json(result.recordset);    
+        })
     };
     
     //流程详情
