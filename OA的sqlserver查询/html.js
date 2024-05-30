@@ -260,7 +260,7 @@ like '%_key_%' GROUP BY workflowname order by id desc `
 
 
 var sql_默认最近200 = `select top 2000
-                        a.requestmark 流程单号,
+                        ISNULL(NULLIF(a.requestmark, ''), '--------------') AS 流程单号,
                         (select workflowname from workflow_base where id= a.workflowid) as 流程名称,
                         a.requestnamenew 流程名称2,	
                         a.createdate  创建日期,
@@ -273,7 +273,7 @@ var sql_默认最近200 = `select top 2000
                         -- 	and requestname like '采购立项审批流程(职能部门专用)-范秉淇-2023-05-29%'
                         -- 		and a.requestId = 777939
                         -- 		and a.requestmark = 'HTSP2024050261'
-                        order by createdate desc `
+                        order by createdate desc, a.workflowid   `
 
 // 查询某个流程表单内容 
 function  Query_flow(_flowName,res){
